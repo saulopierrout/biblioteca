@@ -206,6 +206,9 @@ details.rec pre{white-space:pre-wrap;font:11.5px/1.45 Consolas,monospace;color:v
 .vc2 .tg{display:flex;gap:5px;flex-wrap:wrap;padding:0 4px}.vc2 .tg i{font-style:normal;font-size:11px;font-weight:700;color:#FFD2B0;background:var(--grad-soft);border:1px solid rgba(255,138,61,.4);border-radius:99px;padding:2px 8px}
 .vc2 .pq{margin:0 4px;font-size:12.5px;color:var(--mut);line-height:1.45;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}.vc2 .pq.abre{-webkit-line-clamp:unset;max-height:260px;overflow:auto}
 .vc2 .acts{display:flex;gap:6px;flex-wrap:wrap;padding:0 4px}.vc2 .acts button,.vc2 .acts a{font:700 11.5px "Segoe UI",sans-serif;color:var(--tx);background:rgba(255,255,255,.06);border:1px solid var(--line);border-radius:99px;padding:4px 10px;cursor:pointer;text-decoration:none}.vc2 .acts .p{background:var(--grad-soft);border-color:rgba(255,138,61,.5)}.vc2 .acts button:hover,.vc2 .acts a:hover{border-color:var(--or)}
+.vc2 .im video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;background:#000}
+.vsel{position:absolute;left:6px;bottom:6px;display:flex;gap:4px;z-index:2}.vsel button{font:700 10.5px "Segoe UI",sans-serif;color:#fff;background:#000a;border:1px solid #fff3;border-radius:99px;padding:3px 9px;cursor:pointer}.vsel button.on{background:var(--or);border-color:var(--or);color:#1a0c05}
+.vtag{position:absolute;right:6px;top:6px;z-index:2;font:700 10px "Segoe UI",sans-serif;color:#fff;background:#000a;border-radius:99px;padding:2px 8px}
 .mais{display:block;margin:14px auto 0}
 .hub{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px;margin-top:10px}.hub .box{margin:0}.hub h3{display:flex;justify-content:space-between}.hub h3 span{color:var(--dim);font-size:12px;letter-spacing:0}
 .hl2{display:block;padding:8px 0;border-bottom:1px solid var(--line);text-decoration:none}.hl2:last-child{border:0}.hl2 b{display:block;color:var(--tx);font-size:13.5px}.hl2 small{display:block;color:var(--dim);font-size:12px;line-height:1.35;margin-top:2px}.hl2:hover b{color:var(--or)}
@@ -531,13 +534,26 @@ let V = [], vc = "", vtec = "", vtxt = "", vref = false, vmax = 24, carregou = f
 const vfiltrados = () => V.filter(v => (!vc || v.c === vc) && (!vtec || v.t.includes(vtec)) && (!vref || v.r) && (!vtxt || (v.q + " " + v.a).toLowerCase().includes(vtxt)));
 function vdesenha() {
   const l = vfiltrados(); $("vn").textContent = l.length + " vídeos" + (l.length > vmax ? " (mostrando " + vmax + ")" : "");
-  $("vg").innerHTML = l.slice(0, vmax).map((v, i) => `<article class="vc2"><div class="im"><img loading="lazy" referrerpolicy="no-referrer" src="${esc(v.i)}" alt="" onerror="this.remove()"></div>
+  $("vg").innerHTML = l.slice(0, vmax).map((v, i) => `<article class="vc2"><div class="im"${v.r ? ` data-s="${esc(v.s)}"` : ""}><img loading="lazy" referrerpolicy="no-referrer" src="${esc(v.i)}" alt="" onerror="this.remove()">${v.r ? '<span class="vtag">vídeo</span><div class="vsel"><button type="button" class="on" data-vs="original">Original</button><button type="button" data-vs="remake">Refação</button></div>' : '<span class="vtag">imagem</span>'}</div>
     <div class="au"><a href="${esc(v.au)}" target="_blank" rel="noopener">@${esc(v.a)}</a><span>${esc(VCAT[v.c] || v.c)}</span></div>
     <div class="tg">${v.t.map(x => `<i>${esc(x)}</i>`).join("")}</div>
     <div class="pq" data-q="${i}">${esc(v.q)}</div>
     <div class="acts"><button class="p" type="button" data-cp="${i}">Copiar prompt</button><button type="button" data-ver="${i}">Ver tudo</button><a href="${esc(v.p)}" target="_blank" rel="noopener">Post original</a>${v.r && v.k ? `<a href="${esc(v.k)}" target="_blank" rel="noopener">Refação</a>` : ""}</div></article>`).join("");
   $("vm").hidden = l.length <= vmax;
+  ioV.disconnect(); document.querySelectorAll(".vc2 .im[data-s]").forEach(e => ioV.observe(e));
 }
+const MID = "https://media.skillry.dev/opus-5-5/";
+function toca(box, qual) {   // coloca o vídeo (original ou refação) na área da imagem
+  let vd = box.querySelector("video");
+  if (!vd) { vd = document.createElement("video"); vd.muted = true; vd.loop = true; vd.playsInline = true; vd.autoplay = true; vd.preload = "metadata"; vd.setAttribute("referrerpolicy", "no-referrer"); box.insertBefore(vd, box.querySelector(".vtag")); }
+  box.dataset.q = qual; vd.src = MID + box.dataset.s + "/" + qual + ".mp4"; vd.play().catch(() => {});
+  box.querySelectorAll(".vsel button").forEach(b => b.classList.toggle("on", b.dataset.vs === qual));
+}
+const ioV = new IntersectionObserver(es => es.forEach(e => {
+  const box = e.target;
+  if (e.isIntersecting) toca(box, box.dataset.q || "original");
+  else { const vd = box.querySelector("video"); if (vd) { vd.pause(); vd.removeAttribute("src"); vd.load(); vd.remove(); } }
+}), { threshold: 0.55 });
 function vcats() {
   const n = c => V.filter(v => !c || v.c === c).length;
   $("vcats").innerHTML = [["", "Todos"], ...Object.entries(VCAT)].map(([k, r]) => `<button class="esc" type="button" data-vc="${k}" aria-pressed="${k === vc}">${esc(r)} <b style="margin-left:6px">${n(k)}</b></button>`).join("");
@@ -552,6 +568,7 @@ async function vcarrega() {
 new IntersectionObserver((es, o) => { if (es[0].isIntersecting) { vcarrega(); o.disconnect(); } }, { rootMargin: "400px" }).observe($("videos"));
 document.addEventListener("click", e => {
   const c = e.target.closest("[data-vc]"); if (c) { vc = c.dataset.vc; vmax = 24; vcats(); vdesenha(); return; }
+  const vs = e.target.closest("[data-vs]"); if (vs) { toca(vs.closest(".im"), vs.dataset.vs); return; }
   const cp = e.target.closest("[data-cp]"); if (cp) { const v = vfiltrados()[+cp.dataset.cp]; copiar(cp, v.q, "Copiar prompt"); return; }
   const ver = e.target.closest("[data-ver]"); if (ver) { const q = ver.closest(".vc2").querySelector(".pq"); q.classList.toggle("abre"); ver.textContent = q.classList.contains("abre") ? "Fechar" : "Ver tudo"; }
 });
