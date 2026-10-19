@@ -1,0 +1,375 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Animação | Skills & Tools</title>
+<meta name="description" content="Estilos de animação em duas escolhas (como é desenhado e como se mexe), combinação ao vivo, filmes de referência e vocabulário de efeitos.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Skills &amp; Tools">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:title" content="Animação | Skills & Tools">
+<meta property="og:description" content="Estilos de animação em duas escolhas (visual e movimento), combinação ao vivo e filmes de referência.">
+<meta property="og:url" content="https://saulopierrout.github.io/biblioteca/animacao.html">
+<meta property="og:image" content="https://saulopierrout.github.io/biblioteca/og-animacao.jpg">
+<meta property="og:image:type" content="image/jpeg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Animação | Skills & Tools">
+<meta name="twitter:description" content="Estilos de animação em duas escolhas (visual e movimento), combinação ao vivo e filmes de referência.">
+<meta name="twitter:image" content="https://saulopierrout.github.io/biblioteca/og-animacao.jpg">
+<meta name="author" content="Saulo Pierrout">
+<style>
+
+:root{
+  --bg:#0B0806; --panel:#1A130F; --panel2:#241B15;
+  --or:#FF7A33; --or2:#D97757; --amber:#FFB347; --rust:#B5421C;
+  --grad:linear-gradient(120deg,#FF8A3D 0%,#D97757 55%,#B5421C 100%);
+  --grad-soft:linear-gradient(120deg,rgba(255,138,61,.28),rgba(181,66,28,.24));
+  --tx:#F7F0EA; --mut:#BDAC9E; --dim:#8A7A6D; --line:rgba(255,226,205,.11);
+  --ok:#5FD3A0; --pad:clamp(14px,3.5vw,44px);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:radial-gradient(1000px 520px at 88% -8%,rgba(255,122,51,.12),transparent 60%),radial-gradient(800px 460px at -8% 40%,rgba(181,66,28,.12),transparent 60%),var(--bg);background-attachment:fixed;color:var(--tx);font:15px/1.55 "Segoe UI",system-ui,-apple-system,sans-serif}
+a{color:inherit}
+h1,h2,h3,h4{margin:0;letter-spacing:-.01em}
+.wrap{max-width:1320px;margin:0 auto;padding:0 var(--pad)}
+.top{position:sticky;top:0;z-index:50;background:rgba(11,8,6,.88);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+.top .wrap{display:flex;align-items:center;gap:14px;height:56px}
+.brand{display:flex;align-items:center;gap:9px;font-weight:800;font-size:17px;white-space:nowrap}
+.brand .mk{width:28px;height:28px;border-radius:8px;background:var(--grad);display:grid;place-items:center;box-shadow:0 5px 16px rgba(255,122,51,.4)}
+.brand .mk svg{width:16px;height:16px;fill:#1a0c05}
+.nav{margin-left:auto;display:flex;gap:8px}
+.btn2{display:inline-flex;align-items:center;gap:7px;font:700 13px "Segoe UI",sans-serif;color:var(--tx);background:rgba(255,255,255,.06);border:1px solid var(--line);border-radius:11px;padding:9px 12px;cursor:pointer;text-decoration:none;white-space:nowrap}
+.btn2:hover{border-color:rgba(255,138,61,.6)}
+.btn2.on{background:var(--grad-soft);border-color:var(--or)}
+.autor{display:inline-flex;align-items:center;gap:8px;text-decoration:none;color:var(--mut);font-size:12.5px;padding:4px 10px 4px 8px;border:1px solid var(--line);border-radius:99px;background:rgba(255,255,255,.04);white-space:nowrap}
+.autor:hover{color:#fff;border-color:rgba(255,138,61,.6)}
+.autor img{height:20px;width:auto;display:block}
+.autor b{color:var(--tx)}
+.credito{display:flex;align-items:center;gap:18px;flex-wrap:wrap;padding:22px 0 8px;border-top:1px solid var(--line);margin-top:18px}
+.credito img{height:84px;width:auto;display:block}
+.credito .txt{display:flex;flex-direction:column;gap:6px;color:var(--mut);font-size:13.5px}
+.credito .txt b{color:var(--tx);font-size:15px}
+.credito .links{display:flex;gap:10px;flex-wrap:wrap}
+.credito .links a{display:inline-flex;align-items:center;gap:7px;color:var(--tx);text-decoration:none;font-weight:700;font-size:13px;padding:7px 12px;border:1px solid var(--line);border-radius:11px;background:rgba(255,255,255,.05)}
+.perfis{display:flex;gap:10px;flex-wrap:wrap;margin-top:2px}
+.credito .links a.perfil,.perfil{display:inline-flex;align-items:center;gap:10px;padding:6px 14px 6px 6px;border:1px solid var(--line);border-radius:99px;color:var(--tx);text-decoration:none;background:rgba(255,255,255,.04)}
+.perfil:hover{border-color:rgba(255,138,61,.6)}
+.perfil img{width:44px;height:44px;border-radius:50%;object-fit:cover;display:block;border:2px solid rgba(255,138,61,.55)}
+.perfil span{display:flex;flex-direction:column;line-height:1.2}
+.perfil b{font-size:13.5px;color:var(--tx)}
+.perfil small{font-size:11.5px;color:var(--mut);font-weight:400}
+.credito .links a:hover{border-color:rgba(255,138,61,.6)}
+@media(max-width:700px){.autor span{display:none}.autor{padding:4px 8px}}
+.top .wrap{height:64px}
+.marca{display:flex;align-items:center;gap:11px;text-decoration:none;color:var(--tx);flex:none}
+.marca img{height:38px;width:auto;display:block}
+.marca .nome{font-weight:300;letter-spacing:.24em;font-size:13px;text-transform:uppercase;white-space:nowrap}
+.marca:hover .nome{color:var(--amber)}
+.sep{width:1px;height:28px;background:var(--line);flex:none}
+.soc{display:flex;gap:6px;flex:none}
+.soc a{display:grid;place-items:center;width:38px;height:38px;border-radius:12px;border:1px solid var(--line);background:rgba(255,255,255,.05);color:var(--tx);text-decoration:none}
+.soc a:hover{border-color:rgba(255,138,61,.7);color:var(--amber)}
+a.aba{text-decoration:none}
+a.aba.link{margin-left:auto;border-style:dashed}
+@media(max-width:1000px){.brand small{display:none}.marca .nome{letter-spacing:.14em}}
+@media(max-width:760px){.marca .nome,.sep{display:none}.top .wrap{gap:10px}}
+
+.abas-row{border-top:1px solid var(--line)}
+.abas{display:flex;gap:6px;align-items:center;padding:7px 0;overflow-x:auto}
+.aba{display:inline-flex;align-items:center;gap:7px;font:700 13.5px "Segoe UI",sans-serif;padding:7px 14px;border-radius:99px;border:1px solid var(--line);background:rgba(255,255,255,.04);color:var(--mut);cursor:pointer;white-space:nowrap}
+.aba:hover{color:#fff;border-color:rgba(255,138,61,.6)}
+.aba.on{color:#fff;background:var(--grad-soft);border-color:var(--or);box-shadow:0 4px 16px rgba(255,122,51,.25)}
+.brand small{font-weight:600;color:var(--dim);font-size:12.5px}
+.layout{display:grid;grid-template-columns:270px 1fr;gap:26px;padding:22px 0 60px}
+aside{position:sticky;top:112px;align-self:start;max-height:calc(100vh - 96px);overflow:auto;padding-right:4px}
+aside .lbl{font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--dim);font-weight:700;margin:2px 4px 8px}
+.pn{display:flex;flex-direction:column;gap:6px}
+.pn a{display:flex;align-items:center;gap:9px;padding:9px 11px;border-radius:12px;border:1px solid var(--line);background:rgba(255,255,255,.03);color:var(--mut);text-decoration:none;font-weight:600;font-size:13.5px;line-height:1.3}
+.pn a:hover{color:#fff;border-color:rgba(255,138,61,.6)}
+.pn a.on{color:#fff;background:var(--grad-soft);border-color:var(--or)}
+.pn a .n{margin-left:auto;font-size:11.5px;color:var(--dim)}
+main{min-width:0}
+.hero h1{font-size:clamp(26px,4vw,40px);line-height:1.1}
+.hero p{color:var(--mut);max-width:70ch;margin:10px 0 0}
+.gtext{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.tiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px;margin-top:20px}
+.tile{display:flex;flex-direction:column;gap:6px;padding:15px;border:1px solid var(--line);border-radius:16px;background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.015));text-decoration:none}
+.tile:hover{border-color:rgba(255,138,61,.6);transform:translateY(-2px)}
+.tile h3{font-size:15.5px}
+.tile p{margin:0;color:var(--mut);font-size:13px}
+.tile .meta{margin-top:auto;color:var(--dim);font-size:12px}
+.box{border:1px solid var(--line);border-radius:16px;background:rgba(255,255,255,.035);padding:16px;margin-top:16px}
+.box h3{font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:var(--amber);margin-bottom:8px}
+.kv{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:16px}
+.kv .box{margin:0}
+.kv p{margin:0;color:var(--tx)}
+h2.sec{font-size:19px;margin:26px 0 4px}
+.sub{color:var(--dim);font-size:13px;margin:0 0 10px}
+.kit{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:12px}
+.ki{display:flex;flex-direction:column;gap:7px;padding:14px;border:1px solid var(--line);border-radius:16px;background:var(--panel)}
+.ki .tag{align-self:flex-start;font-size:11px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;padding:3px 8px;border-radius:99px;background:var(--grad-soft);border:1px solid rgba(255,138,61,.4);color:#FFD2B0}
+.ki h3{font-size:16px}
+.ki p{margin:0;color:var(--mut);font-size:13.5px}
+.ki .como{color:var(--tx);font-size:13px}
+.ki .como b{color:var(--amber)}
+.ki .go{margin-top:auto;padding-top:4px;color:var(--or);font-weight:700;font-size:13px;text-decoration:none}
+.ki .go:hover{text-decoration:underline}
+.cols{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.cols .box{margin:0}
+.cols ul{margin:0;padding-left:18px;color:var(--mut);font-size:13.5px}
+details.tr{margin-top:22px;border:1px solid var(--line);border-radius:16px;background:rgba(255,255,255,.03)}
+details.tr>summary{cursor:pointer;padding:14px 16px;font-weight:800;font-size:16px;list-style:none}
+details.tr>summary::before{content:"▸ ";color:var(--or)}
+details.tr[open]>summary::before{content:"▾ "}
+.tr .body{padding:0 18px 16px}
+.tr h3{font-size:16px;margin:18px 0 6px;color:var(--amber)}
+.tr h4{font-size:14px;margin:12px 0 4px}
+.tr p,.tr li{color:var(--mut);font-size:14px;margin:4px 0}
+.tr ul,.tr ol{padding-left:20px;margin:6px 0}
+.tr b.it{color:var(--tx)}
+.tr a.lk{color:var(--or);text-decoration:none;font-weight:700}
+.tr a.lk:hover{text-decoration:underline}
+code{background:rgba(255,255,255,.08);padding:1px 6px;border-radius:6px;font-size:.92em}
+.foot{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;margin-top:24px}
+.bigcopy{display:inline-flex;align-items:center;gap:8px;font:800 14px "Segoe UI",sans-serif;color:#1a0c05;background:var(--grad);border:0;border-radius:12px;padding:12px 16px;cursor:pointer}
+.small{color:var(--dim);font-size:12.5px}
+footer{border-top:1px solid var(--line);color:var(--dim);font-size:12.5px;padding:18px 0 30px}
+@media(max-width:900px){.layout{grid-template-columns:1fr}aside{position:static;max-height:none}.pn{flex-direction:row;flex-wrap:wrap}.cols{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:560px){.kv,.cols{grid-template-columns:1fr}}
+
+/* ---- página de animação ---- */
+.hero .cred{margin-top:12px;font-size:13px;color:var(--dim)}
+.hero .cred a{color:var(--or);text-decoration:none;font-weight:700}
+.passos{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:16px}
+.passos .box{margin:0}.passos b{color:var(--amber)}
+h2.sec .n{color:var(--or);margin-right:6px}
+.grid-a{display:grid;grid-template-columns:repeat(auto-fill,minmax(168px,1fr));gap:12px}
+.ac{display:flex;flex-direction:column;gap:7px;border:1px solid var(--line);border-radius:16px;background:var(--panel);padding:8px 8px 12px;overflow:hidden}
+.pv{position:relative;aspect-ratio:9/16;border-radius:11px;overflow:hidden;background:#120c08;display:grid;place-items:center}
+.pv iframe{position:absolute;inset:0;width:100%;height:100%;border:0;background:#000}
+.pv .ph{color:var(--dim);font-size:12px;text-align:center;padding:10px}
+.pv .sem{padding:14px;text-align:center;color:var(--mut);font-size:12.5px}
+.ac h3{font-size:14.5px;padding:0 4px;display:flex;gap:7px;align-items:baseline}
+.ac h3 b{color:var(--or);font-size:12px;letter-spacing:.04em}
+.ac p{margin:0;padding:0 4px;color:var(--mut);font-size:12.5px;line-height:1.4}
+.ac p.cabe{color:var(--dim);font-size:12px}
+.ac .bt{margin:2px 4px 0;align-self:flex-start;font:700 12px "Segoe UI",sans-serif;color:var(--tx);background:var(--grad-soft);border:1px solid rgba(255,138,61,.45);border-radius:99px;padding:5px 11px;cursor:pointer}
+.ac .bt:hover{border-color:var(--or)}
+details.rec{margin:2px 4px 0}
+details.rec>summary{cursor:pointer;color:var(--or);font-weight:700;font-size:12px;list-style:none}
+details.rec>summary::before{content:"▸ "}details.rec[open]>summary::before{content:"▾ "}
+details.rec pre{white-space:pre-wrap;font:11.5px/1.45 Consolas,monospace;color:var(--mut);margin:6px 0 0}
+/* mesa */
+.mesa{display:grid;grid-template-columns:200px minmax(280px,360px) 200px;gap:14px;justify-content:center;align-items:start;margin-top:12px}
+.mesa .col{display:flex;flex-direction:column;gap:5px;max-height:620px;overflow:auto;padding-right:3px}
+.mesa .col h4{font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--dim);margin:0 2px 4px}
+.esc{display:flex;align-items:center;gap:8px;text-align:left;font:600 13px "Segoe UI",sans-serif;color:var(--mut);background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:11px;padding:8px 10px;cursor:pointer}
+.esc b{color:var(--or);font-size:11.5px;min-width:26px}.esc em{margin-left:auto;font-style:normal;font-size:10px;color:var(--amber);border:1px solid rgba(255,179,71,.4);border-radius:99px;padding:1px 6px}
+.esc:hover{color:#fff;border-color:rgba(255,138,61,.6)}
+.esc[aria-pressed="true"]{color:#fff;background:var(--grad-soft);border-color:var(--or)}
+.palco{position:sticky;top:120px}
+.palco .pv{aspect-ratio:9/16;max-height:640px;border:1px solid var(--line)}
+.palco .leg{margin-top:8px;text-align:center;font-weight:800;font-size:15px}.palco .leg span{display:block;font-weight:400;color:var(--mut);font-size:12.5px}
+.aviso{margin-top:8px;padding:8px 10px;border:1px solid rgba(255,179,71,.4);border-radius:11px;color:var(--amber);font-size:12.5px;background:rgba(255,179,71,.07)}
+.pedido{margin-top:16px}
+.pedido label{display:block;font-size:12.5px;color:var(--mut);margin:0 0 6px}
+.pedido textarea{width:100%;min-height:64px;resize:vertical;background:rgba(255,255,255,.05);border:1px solid var(--line);border-radius:12px;color:var(--tx);font:14px "Segoe UI",sans-serif;padding:10px 12px}
+.pedido textarea:focus{outline:0;border-color:var(--or)}
+.pedido .lin{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:8px 0}
+.pedido .lin label{margin:0;display:flex;gap:6px;align-items:center}
+.pre{white-space:pre-wrap;font:12px/1.5 Consolas,monospace;color:var(--mut);background:#120c08;border:1px solid var(--line);border-radius:12px;padding:12px;max-height:320px;overflow:auto}
+.pre mark{background:rgba(255,138,61,.25);color:#ffe2c9;border-radius:4px;padding:0 3px}
+.cmb{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:12px}
+/* referências */
+.film{display:grid;grid-template-columns:minmax(260px,420px) 1fr;gap:16px;padding:14px;border:1px solid var(--line);border-radius:18px;background:var(--panel);margin-top:12px}
+.yt{position:relative;aspect-ratio:16/9;border-radius:12px;overflow:hidden;background:#000}
+.yt img,.yt iframe{position:absolute;inset:0;width:100%;height:100%;border:0;object-fit:cover}
+.yt button{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:58px;height:58px;border-radius:50%;border:0;background:var(--grad);cursor:pointer;color:#1a0c05;font-size:22px;box-shadow:0 8px 24px rgba(0,0,0,.5)}
+.film h3{font-size:18px}.film .au{color:var(--dim);font-size:12.5px;margin:2px 0 8px}
+.film p{margin:0 0 8px;color:var(--mut);font-size:14px}
+.film .tg{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0}
+.tg a{font-size:11.5px;font-weight:700;color:#FFD2B0;background:var(--grad-soft);border:1px solid rgba(255,138,61,.4);border-radius:99px;padding:3px 9px;text-decoration:none;cursor:pointer}
+.mom{display:flex;flex-direction:column;gap:5px;margin-top:6px}
+.mom button{display:flex;gap:9px;text-align:left;font:13px "Segoe UI",sans-serif;color:var(--mut);background:none;border:0;padding:3px 0;cursor:pointer}
+.mom button b{color:var(--or);min-width:42px}.mom button:hover{color:#fff}
+.faltam{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:10px;margin-top:10px}
+.ef{display:flex;flex-wrap:wrap;gap:7px;margin-top:8px}
+.ef span{font-size:12.5px;font-weight:700;color:var(--tx);background:rgba(255,255,255,.06);border:1px solid var(--line);border-radius:99px;padding:5px 11px}
+@media(max-width:1000px){.mesa{grid-template-columns:1fr 1fr}.palco{position:static;grid-column:1 / -1;grid-row:1}.palco .pv{max-width:300px;margin:0 auto}.film{grid-template-columns:1fr}.passos{grid-template-columns:1fr}}
+@media(max-width:560px){.mesa{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap">
+  <a class="marca" href="https://www.instagram.com/saulomotion/" target="_blank" rel="noopener" title="Saulo Pierrout no Instagram"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjY4LjE0IDU2LjI5IDM4OS4yNCA1NTIuNjgiPjxkZWZzPjxsaW5lYXJHcmFkaWVudCBpZD0iZyIgZ3JhZGllbnRVbml0cz0idXNlclNwYWNlT25Vc2UiIHgxPSIwIiB5MT0iNTg4Ljk3IiB4Mj0iMCIgeTI9Ijc2LjI5Ij48c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiNmZjNkMTIiLz48c3RvcCBvZmZzZXQ9Ii40NSIgc3RvcC1jb2xvcj0iI2ZmOGEyNiIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iI2ZmZDg2YiIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxnIGZpbGw9IiNmZmZmZmYiPjxwYXRoIGQ9Ik0zMjguMjYgMjMwLjEyIEE3Ny41MCA3Ny41MCAwIDAgMCAzNDEuMzIgMTc2LjAyIEE0Ny45MCA0Ny45MCAwIDEgMCAyNzIuMTUgMjI0Ljk2IEwzNzguMTEgMjc4Ljc2IEExMjUuNDAgMTI1LjQwIDAgMCAxIDQzMS41MiAzMzAuNjggQTQ3LjkwIDQ3LjkwIDAgMCAxIDQzMy41MCAzMzQuNzcgQTQ3LjkwIDQ3LjkwIDAgMCAxIDQzNy4yOCAzNTEuMTYgQTc3LjUwIDc3LjUwIDAgMCAxIDQzMy41NyAzNzkuMDQgQTEyNS40MCAxMjUuNDAgMCAwIDEgNDIxLjE1IDQwNS44OSBBMjAyLjkxIDIwMi45MSAwIDAgMSAzNzEuODggNDYwLjU1IEEyMDIuOTEgMjAyLjkxIDAgMCAwIDM4OC44NCA0MjYuNTEgQTQ3LjkwIDQ3LjkwIDAgMCAwIDM5MS45MyA0MDUuNjQgQTQ3LjkwIDQ3LjkwIDAgMCAwIDM3Mi44MyAzNzAuODggQTE4LjMwIDE4LjMwIDAgMCAwIDM3MC4xNyAzNjkuMjIgTDIzMi43NyAyOTkuMzcgQTMyOC4zMSAzMjguMzEgMCAwIDEgMTg5Ljg4IDI3My4yNiBBMTI1LjQwIDEyNS40MCAwIDAgMSAxNzAuODkgMjU2LjQ1IEE3Ny41MCA3Ny41MCAwIDAgMSAxNTAuNDUgMjA3LjUzIEExMjUuNDAgMTI1LjQwIDAgMCAxIDIwNC4zNyA5OC41NiBBMTI1LjQwIDEyNS40MCAwIDAgMSAzMjUuNzIgODYuNjggQTEyNS40MCAxMjUuNDAgMCAwIDEgMzg1LjkxIDE0MS44MiBBNDcuOTAgNDcuOTAgMCAwIDEgMzg5Ljk1IDE3Ny41OSBBNzcuNTAgNzcuNTAgMCAwIDEgMzU0LjQ0IDIyMy42MiBBNDcuOTAgNDcuOTAgMCAwIDEgMzM0Ljg1IDIyOS45NSBBNDcuOTAgNDcuOTAgMCAwIDEgMzI4LjI2IDIzMC4xMyBaIi8+PHBhdGggZD0iTTEyNC4zMCAyMjYuMzAgQTIwMi45MSAyMDIuOTEgMCAwIDAgMTE2LjI5IDI1MS4zNCBBMjkuNjAgMjkuNjAgMCAwIDAgMTE3LjMwIDI2OC45MCBBNzcuNTAgNzcuNTAgMCAwIDAgMTM1Ljk3IDI5Ny4zOSBBNDcuOTAgNDcuOTAgMCAwIDAgMTQ4LjcyIDMwNi4yNCBMMzA5LjI5IDM4Mi41MyBBNzcuNTAgNzcuNTAgMCAwIDEgMzUyLjExIDQ2Ny4zNCBBMjAyLjkxIDIwMi45MSAwIDAgMSAyODYuMDYgNTgxLjcxIEEyOS42MCAyOS42MCAwIDAgMSAyNTAuNTIgNTg0LjIwIEExMjUuNDAgMTI1LjQwIDAgMCAxIDE5NS41MCA1MDEuODMgQTQ3LjkwIDQ3LjkwIDAgMCAxIDIyNi4yMCA0NDguMTEgTDIyNi4yMSA0NDguMTIgQTc3LjUwIDc3LjUwIDAgMCAwIDIyNi40NSA1MTMuMzcgQTI5LjYwIDI5LjYwIDAgMCAwIDI0Ny44MyA1MjkuOTEgQTI5LjYwIDI5LjYwIDAgMCAwIDI3OS43OSA1MTMuOTUgQTQ3LjkwIDQ3LjkwIDAgMCAwIDI3Ni4yMSA0NjUuMzggQTc3LjUwIDc3LjUwIDAgMCAwIDI0Ni4zMiA0MzkuODIgTDE3OC44NyA0MDcuMTUgQTMyOC4zMSAzMjguMzEgMCAwIDEgMTQzLjk2IDM4Ny41NCBBMTI1LjQwIDEyNS40MCAwIDAgMSA5MC43MyAzMTQuMjggQTc3LjUwIDc3LjUwIDAgMCAxIDEwMy41NyAyNDguMDMgQTEyNS40MCAxMjUuNDAgMCAwIDEgMTI0LjMwIDIyNi4zMCBaIi8+PC9nPjwvc3ZnPg==" alt="Logo de Saulo Pierrout"><span class="nome">Saulo Pierrout</span></a><span class="sep"></span>
+  <div class="brand">Animação</div>
+  <div style="margin-left:auto"></div>
+  <div class="soc"><a href="https://www.instagram.com/saulomotion/" target="_blank" rel="noopener" title="Instagram @saulomotion" aria-label="Instagram de Saulo Pierrout"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></a><a href="https://www.linkedin.com/in/saulopierrout/" target="_blank" rel="noopener" title="LinkedIn de Saulo Pierrout" aria-label="LinkedIn de Saulo Pierrout"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M8 10.5V16M8 7.8v.01M12 16v-3.2a2.3 2.3 0 0 1 4.6 0V16M12 10.5V16"/></svg></a></div>
+</div>
+<div class="abas-row"><div class="wrap"><nav class="abas" aria-label="Seções"><a class="aba" href="index.html">Skills &amp; Tools</a><a class="aba" href="index.html#aba=sites">Sites</a><a class="aba" href="index.html#aba=cursos">Cursos</a><a class="aba" href="index.html#aba=codigos">Códigos</a><a class="aba" href="protocolos.html">Protocolos</a><a class="aba on" href="animacao.html">Animação</a></nav></div></div></header>
+<div class="wrap" id="avisoDisco" hidden><div class="aviso" style="margin-top:14px">As cenas animadas precisam de um servidor: abra esta página pelo link do site (https://saulopierrout.github.io/biblioteca/animacao.html). Aberta direto do arquivo, os quadros ficam pretos.</div></div>
+<div class="wrap layout">
+  <aside><div class="lbl">Animação</div><nav class="pn" id="pn">
+    <a href="#inicio" class="on">Visão geral</a><a href="#visual">Visual (V1 a V11)</a><a href="#movimento">Movimento (M0 a M15)</a><a href="#mesa">Combinação</a><a href="#combinacoes">Combinações prontas</a><a href="#referencias">Filmes de referência</a><a href="#efeitos">Vocabulário de efeitos</a></nav></aside>
+  <main id="main">
+    <section id="inicio" class="hero">
+      <h1><span class="gtext">Referência de animação</span></h1>
+      <p>Toda animação são duas escolhas: <b>como ela é desenhada</b> (o visual) e <b>como ela se mexe</b> (o movimento). Aqui cada escolha tem um número, uma receita em português e uma cena que roda ao vivo, com o monograma e a paleta do Saulo. Qualquer visual combina com qualquer movimento, e cada combinação vira um pedido pronto para colar no Claude ou em outra IA.</p>
+      <div class="passos">
+        <div class="box"><h3>1 · Escolha</h3><p><b>Um visual e um movimento</b> na seção Combinação. A cena muda na hora.</p></div>
+        <div class="box"><h3>2 · Descreva</h3><p>Escreva o assunto (um produto, uma frase, uma ideia). O pedido se monta enquanto você escreve.</p></div>
+        <div class="box"><h3>3 · Leve para a IA</h3><p>Copie o pedido e cole no Claude: ele recebe as regras do estilo e do movimento, sem precisar saber de animação.</p></div>
+      </div>
+      <p class="cred">Base: <a href="https://riscaemexe.com.br" target="_blank" rel="noopener">Risca &amp; Mexe</a>, índice aberto de estilos de animação da FORSTER (licença MIT, <a href="https://github.com/oiforster/risca-e-mexe" target="_blank" rel="noopener">código no GitHub</a>). Aqui o motor, a paleta, o monograma e os textos de exemplo foram adaptados à identidade do Saulo Pierrout. Os filmes da seção de referências são de quem os fez e tocam pelo player oficial do YouTube.</p>
+    </section>
+
+    <h2 class="sec" id="visual"><span class="n">01</span>Visual: como é desenhado</h2>
+    <p class="sub">Capítulo um. Cada cartão é um estilo, rodando de verdade (anima enquanto está na tela).</p>
+    <div class="grid-a" id="gV"></div>
+
+    <h2 class="sec" id="movimento"><span class="n">02</span>Movimento: como se mexe</h2>
+    <p class="sub">Capítulo dois. Os de interface (M12 a M14) pedem um cartão: V7, V10 ou V11.</p>
+    <div class="grid-a" id="gM"></div>
+
+    <h2 class="sec" id="mesa"><span class="n">03</span>Combinação</h2>
+    <p class="sub">Escolha um de cada e veja ao vivo. O pedido para a IA muda junto.</p>
+    <div class="mesa">
+      <div class="col" id="cV"><h4>Visual</h4></div>
+      <div class="palco"><div class="pv" id="palco"></div><div class="leg" id="leg"></div><div class="aviso" id="aviso" hidden></div></div>
+      <div class="col" id="cM"><h4>Movimento</h4></div>
+    </div>
+    <div class="pedido">
+      <label for="assunto">Sobre o que é a animação? (o pedido se monta enquanto você escreve)</label>
+      <textarea id="assunto" placeholder="Ex.: a abertura de um canal de motion design, com o nome e o logo"></textarea>
+      <div class="lin"><label><input type="checkbox" id="img"> Vou anexar uma imagem (a IA redesenha ela no estilo)</label><button class="bigcopy" id="copiar" type="button">Copiar o pedido</button></div>
+      <div class="pre" id="ped"></div>
+      <div class="lin" style="margin-top:12px"><span class="small">Para usar o motor desta página no seu projeto:</span><button class="btn2" id="copCod" type="button">Copiar o código</button></div>
+      <div class="pre" id="cod" style="max-height:none"></div>
+    </div>
+
+    <h2 class="sec" id="combinacoes"><span class="n">04</span>Combinações prontas</h2>
+    <p class="sub">Capítulo três. Um visual e um movimento já escolhidos, para um tipo de assunto.</p>
+    <div class="cmb" id="gC"></div>
+
+    <h2 class="sec" id="referencias"><span class="n">05</span>Filmes de referência</h2>
+    <p class="sub">Capítulo quatro. Filmes de verdade, o que cada um usa nos dois eixos e os momentos para pular direto no trecho.</p>
+    <div id="fs"></div>
+    <div class="box"><h3>Movimentos vistos nos filmes que ainda não estão no catálogo</h3><div class="faltam" id="falt"></div></div>
+
+    <h2 class="sec" id="efeitos"><span class="n">06</span>Vocabulário de efeitos de vídeo</h2>
+    <p class="sub">Nomes de efeitos que dá para pedir ao Claude por código. Saber o nome deixa o pedido mais preciso. São nomes de pacotes de terceiros ainda não públicos: se o nome não for reconhecido, descreva o efeito.</p>
+    <div class="box"><h3>Efeitos de câmera, tela e transição</h3><div class="ef" id="e1"></div></div>
+    <div class="box"><h3>Efeitos de interface, edição e legenda</h3><div class="ef" id="e2"></div></div>
+    <p class="small" style="margin-top:14px">Peça assim: "Aplique o efeito [nome] neste trecho, com [duração] e [estilo]." Para ver o efeito em ação, use a seção Combinação com o movimento mais próximo.</p>
+  </main>
+</div>
+<footer><div class="wrap"><div class="credito"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjY4LjE0IDU2LjI5IDM4OS4yNCA1NTIuNjgiPjxkZWZzPjxsaW5lYXJHcmFkaWVudCBpZD0iZyIgZ3JhZGllbnRVbml0cz0idXNlclNwYWNlT25Vc2UiIHgxPSIwIiB5MT0iNTg4Ljk3IiB4Mj0iMCIgeTI9Ijc2LjI5Ij48c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiNmZjNkMTIiLz48c3RvcCBvZmZzZXQ9Ii40NSIgc3RvcC1jb2xvcj0iI2ZmOGEyNiIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iI2ZmZDg2YiIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxnIGZpbGw9IiNmZmZmZmYiPjxwYXRoIGQ9Ik0zMjguMjYgMjMwLjEyIEE3Ny41MCA3Ny41MCAwIDAgMCAzNDEuMzIgMTc2LjAyIEE0Ny45MCA0Ny45MCAwIDEgMCAyNzIuMTUgMjI0Ljk2IEwzNzguMTEgMjc4Ljc2IEExMjUuNDAgMTI1LjQwIDAgMCAxIDQzMS41MiAzMzAuNjggQTQ3LjkwIDQ3LjkwIDAgMCAxIDQzMy41MCAzMzQuNzcgQTQ3LjkwIDQ3LjkwIDAgMCAxIDQzNy4yOCAzNTEuMTYgQTc3LjUwIDc3LjUwIDAgMCAxIDQzMy41NyAzNzkuMDQgQTEyNS40MCAxMjUuNDAgMCAwIDEgNDIxLjE1IDQwNS44OSBBMjAyLjkxIDIwMi45MSAwIDAgMSAzNzEuODggNDYwLjU1IEEyMDIuOTEgMjAyLjkxIDAgMCAwIDM4OC44NCA0MjYuNTEgQTQ3LjkwIDQ3LjkwIDAgMCAwIDM5MS45MyA0MDUuNjQgQTQ3LjkwIDQ3LjkwIDAgMCAwIDM3Mi44MyAzNzAuODggQTE4LjMwIDE4LjMwIDAgMCAwIDM3MC4xNyAzNjkuMjIgTDIzMi43NyAyOTkuMzcgQTMyOC4zMSAzMjguMzEgMCAwIDEgMTg5Ljg4IDI3My4yNiBBMTI1LjQwIDEyNS40MCAwIDAgMSAxNzAuODkgMjU2LjQ1IEE3Ny41MCA3Ny41MCAwIDAgMSAxNTAuNDUgMjA3LjUzIEExMjUuNDAgMTI1LjQwIDAgMCAxIDIwNC4zNyA5OC41NiBBMTI1LjQwIDEyNS40MCAwIDAgMSAzMjUuNzIgODYuNjggQTEyNS40MCAxMjUuNDAgMCAwIDEgMzg1LjkxIDE0MS44MiBBNDcuOTAgNDcuOTAgMCAwIDEgMzg5Ljk1IDE3Ny41OSBBNzcuNTAgNzcuNTAgMCAwIDEgMzU0LjQ0IDIyMy42MiBBNDcuOTAgNDcuOTAgMCAwIDEgMzM0Ljg1IDIyOS45NSBBNDcuOTAgNDcuOTAgMCAwIDEgMzI4LjI2IDIzMC4xMyBaIi8+PHBhdGggZD0iTTEyNC4zMCAyMjYuMzAgQTIwMi45MSAyMDIuOTEgMCAwIDAgMTE2LjI5IDI1MS4zNCBBMjkuNjAgMjkuNjAgMCAwIDAgMTE3LjMwIDI2OC45MCBBNzcuNTAgNzcuNTAgMCAwIDAgMTM1Ljk3IDI5Ny4zOSBBNDcuOTAgNDcuOTAgMCAwIDAgMTQ4LjcyIDMwNi4yNCBMMzA5LjI5IDM4Mi41MyBBNzcuNTAgNzcuNTAgMCAwIDEgMzUyLjExIDQ2Ny4zNCBBMjAyLjkxIDIwMi45MSAwIDAgMSAyODYuMDYgNTgxLjcxIEEyOS42MCAyOS42MCAwIDAgMSAyNTAuNTIgNTg0LjIwIEExMjUuNDAgMTI1LjQwIDAgMCAxIDE5NS41MCA1MDEuODMgQTQ3LjkwIDQ3LjkwIDAgMCAxIDIyNi4yMCA0NDguMTEgTDIyNi4yMSA0NDguMTIgQTc3LjUwIDc3LjUwIDAgMCAwIDIyNi40NSA1MTMuMzcgQTI5LjYwIDI5LjYwIDAgMCAwIDI0Ny44MyA1MjkuOTEgQTI5LjYwIDI5LjYwIDAgMCAwIDI3OS43OSA1MTMuOTUgQTQ3LjkwIDQ3LjkwIDAgMCAwIDI3Ni4yMSA0NjUuMzggQTc3LjUwIDc3LjUwIDAgMCAwIDI0Ni4zMiA0MzkuODIgTDE3OC44NyA0MDcuMTUgQTMyOC4zMSAzMjguMzEgMCAwIDEgMTQzLjk2IDM4Ny41NCBBMTI1LjQwIDEyNS40MCAwIDAgMSA5MC43MyAzMTQuMjggQTc3LjUwIDc3LjUwIDAgMCAxIDEwMy41NyAyNDguMDMgQTEyNS40MCAxMjUuNDAgMCAwIDEgMTI0LjMwIDIyNi4zMCBaIi8+PC9nPjwvc3ZnPg==" alt="Saulo Pierrout"><div class="txt"><b>Feito por Saulo Pierrout</b><span>Motion designer. Esta biblioteca e os protocolos são mantidos por ele. Dúvidas, sugestões ou conteúdo para incluir: saulopierrout.designer@gmail.com.</span><div class="perfis"><a class="perfil" href="https://www.instagram.com/saulopierrout/" target="_blank" rel="noopener"><img src="data:image/jpeg;base64,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" alt="Foto do perfil @saulopierrout"><span><b>@saulopierrout</b><small>Instagram pessoal</small></span><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></a><a class="perfil" href="https://www.instagram.com/saulomotion/" target="_blank" rel="noopener"><img src="data:image/jpeg;base64,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" alt="Foto do perfil @saulomotion"><span><b>@saulomotion</b><small>Instagram profissional</small></span><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></a></div><div class="links"><a href="https://www.linkedin.com/in/saulopierrout/" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M8 10.5V16M8 7.8v.01M12 16v-3.2a2.3 2.3 0 0 1 4.6 0V16M12 10.5V16"/></svg> LinkedIn</a><a href="mailto:saulopierrout.designer@gmail.com?subject=Biblioteca%20Skills%20%26%20Tools" title="Enviar e-mail"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M3.5 7l8.5 6 8.5-6"/></svg> E-mail</a></div></div></div>Documentos vivos. O kit principal indica as melhores opções catalogadas e como acioná-las; instalar qualquer item de terceiros exige ler o código antes e usar um computador pessoal.</div></footer>
+<script>
+const D = {"MI": {"visuais": [{"n": 1, "nome": "Flat", "arq": "V1_flat", "oque": "Cores chapadas, sem sombra nem textura. Lê rápido em qualquer tela.", "cabe": "Varejo (oferta, data da promoção) e tecnologia (ícone de cada função)."}, {"n": 2, "nome": "Traço", "arq": "V2_traco", "oque": "Só linhas finas, como desenho a caneta. Calmo e elegante.", "cabe": "Saúde: explicar um órgão, um exame, um procedimento."}, {"n": 3, "nome": "Isométrico", "arq": "V3_isometrico", "oque": "Peças em bloco, vistas de quina, como uma maquete.", "cabe": "Tecnologia: servidor, fluxo de trabalho, estrutura."}, {"n": 4, "nome": "Massinha", "arq": "V4_massinha", "oque": "Formas fofas e brilhantes, como modeladas em massinha.", "cabe": "Marcas simpáticas, datas festivas, saúde explicada sem assustar."}, {"n": 5, "nome": "Recorte e colagem", "arq": "V5_recorte", "oque": "Papel recortado, fita adesiva e letras tiradas de revista.", "cabe": "Varejo, moda, novidade da loja."}, {"n": 6, "nome": "Risografia", "arq": "V6_risografia", "oque": "Duas tintas fortes, um pouco fora do lugar, com falhas de impressão.", "cabe": "Campanha de data, evento, manchete com cara de cartaz."}, {"n": 7, "nome": "Vidro fosco", "arq": "V7_vidro", "oque": "Cartão translúcido sobre luzes coloridas desfocadas. Cara de aplicativo.", "cabe": "Tela de produto, painel, número de resultado."}, {"n": 8, "nome": "ASCII", "arq": "V8_ascii", "oque": "A imagem feita de letras e símbolos, como tela de computador antigo.", "cabe": "Tecnologia, abertura de vídeo técnico, gancho."}, {"n": 9, "nome": "Pontilhismo", "arq": "V9_pontilhismo", "oque": "A imagem feita de milhares de pontinhos, com luz e sombra pelo tamanho do ponto.", "cabe": "Saúde, ciência, marca que pede elegância."}, {"n": 10, "nome": "Cartão de interface", "arq": "V10_cartao", "oque": "Só a caixa da ferramenta, redesenhada, grande e no meio da tela.", "cabe": "Demonstração de ferramenta digital."}, {"n": 11, "nome": "Cartão sobre o resultado", "arq": "V11_cartao-resultado", "oque": "O mesmo cartão, com o próprio resultado borrado e escuro atrás.", "cabe": "Ferramenta que gera algo: o resultado aparece por trás."}], "movimentos": [{"n": 0, "nome": "Entrada simples", "arq": null, "oque": "A peça só entra. Serve para ver o visual sozinho.", "cabe": ""}, {"n": 1, "nome": "Tipografia cinética", "arq": "M1_tipografia", "oque": "As letras e os números são o movimento: caem, giram e se encaixam.", "cabe": "Manchete, preço, número de destaque."}, {"n": 2, "nome": "Partículas", "arq": "M2_particulas", "oque": "A peça se monta a partir de grãos soltos e depois se desfaz.", "cabe": "Ciência, saúde, algo que se forma."}, {"n": 3, "nome": "Morph", "arq": "M3_morph", "oque": "Uma forma vira outra sem corte.", "cabe": "Explicar uma transformação."}, {"n": 4, "nome": "Desenho em traço", "arq": "M4_traco", "oque": "O contorno se desenha na frente de quem vê e depois se preenche.", "cabe": "Explicar passo a passo."}, {"n": 5, "nome": "Revelação por máscara", "arq": "M5_mascara", "oque": "A peça aparece por uma janela que abre ou por uma faixa que passa.", "cabe": "Revelar um produto, antes e depois."}, {"n": 6, "nome": "Camadas em profundidade", "arq": "M6_profundidade", "oque": "Camadas planas andam em velocidades diferentes e dão sensação de fundo.", "cabe": "Foto de produto, ambiente."}, {"n": 7, "nome": "Câmera 3D", "arq": "M7_camera3d", "oque": "A peça é um plano no espaço; a câmera chega inclinada, mergulha e recua.", "cabe": "Tela de produto."}, {"n": 8, "nome": "Stop motion", "arq": "M8_stopmotion", "oque": "Anda aos saltos, oito quadros por segundo, com um tremor leve.", "cabe": "Produto, cara de feito à mão."}, {"n": 9, "nome": "Glitch", "arq": "M9_glitch", "oque": "Falha digital: a imagem se parte, se desloca e separa as cores.", "cabe": "Tecnologia, o problema antes da solução."}, {"n": 10, "nome": "Quadro a quadro e rotoscopia", "arq": null, "ref": true, "oque": "Cada quadro desenhado à mão; na rotoscopia, por cima de um vídeo filmado.", "cabe": "Pede desenhista. Abertura especial, campanha."}, {"n": 11, "nome": "Rastreamento", "arq": null, "ref": true, "oque": "Um texto ou uma seta preso a algo que se mexe no vídeo filmado.", "cabe": "Depende da gravação; os editores de vídeo já fazem."}, {"n": 12, "nome": "Digitação", "arq": "M12_digitacao", "oque": "O pedido aparece letra por letra e o cartão cresce com o texto.", "cabe": "Ferramenta com IA, pedido escrito."}, {"n": 13, "nome": "Arrastar e soltar", "arq": "M13_arrastar", "oque": "O cursor traz um arquivo para dentro da caixa e ele vira o resultado.", "cabe": "Enviar um arquivo, a foto do produto."}, {"n": 14, "nome": "Lista de progresso", "arq": "M14_lista", "oque": "Os passos aparecem um por um e ganham o sinal de feito.", "cabe": "Processo em etapas."}, {"n": 15, "nome": "Esfera de pontos", "arq": "M15_esfera", "oque": "Pontos formam uma esfera que gira, ganha uma faixa de luz, respira e ganha um anel em órbita.", "cabe": "Produto de IA, tela de espera, algo que pensa ou trabalha."}], "combinacoes": [{"v": 9, "m": 2, "arq": "X1_pontilhismo-particulas", "nome": "Grãos que se formam", "para": "Saúde e ciência"}, {"v": 7, "m": 7, "arq": "X2_vidro-camera3d", "nome": "Vidro no espaço", "para": "Tela de produto"}, {"v": 5, "m": 8, "arq": "X3_recorte-stopmotion", "nome": "Colagem aos saltos", "para": "Varejo"}, {"v": 11, "m": 13, "arq": "X4_resultado-arrastar", "nome": "Foto na caixa", "para": "Demonstração de ferramenta"}, {"v": 9, "m": 15, "arq": "X5_orbe-pontilhismo", "nome": "Orbe de pontos", "para": "Produto de IA"}]}, "R": {"V1": "- Cores chapadas, sem sombra, sem degradê, sem textura. Formas simples e grandes, com cantos levemente arredondados.\n- Paleta de quatro cores: fundo creme #F4EDE1; objeto principal laranja #E4572E; apoio azul #2E86AB; texto e detalhes azul-escuro #1D2A44. Um círculo grande de cor clara (#F6CFAE) atrás do objeto principal, que anda com ele.\n- Texto em Bricolage Grotesque: título muito grosso (800), apoio seminegrito (600) espaçado.\n- Nada de contorno; quando precisar separar formas, use outra cor chapada.", "V2": "- Só linhas: contorno de 6 px, pontas e cantos arredondados, cor azul-escura #1F2A44, sobre fundo papel #FAF6EF com pautas bem claras.\n- Por dentro das formas, uma segunda linha mais fina (2,5 px) a 84% do tamanho e uma hachura diagonal leve em terracota #C8553D. Nada de preenchimento chapado.\n- Números em contorno (letra vazada, serifada, Fraunces 600); palavras em Fraunces itálico.\n- Um detalhe pequeno em terracota (um círculo, uma marca) para dar ponto de cor.", "V3": "- A peça fica numa parede isométrica: inclinada 30 graus (as linhas horizontais sobem para a direita), como numa maquete vista de quina.\n- Cada forma tem espessura: a face da frente em azul #4C7DF0 e a lateral, mais escura (#2A4BA6), deslocada para trás e para cima, uns 34 px. Uma linha clara fina na borda da face.\n- Números e letras também com espessura (face amarela #FFB547, lateral quase preta #0E1626), em Space Grotesk grosso.\n- Fundo cinza-claro #EDF1F7 com a grade isométrica bem fraca, que desliza devagar.", "V4": "- Formas fofas, de contorno ondulado e macio (nada de canto vivo), como modeladas em massinha.\n- Cada forma tem volume: degradê radial do claro (no alto à esquerda) para o escuro, um brilho branco borrado no alto e uma sombra grande e macia embaixo. Marquinhas de dedo bem leves.\n- Paleta: objeto em coral (#FFB09C → #EC6248 → #B13E2C), apoio em azul (#A9C8FF → #3459B8), fundo pêssego claro em degradê.\n- Texto em Fredoka (redondo e grosso), com degradê vertical e sombra.", "V5": "- Tudo parece papel recortado e colado: bordas rasgadas e irregulares, uma margem de papel branco em volta, sombra curta e dura embaixo, cada peça levemente torta.\n- Fundo papel kraft #C9A37C com textura; retalhos de jornal e de papel colorido parados nos cantos; fita adesiva translúcida segurando o objeto principal.\n- Letras de bilhete de revista: cada letra num pedaço de papel diferente (creme, preto, amarelo #E8C547, vermelho #D8432A, azul #2F5DA8), com fonte e giro sorteados.\n- Objeto principal em vermelho #D8432A com textura de fibra de papel.", "V6": "- Impressão em duas tintas que se sobrepõem (efeito multiplicar): rosa fluorescente #FF48B0 e azul #0078BF, sobre papel creme #F4EEE3 com textura.\n- As tintas ficam um pouco fora de registro (uma deslocada uns 10 px da outra); uma delas em retícula de bolinhas.\n- Falhas de tinta: manchinhas brancas sorteadas que mudam de lugar a cada 3 quadros, como se a impressão vivesse.\n- Texto em Archivo Black, azul, com o rosa deslocado por trás no número.", "V7": "- Um cartão de vidro fosco (780 × 1140 px, cantos de 64 px): mostra o fundo desfocado por trás, com um véu branco de 10%, borda branca a 38% e um brilho no alto.\n- Fundo escuro #12162E com três manchas de luz grandes e desfocadas (violeta #7B5CFF, ciano #00C2FF, rosa #FF5FA2) que andam devagar em círculos.\n- Objeto em branco com degradê para transparente e brilho suave em volta. Texto branco em Manrope (número 800, palavra 600 espaçada).\n- O cartão anda junto com a peça; numa câmera 3D, ele inclina como uma placa de vidro.", "V8": "- A imagem é feita de caracteres numa grade fixa (células de 10 × 16 px), como tela de computador antigo: a claridade de cada célula escolhe o caractere da escala \" .:-=+*%#@\".\n- Duas cores de fósforo: âmbar #FFB000 no objeto principal, verde #3BFF8A no texto, sobre fundo quase preto #060906 com linhas de varredura bem fracas e as bordas escurecidas.\n- Fonte monoespaçada (JetBrains Mono). Uns 3% das células trocam de caractere a cada quadro, como chiado.\n- Desenhe a peça normalmente por baixo e converta em caracteres no fim de cada quadro.", "V9": "- Tudo é feito de pontos redondos. Nada de linhas, contornos ou áreas chapadas: cada forma é uma nuvem densa de pontos, inclusive o texto.\n- Os pontos são sempre claros sobre o fundo escuro, e o objeto precisa ler de longe. A luz se faz com pontos maiores (até 4 px) e mais juntos (um a cada 3 ou 4 px); a sombra, com pontos menores e mais espaçados. Nunca com pontos escuros ou apagados: um ponto existe com brilho total ou não existe. A distribuição é sorteada, sem grade visível.\n- Três cores: fundo azul-marinho chapado #0F1B2D; pontos dourados #C9A24C no objeto principal; pontos creme #F3EDE2 no texto e nas partes mais claras.\n- Os pontos nunca ficam parados: cada um treme menos de 1 px. Uns 140 grãos de poeira creme, bem transparentes, atravessam o fundo devagar.\n- Títulos em serifa (Fraunces), apoio em sem serifa (Manrope), espaçado.\n- Com imagem de referência (foto, logo, desenho): redesenhar a imagem em pontos, assim:\n  1. Fundo liso (branco, de preferência) e um objeto só. O fundo que encosta na borda some; o que está dentro do objeto (o texto de uma embalagem) continua objeto.\n  2. Recortar só o objeto. Ele ocupa cerca de 70% da largura do quadro.\n  3. Desenho escuro em fundo claro (quase todo logo): inverter, para o desenho virar ponto claro.\n  4. Traços finos não podem sumir: engrossar o desenho antes (uns 6 px no tamanho final).\n  5. Pontos numa grade de 3 a 7 px com a posição sorteada. O tom da imagem vira tamanho (claro maior) e cor (dourado no desenho principal, creme nos detalhes e nas letras); a transparência nunca fica abaixo de 60%.\n  6. Esfumar a base se a figura terminaria num corte reto (os últimos 20% de baixo).\n  7. A página tem um botão \"Escolher imagem\": a pessoa escolhe o arquivo e ele vira pontos ali mesmo (funciona aberta com dois cliques). Se houver um `logo.png` na mesma pasta, a página usa esse sozinha, que é o caminho para gravar em vídeo.\n- Esta receita vem do motor de grãos da Forster e usa duas ideias da skill de pontilhismo do Fernando Araújo (BRABO, licença MIT): inverter o desenho escuro e esfumar a base.", "V10": "- Só a caixa da ferramenta, redesenhada, grande e no meio: 900 × 1240 px, cantos de 48 px, branca, com borda cinza-clara #E1E5EC e sombra larga e suave. No alto, uma barra com três bolinhas cinza e uma linha fina embaixo.\n- Fundo cinza-azulado claro, em degradê do centro (#F4F6FA) para as bordas (#DCE1EA). Nada da interface real além da caixa.\n- Texto em DM Sans: principal #1B1F2A, secundário #6A7182. Cor de destaque azul #3D6BFF (botão, ícone, sinal de feito).\n- Plano: sem textura, sem 3D, sem brilho.", "V11": "- O mesmo cartão do V10, mas escuro (#16171C a 92%), com borda branca a 10% e as bolinhas do topo em branco a 18%.\n- Atrás do cartão, o próprio resultado do que a ferramenta faz (a foto do produto, a imagem gerada), em tela cheia, borrado (26 px), escuro (brilho a 42%) e com um zoom lento. As bordas escurecem.\n- Texto branco em DM Sans; destaque azul-claro #7AA2FF.\n- Liga a ferramenta ao que ela produz: o resultado aparece por trás o tempo todo.", "M0": "- O objeto principal entra crescendo de 0 com um passar do ponto (0,55 s) e um giro de -25 graus para 0.\n- O número conta de 0 até o valor final em 1,1 s, freando no fim; a palavra entra letra por letra, subindo 40 px, 0,025 s entre letras.\n- Aos 2,5 s, um pulso no objeto (+10% e volta com quique). Deriva lenta de escala do grupo o tempo todo. Duração: 4 s.", "M1": "- As letras são o movimento. O número começa gigante (2 vezes) e cada algarismo cai de cima, girando 50 graus, com passar do ponto, 0,2 s entre eles; um soco de escala quando o último chega.\n- Aos 1,45 s, o número encolhe para o tamanho normal e desce para o lugar (0,5 s). As letras da palavra chegam de posições e giros sorteados por toda a tela, em ordem sorteada (0,55 s cada, 0,025 s entre elas).\n- O objeto entra por último, girando. Aos 3 s, uma onda passa pelas letras da palavra (sobem 34 px e voltam, uma depois da outra). Duração: 4 s.", "M2": "- A peça começa desfeita: os pontos espalhados pela tela, num anel em volta do centro, a 260 a 950 px do lugar de cada um.\n- De 0,1 s a 1,8 s, os pontos voltam ao lugar com curva suave (saem devagar, correm, freiam), cada um com um atraso sorteado de até 0,45 s: a forma condensa em ondas.\n- Formada, a peça fica viva por cerca de 1 s: um pulso de escala aos 2,2 s (+8% e volta com um quique leve).\n- De 2,9 s a 4 s, ela se desfaz de novo, acelerando, como se fosse soprada, e os pontos voltam para longe.\n- Duração: 4 s, em laço.", "M3": "- Uma forma vira outra sem corte: o contorno é o mesmo conjunto de pontos (180, começando no alto, em sentido horário) que escorrega de uma forma para a outra.\n- Troca a cada 1 s (0,9 s, 1,9 s, 2,9 s), cada troca em 0,6 s com um pequeno recuo e passar do ponto, e um giro de 14 graus que vai e volta.\n- O texto entra no começo e fica. Duração: 4 s.", "M4": "- O contorno do objeto se desenha na frente de quem vê, como uma caneta (1,2 s, velocidade constante), com uma bolinha marcando a ponta da caneta.\n- Terminado o contorno, o preenchimento entra por dentro (0,4 s). Depois o número e a palavra se escrevem da esquerda para a direita, cada um com a ponta da caneta correndo na frente.\n- Aos 3 s, um pulso no objeto. Duração: 4 s.", "M5": "- O objeto aparece por uma janela redonda que abre a partir do centro dele (0,7 s).\n- Cada linha de texto aparece por uma faixa de cor: a faixa cresce da esquerda até cobrir a linha (0,35 s) e sai pela direita, deixando o texto (0,4 s). A segunda linha começa 0,25 s depois.\n- Aos 2,7 s, a janela fecha (0,35 s), o objeto troca de forma e a janela reabre (0,55 s). Duração: 4 s.", "M6": "- A cena é feita de camadas planas em profundidades diferentes: o objeto, o número, a palavra e uns dez enfeites pequenos (alguns atrás, alguns na frente, os da frente maiores e desfocados).\n- Uma câmera anda devagar na diagonal e se aproxima um pouco durante os 4 s; cada camada anda mais ou menos conforme a profundidade, o que dá a sensação de fundo.\n- Os elementos entram aparecendo, um depois do outro, no primeiro meio segundo. Duração: 4 s.", "M7": "- A peça é um plano no espaço. A câmera chega de longe, inclinada (50 graus de lado, 22 para cima), e pousa (0,65 s).\n- Mergulha até o número, ficando bem perto (0,6 s); varre até o objeto (0,5 s); e recua inclinando para o outro lado (0,6 s).\n- Nada fica parado mais de 1,5 s. Duração: 4 s.", "M8": "- O tempo anda aos saltos: 8 quadros por segundo (cada imagem fica 3 quadros num vídeo de 24).\n- A cada salto, tudo treme um pouco (até 5 px e 1,2 grau, sorteado por salto) e o contorno das formas \"ferve\" (os pontos do contorno se mexem até 3 px).\n- O objeto cai de cima e quica; os algarismos aparecem um por vez, a cada 0,25 s; as palavras aparecem uma por vez. Duração: 4 s.", "M9": "- A peça entra com uma falha forte que vai sumindo aos saltos (0,55 s). Duas falhas curtas depois, aos 1,55 s e aos 2,6 s.\n- A falha: fatias horizontais da imagem deslocadas para os lados (até 160 px) e os canais de cor separados (vermelho para um lado, azul para o outro, até 16 px). Na falha mais forte, o número aparece trocado por um instante.\n- Fora das falhas, a imagem fica limpa. Duração: 4 s.", "M10": "Sem receita em código: cada quadro é desenhado à mão; na rotoscopia, por cima de um vídeo filmado. Peça a um desenhista ou a uma ferramenta de vídeo com IA.", "M11": "Sem receita em código: depende do vídeo gravado. Os editores de vídeo (Final Cut, Premiere, After Effects) prendem o texto ou a seta ao objeto que se mexe.", "M12": "- O pedido aparece letra por letra, umas 22 letras por segundo (0,045 s por letra), com o cursor de texto piscando no fim.\n- O cartão começa com a altura de uma linha e cresce suavemente a cada linha nova.\n- Terminou de digitar: o cursor do mouse vai até o botão de enviar (0,45 s) e clica (encolhe para 82% e volta, em 3 quadros). O texto some e o cartão se abre até o tamanho cheio (0,6 s, curva suave).\n- O resultado aparece dentro do cartão: o elemento principal salta com um pequeno passar do ponto (0,5 s), depois o texto de apoio, letra por letra ou linha por linha.\n- Duração: o tempo de digitação mais 2,6 s.", "M13": "- O cursor traz um arquivo (uma miniatura de papel branco com a imagem e o nome embaixo) de fora da tela até o centro da caixa (0,85 s, curva suave), com o arquivo um pouco torto.\n- Quando o arquivo entra, a área de soltar acende: uma borda tracejada na cor de destaque.\n- O cursor clica e solta; o arquivo cresce e some, virando o resultado, que salta no mesmo lugar; o número conta e a palavra aparece. Duração: 4,2 s.", "M14": "- Os passos aparecem um por um dentro do cartão, a cada 0,55 s: cada um com um círculo girando ao lado, que vira um sinal de feito com um pequeno quique 0,42 s depois.\n- Do quarto passo em diante, o conteúdo rola para cima dentro do cartão; a câmera fica parada.\n- No fim, a lista rola para fora e o resultado sobe de baixo para o lugar (0,7 s); o número conta. Duração: cerca de 5,2 s.", "M15": "- Uns 640 pontos distribuídos por igual numa esfera que gira o tempo todo, inclinada 18 graus. Os pontos da frente são maiores e mais fortes; os de trás, menores e fracos.\n- Os pontos chegam espalhados e formam a esfera (0,8 s). Aos 1,3 s, uma faixa de luz varre o globo de um lado ao outro (0,9 s), acendendo os pontos por onde passa.\n- Aos 2,4 s a esfera \"respira\" (cresce 12% e volta, duas vezes). Aos 3,3 s, um anel inclinado de pontos entra em órbita em volta dela. Duração: 4,6 s."}, "G": "- Movimentos de 0,4 a 0,6 segundo; nada fica parado mais de 1,5 segundo (sempre uma deriva leve de escala, de 96% a 103%).\n- Curvas suaves: entra devagar, acelera e freia; saltos com um pequeno passar do ponto e volta.\n- Uma coisa principal por vez no centro da tela; o rodapé (último quarto do quadro) fica livre para a legenda.", "F": "Um único arquivo HTML que roda no navegador, com a animação num `<canvas>` (pode usar GSAP pelo cdnjs). Para gravar quadro a quadro, a página expõe `window.cena = { duracao, fps: 24, pronto: true, irPara(t) }`, em que `irPara(t)` desenha exatamente o instante `t`, sem depender do relógio; e só anima sozinha, em laço, quando o endereço não tiver `?render=1`. No modo `?render=1`, botões e qualquer outro controle ficam escondidos, para não aparecerem no vídeo.", "REFS": {"filmes": [{"id": "LPBC-lP-LQM", "titulo": "Microsoft Designer", "autor": "NotReal para a Microsoft", "canal": "Microsoft Design", "motionIndex": true, "v": 4, "m": 12, "tambem": [3], "diz": "Um mundo macio de massinha, e o pedido digitado numa barra por cima da cena. O resultado aparece em cartões que giram.", "momentos": [[3, "uma pincelada que se transforma em fita (morph)"], [9, "o pedido é digitado sobre a cena 3D"], [13, "a barra do pedido sobre o bolo, letra por letra"], [16, "o resultado aparece em cartões que giram"], [18, "a peça pronta se monta na tela"]]}, {"id": "fqlkvqBoQaU", "titulo": "Windows 365", "autor": "Tendril para a Microsoft", "canal": "Microsoft Design", "motionIndex": true, "v": 7, "m": 7, "tambem": [13, 2], "diz": "A câmera entra no monitor até o navegador, e as janelas viram placas de vidro soltas no espaço. É o mesmo princípio da nossa câmera 3D.", "momentos": [[2, "a câmera mergulha no monitor (câmera 3D)"], [10, "janelas de vidro saltam da tela"], [26, "o cursor arrasta um arquivo (arrastar e soltar)"], [40, "servidores em cubos de vidro, vistos de quina"], [48, "um campo de cubinhos (partículas)"]]}, {"id": "-Y4RToW0Bok", "titulo": "Icon Celebration", "autor": "Tendril para a Microsoft", "canal": "Microsoft Design", "motionIndex": true, "v": 3, "m": 4, "tambem": [3], "diz": "Os ícones nascem como desenho técnico, em grade e contorno, e viram blocos 3D. As peças se juntam como num quebra-cabeça.", "momentos": [[7, "folhas e grade de desenho técnico"], [9.5, "o contorno do ícone se desenha na grade (desenho em traço)"], [11, "uma fita vira o ícone (morph)"], [15, "as peças se juntam (montagem, ainda não temos)"], [24, "ícones em blocos, vistos de quina"]]}, {"id": "ACiJFw5Rr6k", "titulo": "Novo design do Microsoft 365 Copilot", "autor": "Microsoft Design", "canal": "Microsoft Design", "v": 10, "m": 12, "tambem": [1, 14], "diz": "Interface branca e limpa, frases que aparecem palavra por palavra e pedidos digitados na barra do assistente. É quase exatamente o nosso cartão de interface.", "momentos": [[1, "a frase aparece palavra por palavra (tipografia cinética)"], [11, "um ícone vira o menu"], [23, "pedidos digitados na barra \"Ask Copilot\""], [34, "\"To offer you\": tipografia que muda de tamanho"], [45, "o documento se escreve sozinho"]]}, {"id": "zy_dHJcAAho", "titulo": "Meet Copilot", "autor": "Microsoft", "canal": "Microsoft Design", "v": 11, "m": 12, "tambem": [7], "diz": "Cartões de vidro sobre o resultado colorido, e cada pedido é digitado em letras grandes, inclinadas no espaço.", "momentos": [[3.5, "a pergunta digitada em letras grandes, em perspectiva"], [13, "\"Generating output...\": o aviso de que está trabalhando"], [20.5, "o pedido dentro do documento"], [37.5, "\"Create a 10 slide presentation\""], [75, "uma série de pedidos, um atrás do outro"]]}, {"id": "xOGgbGfRFM0", "titulo": "Microsoft Planner", "autor": "Microsoft", "canal": "Microsoft Design", "v": 7, "m": 14, "tambem": [2, 7], "diz": "Painéis de vidro inclinados e listas de tarefas que se preenchem. Um botão clicado explode em bolhas.", "momentos": [[8, "o botão clicado vira uma explosão de bolhas (partículas)"], [16, "a lista de tarefas se preenche (lista de progresso)"], [23, "cartões em perspectiva (câmera 3D)"], [38, "peças correndo em trilhos"], [53.5, "a lista ganha os sinais de feito"]]}, {"id": "t3GycrxB7hQ", "titulo": "Themes by Copilot no Outlook", "autor": "Microsoft", "canal": "Microsoft Design", "v": 11, "m": 12, "tambem": [6], "diz": "O pedido é montado com etiquetas, a imagem gerada entra atrás da janela e vira o tema. Termina num mosaico de telas em profundidade.", "momentos": [[0.5, "bolhas coloridas viram a escolha do tema"], [4, "o pedido montado com etiquetas"], [7.5, "a imagem gerada entra atrás da janela (cartão sobre o resultado)"], [10.5, "a página vira e troca o tema"], [50.5, "um mosaico de telas em profundidade"]]}, {"id": "DzXBdc8Dfmg", "titulo": "A nova geração do OneDrive", "autor": "Microsoft", "canal": "Microsoft Design", "v": 7, "m": 12, "tambem": [7], "diz": "\"Help me get organized\" é digitado na busca, um ícone de nuvem de vidro aparece e as pastas voam até se organizarem numa grade.", "momentos": [[2, "\"Help me get organized\" digitado na busca"], [8, "a nuvem de vidro"], [10, "uma ondulação vira o cartão (ainda não temos)"], [13, "painéis em perspectiva"], [48.5, "as pastas voam e se encaixam numa grade (ainda não temos)"]]}], "faltam": [{"nome": "Montagem por peças", "oque": "As partes chegam de vários lados e se encaixam até formar o objeto. O contrário, a vista explodida, separa as peças para mostrar o que tem dentro.", "visto": "Icon Celebration, aos 15 s"}, {"nome": "Encaixar em grade", "oque": "Itens soltos voam e se organizam numa grade arrumada. Bom para \"organizar\", \"reunir\", \"catálogo\".", "visto": "OneDrive, aos 48 s"}, {"nome": "Ondulação", "oque": "Uma onda se espalha pela superfície, como uma gota na água, e revela a próxima tela.", "visto": "OneDrive, aos 10 s"}, {"nome": "Fita que desliza", "oque": "Uma fita larga atravessa a tela, dobra e vira outra forma. Liga uma cena na outra sem corte.", "visto": "Microsoft Designer, aos 3 s; Icon Celebration, aos 11 s"}]}};
+const $ = id => document.getElementById(id);
+const esc = s => String(s == null ? "" : s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const CENA = "animacao/cena/combinar.html";
+const { visuais, movimentos, combinacoes } = D.MI;
+const PREV_M = { 1: 5, 2: 9, 3: 4, 4: 2, 5: 1, 6: 3, 7: 7, 8: 5, 9: 8, 12: 10, 13: 11, 14: 10, 15: 9 };   // visual de cada vitrine de movimento
+const CARTAO = [7, 10, 11], INTERFACE = [12, 13, 14];
+const EFEITOS1 = ["Orbit","Couch Wall","UI World","Frame Break","Digital Zoom","Phone Mockup","Checklist","Headline Wall","Zoom Through Cut","Chart Grow","Pull Back Reveal","Greenscreen","Paper Cut","Doodle Boil","Vertigo","Cover Story","Glass Type"];
+const EFEITOS2 = ["Kinetic Hook","Gravity Drop","Giant Captions","Prompt Bar","Storyboard Deck","Icon Strike","File Drop","NLE Timeline","Jiggle Delete","Grade Slider","Eye Dropper Grade","Film Look","Title Card","Playing Grid","Real Feed","Video Card","Comment CTA","Comment Drop"];
+$("e1").innerHTML = EFEITOS1.map(n => `<span>${esc(n)}</span>`).join(""); $("e2").innerHTML = EFEITOS2.map(n => `<span>${esc(n)}</span>`).join("");
+
+/* ---- cenas ao vivo só enquanto estão na tela ---- */
+const io = new IntersectionObserver(es => es.forEach(e => {
+  const p = e.target;
+  if (e.isIntersecting) { if (!p.querySelector("iframe")) { const f = document.createElement("iframe"); f.title = "Cena"; f.loading = "lazy"; f.src = `${CENA}?v=${p.dataset.v}&m=${p.dataset.m}`; p.appendChild(f); } }
+  else { const f = p.querySelector("iframe"); if (f) f.remove(); }
+}), { rootMargin: "120px" });
+const vitrine = (v, m) => { const d = document.createElement("div"); d.className = "pv"; d.dataset.v = v; d.dataset.m = m; d.innerHTML = '<span class="ph">carregando…</span>'; io.observe(d); return d; };
+const receita = (id) => D.R[id] ? `<details class="rec"><summary>Receita</summary><pre>${esc(D.R[id])}</pre></details>` : "";
+const minusc = s => s.charAt(0).toLowerCase() + s.slice(1);
+
+/* ---- índice ---- */
+function cartao(i, eixo) {
+  const a = document.createElement("article"); a.className = "ac";
+  const id = (eixo === "v" ? "V" : "M") + i.n, ao = eixo === "v" ? [i.n, 0] : [PREV_M[i.n] || 1, i.n];
+  const prev = i.ref ? '<div class="pv"><div class="sem">Sem modelo em código: depende de desenho à mão ou de vídeo gravado.</div></div>' : "";
+  a.innerHTML = `${prev}<h3><b>${id}</b>${esc(i.nome)}</h3><p>${esc(i.oque)}</p>${i.cabe ? `<p class="cabe">Cabe em: ${esc(i.cabe)}</p>` : ""}${i.ref ? "" : `<button class="bt" type="button" data-mesa="${eixo}${i.n}">Ver na combinação</button>`}${receita(id)}`;
+  if (!i.ref) a.insertBefore(vitrine(ao[0], ao[1]), a.firstChild);
+  return a;
+}
+visuais.forEach(i => $("gV").appendChild(cartao(i, "v")));
+movimentos.forEach(i => $("gM").appendChild(cartao(i, "m")));
+
+/* ---- mesa ---- */
+let sv = 9, sm = 2;
+const botao = (i, eixo) => `<button class="esc" type="button" data-eixo="${eixo}" data-n="${i.n}"><b>${eixo === "v" ? "V" : "M"}${i.n}</b>${esc(i.nome)}${eixo === "v" && CARTAO.includes(i.n) ? "<em>cartão</em>" : ""}</button>`;
+$("cV").insertAdjacentHTML("beforeend", visuais.map(i => botao(i, "v")).join(""));
+$("cM").insertAdjacentHTML("beforeend", movimentos.filter(i => !i.ref).map(i => botao(i, "m")).join(""));
+const PALETA = "Paleta: troque as cores citadas pela identidade do projeto (laranja #FF7A33, brasa #B5421C, âmbar #FFD86B, creme #F7F0EA e carvão #0B0806), mantendo as regras de contraste e de legibilidade.";
+const SEG = { padrao: 4, 12: 7, 13: 4.2, 14: 5.2, 15: 4.6 };
+function pedido(marcar) {
+  const v = visuais.find(i => i.n === sv), m = movimentos.find(i => i.n === sm), assunto = $("assunto").value.trim();
+  const alvo = assunto || "[descreva aqui o que deve aparecer]";
+  const c = t => marcar ? `<mark>${esc(t)}</mark>` : t, e = t => marcar ? esc(t) : t;
+  let p = `Quero uma animação curta para Reel (vertical, 1080 × 1920, cerca de ${SEG[sm] || SEG.padrao} segundos, em laço) de:\n`;
+  const partes = [e(p), c(alvo), e("\n")];
+  let r = "";
+  if ($("img").checked) r += `\nUse a imagem que anexei como referência: redesenhe ela no estilo abaixo, mantendo a forma reconhecível. A página precisa de um botão discreto "Escolher imagem": quando eu escolher o arquivo, ela é transformada no estilo (não desenhe a forma à mão).\n`;
+  r += `\nEstilo de desenho: V${v.n} ${v.nome}\n${D.R["V" + v.n]}\n\nMovimento: M${m.n} ${m.nome}\n${D.R["M" + m.n]}\n\n${PALETA}\n\nRegras gerais:\n${D.G}\n\nFormato da entrega:\n${D.F}`;
+  partes.push(e(r));
+  return partes.join("");
+}
+const textoPedido = () => pedido(false);
+const codigo = () => `<!-- Motor desta página (Risca & Mexe, MIT, adaptado): animacao/cena/ -->\nCatalogo.novaForma("sp", window.SP_PONTOS);          // ícone do assunto (aqui, o monograma SP)\nCatalogo.montar({ visual: ${sv}, movimento: ${sm}, palavra: "AUTORAL", valor: 100, sufixo: "%" });`;
+function atualizar() {
+  const v = visuais.find(i => i.n === sv), m = movimentos.find(i => i.n === sm);
+  document.querySelectorAll("[data-eixo]").forEach(b => b.setAttribute("aria-pressed", +b.dataset.n === (b.dataset.eixo === "v" ? sv : sm)));
+  const p = $("palco"); p.dataset.v = sv; p.dataset.m = sm;
+  let f = p.querySelector("iframe"); if (!f) { f = document.createElement("iframe"); f.title = "Cena"; p.innerHTML = ""; p.appendChild(f); }
+  f.src = `${CENA}?v=${sv}&m=${sm}`;
+  $("leg").innerHTML = `V${sv} × M${sm}<span>${esc(v.nome)} com ${esc(minusc(m.nome))}</span>`;
+  const av = $("aviso"); av.hidden = !(INTERFACE.includes(sm) && !CARTAO.includes(sv)); av.textContent = `O movimento M${sm} acontece dentro de um cartão: combine com V7, V10 ou V11.`;
+  $("ped").innerHTML = pedido(true); $("cod").textContent = codigo();
+}
+document.addEventListener("click", e => {
+  const b = e.target.closest("[data-eixo]"); if (b) { if (b.dataset.eixo === "v") sv = +b.dataset.n; else sm = +b.dataset.n; atualizar(); return; }
+  const g = e.target.closest("[data-mesa]"); if (g) { const t = g.dataset.mesa; if (t[0] === "v") sv = +t.slice(1); else sm = +t.slice(1); atualizar(); $("mesa").scrollIntoView({ behavior: "smooth" }); return; }
+  const c = e.target.closest("[data-comb]"); if (c) { const [v, m] = c.dataset.comb.split("-").map(Number); sv = v; sm = m; atualizar(); $("mesa").scrollIntoView({ behavior: "smooth" }); }
+});
+$("assunto").addEventListener("input", () => $("ped").innerHTML = pedido(true));
+$("img").addEventListener("change", () => $("ped").innerHTML = pedido(true));
+async function copiar(btn, texto, rotulo) { try { await navigator.clipboard.writeText(texto); btn.textContent = "Copiado!"; } catch (e) { btn.textContent = "Selecione e copie"; } setTimeout(() => btn.textContent = rotulo, 1800); }
+$("copiar").addEventListener("click", e => copiar(e.currentTarget, textoPedido(), "Copiar o pedido"));
+$("copCod").addEventListener("click", e => copiar(e.currentTarget, codigo(), "Copiar o código"));
+
+/* ---- combinações ---- */
+combinacoes.forEach(c => { const a = document.createElement("article"); a.className = "ac";
+  a.innerHTML = `<h3><b>V${c.v} × M${c.m}</b>${esc(c.nome)}</h3><p class="cabe">Para: ${esc(c.para)}</p><button class="bt" type="button" data-comb="${c.v}-${c.m}">Abrir na combinação</button>`;
+  a.insertBefore(vitrine(c.v, c.m), a.firstChild); $("gC").appendChild(a); });
+
+/* ---- referências ---- */
+const tempo = s => { const m = Math.floor(s / 60), x = Math.floor(s % 60); return m + ":" + String(x).padStart(2, "0"); };
+function film(f, i) {
+  const d = document.createElement("article"); d.className = "film"; d.id = "filme-" + (i + 1);
+  const tags = [`<a data-comb="${f.v}-${f.m}">V${f.v} × M${f.m}</a>`].concat((f.tambem || []).map(n => `<a data-mesa="m${n}">M${n}</a>`)).join("");
+  d.innerHTML = `<div class="yt" data-id="${f.id}"><img src="https://i.ytimg.com/vi/${f.id}/hqdefault.jpg" alt="" loading="lazy" referrerpolicy="no-referrer"><button type="button" aria-label="Tocar">▶</button></div>
+   <div><h3>${esc(f.titulo)}</h3><div class="au">${esc(f.autor)}</div><p>${esc(f.diz)}</p><div class="tg">${tags}</div><div class="mom">${f.momentos.map(([s, t]) => `<button type="button" data-t="${s}"><b>${tempo(s)}</b><span>${esc(t)}</span></button>`).join("")}</div></div>`;
+  const tocar = s => { const y = d.querySelector(".yt"); y.innerHTML = `<iframe src="https://www.youtube-nocookie.com/embed/${f.id}?start=${Math.floor(s)}&autoplay=1&rel=0" title="${esc(f.titulo)}" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>`; };
+  d.querySelector(".yt button").addEventListener("click", () => tocar(f.momentos[0] ? f.momentos[0][0] : 0));
+  d.querySelectorAll(".mom button").forEach(b => b.addEventListener("click", () => { tocar(+b.dataset.t); d.querySelector(".yt").scrollIntoView({ block: "nearest", behavior: "smooth" }); }));
+  return d;
+}
+D.REFS.filmes.forEach((f, i) => $("fs").appendChild(film(f, i)));
+$("falt").innerHTML = D.REFS.faltam.map(x => `<div class="ki" style="padding:12px;border:1px solid var(--line);border-radius:14px;background:var(--panel)"><h3 style="font-size:14px">${esc(x.nome)}</h3><p style="margin:4px 0;color:var(--mut);font-size:13px">${esc(x.oque)}</p><span class="small">Visto em: ${esc(x.visto)}</span></div>`).join("");
+
+/* ---- menu lateral ---- */
+const links = [...document.querySelectorAll("#pn a")];
+const so = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) links.forEach(a => a.classList.toggle("on", a.getAttribute("href") === "#" + e.target.id)); }), { rootMargin: "-30% 0px -60% 0px" });
+links.forEach(a => { const s = document.querySelector(a.getAttribute("href")); if (s) so.observe(s); });
+if (location.protocol === "file:") $("avisoDisco").hidden = false;
+atualizar();
+</script>
+</body>
+</html>
