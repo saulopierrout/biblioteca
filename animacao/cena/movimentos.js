@@ -1,5 +1,5 @@
-/* Adaptado do Risca & Mexe (FORSTER, licença MIT: ver LICENSE-risca-e-mexe.txt). Paleta recolorida para a identidade do Saulo Pierrout; N = 360 pontos por contorno. */
-/* movimentos.js — Risca & Mexe
+/* Licença MIT: ver ../LICENSE.txt. Paleta recolorida para a identidade do Saulo Pierrout; N = 360 pontos por contorno. */
+/* movimentos.js — Catálogo de animação
    =============================
    O que faz:
      Os MOVIMENTOS do catálogo (eixo 2: como a imagem se mexe). Cada movimento monta uma linha do tempo

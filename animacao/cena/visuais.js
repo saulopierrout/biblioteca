@@ -1,5 +1,5 @@
-/* Adaptado do Risca & Mexe (FORSTER, licença MIT: ver LICENSE-risca-e-mexe.txt). Paleta recolorida para a identidade do Saulo Pierrout; N = 360 pontos por contorno. */
-/* visuais.js — Risca & Mexe
+/* Licença MIT: ver ../LICENSE.txt. Paleta recolorida para a identidade do Saulo Pierrout; N = 360 pontos por contorno. */
+/* visuais.js — Catálogo de animação
    ==========================
    O que faz:
      Os VISUAIS do catálogo (eixo 1: como a imagem é desenhada). Cada visual desenha a mesma peça neutra

@@ -1,5 +1,5 @@
-/* Adaptado do Risca & Mexe (FORSTER, licença MIT: ver LICENSE-risca-e-mexe.txt). Paleta recolorida para a identidade do Saulo Pierrout; N = 360 pontos por contorno. */
-/* nucleo.js — Risca & Mexe
+/* Licença MIT: ver ../LICENSE.txt. Paleta recolorida para a identidade do Saulo Pierrout; N = 360 pontos por contorno. */
+/* nucleo.js — Catálogo de animação
    =========================
    O que faz:
      Motor do catálogo de estilos de animação. Separa os dois eixos:
