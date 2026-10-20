@@ -1788,7 +1788,7 @@ function renderGrid(){
 /* ---- abas ---- */
 function renderAbas(){
   $("abas").innerHTML = Object.keys(ABAS).map(k =>
-    `<button class="aba ${aba === k ? "on" : ""}" data-aba="${k}" type="button">${esc(ABAS[k].nome)} <span class="c">${ITEMS.filter(ABAS[k].filtro).length}</span></button>`).join("") + '<a class="aba link" href="protocolos.html">Protocolos <span class="c">→</span></a><a class="aba link" style="margin-left:0" href="animacao.html">Animação <span class="c">→</span></a>';
+    `<button class="aba ${aba === k ? "on" : ""}" data-aba="${k}" type="button">${esc(ABAS[k].nome)} <span class="c">${ITEMS.filter(ABAS[k].filtro).length}</span></button>`).join("") + '<a class="aba link" href="protocolos.html">Protocolos <span class="c">→</span></a><a class="aba link" style="margin-left:0" href="animacao.html">Referências de animação <span class="c">→</span></a>';
 }
 function mudarAba(k, manter){
   if (!ABAS[k]) k = "skills";
