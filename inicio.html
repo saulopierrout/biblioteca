@@ -4,6 +4,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Início · Biblioteca de Skills</title>
+<meta name="description" content="Skills, ferramentas, cursos, livros, protocolos e animação para trabalhar melhor com IA.">
+<meta property="og:type" content="website"><meta property="og:title" content="Biblioteca de Skills · Saulo Pierrout"><meta property="og:description" content="Skills, ferramentas, cursos, livros, protocolos e animação para trabalhar melhor com IA.">
+<meta property="og:url" content="https://saulopierrout.github.io/biblioteca/"><meta property="og:image" content="https://saulopierrout.github.io/biblioteca/og-inicio.jpg"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="https://saulopierrout.github.io/biblioteca/og-inicio.jpg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,300..900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -746,13 +750,12 @@ anelAcc.position.z = 1.0; proc.add(anelAcc);
 const tc = document.createElement("canvas"); tc.width = tc.height = 512;
 const g = tc.getContext("2d");
 const tex = new THREE.CanvasTexture(tc); tex.colorSpace = THREE.SRGBColorSpace;
-const tela = new THREE.Mesh(new THREE.CircleGeometry(.53, 96), new THREE.MeshBasicMaterial({map:tex}));
+const tela = new THREE.Mesh(new THREE.CircleGeometry(.53, 96), new THREE.MeshBasicMaterial({map:tex, transparent:true, depthWrite:false}));
 const telaG = new THREE.Group(); robo.add(telaG);   // tela animada: fica por cima do modelo
-tela.position.z = 1.006; telaG.add(tela);
-// vidro por cima da tela (reflexo leve)
+tela.position.z = 1.006; telaG.add(tela);// vidro por cima da tela (reflexo leve)
 const vidro = new THREE.Mesh(new THREE.CircleGeometry(.53, 96),
   new THREE.MeshPhysicalMaterial({color:0xffffff, transparent:true, opacity:.06, roughness:.02, clearcoat:1, metalness:0}));
-vidro.position.z = 1.012; telaG.add(vidro);
+vidro.position.z = 1.012; vidro.visible = false; telaG.add(vidro);
 
 // módulo lateral (câmera)
 const mod = new THREE.Group();
@@ -784,14 +787,14 @@ function conteudo(c, estado, rotulo){
     // carinha em pixels com brilho: olhos 6x8 de pixels arredondados nos cantos, sorriso em pixels rosa
     const cel = 13, vao = 3, passo = cel + vao, cols = 6, lins = piscar>0 ? 2 : 8;
     const ox = (typeof rot !== "undefined" ? rot.y : 0)*70, oy = (typeof rot !== "undefined" ? rot.x : 0)*50;
-    const pixel = (x, y, cor, brilho) => { c.shadowColor = brilho; c.shadowBlur = 22; c.fillStyle = cor; c.fillRect(x, y, cel, cel); };
+    const pixel = (x, y, cor, brilho) => { c.shadowColor = brilho; c.shadowBlur = 7; c.fillStyle = cor; c.fillRect(x, y, cel, cel); };
     [[176,214],[336,214]].forEach(([cx, cy]) => {
       const x0 = cx - (cols*passo - vao)/2 + ox, y0 = cy - (lins*passo - vao)/2 + oy;
       for (let r=0;r<lins;r++) for (let k=0;k<cols;k++){
         const canto = lins > 2 && (r===0 || r===lins-1) && (k===0 || k===cols-1);
         if (canto) continue;
         const v = 0.82 + 0.18*Math.sin((r+k)*1.7);
-        pixel(x0 + k*passo, y0 + r*passo, `rgba(255,255,255,${v})`, "rgba(255,255,255,.85)");
+        pixel(x0 + k*passo, y0 + r*passo, `rgba(255,255,255,${v})`, "rgba(255,255,255,.4)");
       }
     });
     // sorriso: pontas levantadas + base; falando: a boca abre e fecha em pixels
@@ -807,25 +810,25 @@ function conteudo(c, estado, rotulo){
     c.shadowBlur = 0;
   } else {
     const m = PIX[estado] || PIX.skills, cel = 22, lado = 18, x0 = 256 - (9*cel)/2, y0 = 82;
-    c.shadowColor = "rgba(255,255,255,.85)"; c.shadowBlur = 18; c.fillStyle = "#FFFFFF";
+    c.shadowColor = "rgba(255,255,255,.4)"; c.shadowBlur = 7; c.fillStyle = "#FFFFFF";
     const tt = performance.now();
     for (let y=0;y<9;y++) for (let x=0;x<9;x++) if (m[y][x] === "#"){
       c.globalAlpha = pixelAlfa(tt, x, y); c.fillRect(x0 + x*cel, y0 + y*cel, lado, lado);
     }
     c.globalAlpha = 1;
-    c.shadowBlur = 14; c.fillStyle = "#FFFFFF"; c.font = "600 30px Archivo, sans-serif"; c.textAlign = "center";
+    c.shadowBlur = 6; c.fillStyle = "#FFFFFF"; c.font = "600 30px Archivo, sans-serif"; c.textAlign = "center";
     c.fillText((rotulo || "").slice(0,18), 256, 342);
     c.shadowColor = "rgba(229,25,75,.95)"; c.fillStyle = "rgba(229,25,75,.95)"; c.fillRect(232,362,48,5); c.shadowBlur = 0;
   }
 }
 function desenhar(t){
   const estado = ROBO.tela, k = estado + "|" + ROBO.rotulo;
-  // fundo da tela
-  const fundo = g.createRadialGradient(256,230,40,256,256,300);
-  fundo.addColorStop(0,"#26262B"); fundo.addColorStop(1,"#0B0B0D");
-  g.fillStyle = fundo; g.fillRect(0,0,512,512);
-  g.fillStyle = "rgba(255,255,255,.035)";
-  for (let y=0;y<512;y+=8) g.fillRect(0,y,512,1);
+  // sem fundo: só as linhas e o conteúdo, aplicados direto sobre a tela do modelo
+  g.clearRect(0,0,512,512);
+  // o vidro do modelo tem um reflexo claro pintado na textura: um véu escuro sem borda apaga o reflexo e se funde ao vidro
+  const veu = g.createRadialGradient(256,256,0,256,256,236);
+  veu.addColorStop(0,"rgba(8,8,10,.94)"); veu.addColorStop(.78,"rgba(8,8,10,.9)"); veu.addColorStop(1,"rgba(8,8,10,0)");
+  g.fillStyle = veu; g.fillRect(0,0,512,512);
   g.strokeStyle = "rgba(255,255,255,.12)"; g.lineWidth = 2;
   g.beginPath(); g.arc(256,256,212,0,Math.PI*2); g.stroke();
   g.strokeStyle = "rgba(229,25,75,.9)"; g.lineWidth = 4;
@@ -989,7 +992,7 @@ function aplicaRaioX(){
   const alvo = ROBO.raiox ? 1 : 0; xr += (alvo - xr)*0.08; if (Math.abs(alvo - xr) < .002) xr = alvo;
   mat.branco.opacity = 1 - .84*xr; mat.branco.depthWrite = xr < .5;
   mat.vidroEsc.opacity = 1 - .72*xr; mat.vidroEsc.depthWrite = xr < .5;
-  tela.material.transparent = xr > 0; tela.material.opacity = 1 - .45*xr;
+  tela.material.opacity = 1 - .45*xr;
   interior.visible = xr > .02; linhaMat.opacity = .35*xr; cascoLinhas.visible = xr > .02; cascoLinhas.material.opacity = .14*xr;
   costuras.visible = xr < .5;
 }
@@ -1172,7 +1175,7 @@ function aplicarModo(m){
   interior.visible = rx; cascoLinhas.visible = rx; costuras.visible = !rx;
   // no raio-X o vidro da tela e a própria tela ficam translúcidos para ver o núcleo por trás
   cupula.material = rx ? vidroRaioX : mat.vidroEsc;
-  tela.material.transparent = rx; tela.material.opacity = rx ? .55 : 1; tela.material.needsUpdate = true;
+  tela.material.opacity = rx ? .55 : 1; tela.material.needsUpdate = true;
   const tz = tripo ? AJUSTE.tela.z : .99, tr = tripo ? AJUSTE.tela.raio : .5;
   tela.geometry = new THREE.CircleGeometry(tr, 96); vidro.geometry = tela.geometry;
   telaG.position.set(0, tripo ? AJUSTE.tela.y : 0, 0); tela.position.z = tz; vidro.position.z = tz + .006;
@@ -1187,7 +1190,7 @@ let mx = 0, my = 0;
 let ultimo = 0;
 addEventListener("mousemove", e => { mx = e.clientX; my = e.clientY; ultimo = performance.now(); });
 const rot = {x:0,y:0};
-setInterval(()=>{ piscar = 7; }, 3800);
+if (!/[?&]og=/.test(location.search)) setInterval(()=>{ piscar = 7; }, 3800);  // ?og=1: sem piscar, para a foto da miniatura
 setInterval(()=>{ if (ROBO.falando && Math.random() < .5) piscar = 6; }, 900);
 
 function quadro(t){
