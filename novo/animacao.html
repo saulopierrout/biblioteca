@@ -1,0 +1,416 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Animação · estúdio de estilos, efeitos e referências</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,300..900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#F7F7F5;--ink:#0E0E10;--ink2:#2A2A2E;--muted:#6A6A70;--line:rgba(14,14,16,.12);--line2:rgba(14,14,16,.22);--accent:#E5194B;--accent-soft:rgba(229,25,75,.10);
+  --mono:"JetBrains Mono",ui-monospace,Consolas,monospace;--sans:"Archivo",system-ui,sans-serif;
+  --chanfro:polygon(12px 0,100% 0,100% calc(100% - 12px),calc(100% - 12px) 100%,0 100%,0 12px)}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--bg);color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none} button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.grain{position:fixed;inset:-50%;width:200%;height:200%;pointer-events:none;z-index:90;opacity:.10;mix-blend-mode:multiply;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 .9 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>")}
+header{position:sticky;top:0;z-index:40;background:rgba(255,255,255,.88);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+.hwrap{max-width:1440px;margin:0 auto;height:68px;padding:0 40px;display:flex;align-items:center;gap:32px}
+.marca{display:flex;align-items:center;gap:12px;font:600 11px/1 var(--mono);letter-spacing:.32em}
+.marca svg{height:30px;width:auto}
+nav.menu{display:flex;gap:28px;margin:0 auto}
+nav.menu a{font:500 14px/1 var(--sans);color:var(--ink2);position:relative;padding:6px 0}
+nav.menu a.on{color:var(--ink)} nav.menu a.on:after{content:"";position:absolute;left:0;right:0;bottom:-2px;height:2px;background:var(--accent)}
+.wrap{max-width:1440px;margin:0 auto;padding-left:40px;padding-right:40px}
+.rotulo{display:flex;align-items:center;gap:12px;font:500 11px var(--mono);letter-spacing:.28em;text-transform:uppercase;color:var(--muted)}
+.rotulo i{width:7px;height:7px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 4px var(--accent-soft)}
+h1{margin-top:16px;font-weight:900;font-stretch:108%;font-size:clamp(42px,5vw,76px);line-height:.9;letter-spacing:-.035em}
+h1 .de,h1 .ponto{color:var(--accent)} h1 .de{font-weight:800}
+.topo{padding-top:56px;padding-bottom:28px}
+.topo p{margin-top:14px;max-width:600px;color:var(--ink2);line-height:1.55}
+/* três portas */
+.portas{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;padding-top:14px;padding-bottom:14px;position:sticky;top:68px;z-index:30;background:rgba(247,247,245,.92);backdrop-filter:blur(12px)}
+.porta{position:relative;isolation:isolate;display:flex;align-items:center;gap:14px;padding:16px 18px;clip-path:var(--chanfro);background:var(--line2);text-align:left}
+.porta:before{content:"";position:absolute;inset:1px;clip-path:var(--chanfro);background:linear-gradient(135deg,#fff,#f0f0ee);z-index:-1}
+.porta b{display:block;font:700 17px var(--sans)} .porta small{display:block;margin-top:3px;font:400 11px var(--mono);letter-spacing:.06em;color:var(--muted)}
+.porta:hover{background:rgba(229,25,75,.6)}
+.porta[aria-selected="true"]{background:var(--accent);color:#fff;filter:drop-shadow(0 0 8px rgba(229,25,75,.35))}
+.porta[aria-selected="true"]:before{background:linear-gradient(135deg,#17171A,#0B0B0D)}
+.porta[aria-selected="true"] small{color:#B4B4BC}
+section.parte{display:none;padding-top:26px} section.parte.on{display:block}
+.subtit{display:flex;align-items:baseline;gap:14px;margin:6px 0 18px;flex-wrap:wrap}
+.subtit h2{font:800 24px var(--sans);letter-spacing:-.02em} .subtit span{font:400 11px var(--mono);letter-spacing:.12em;color:var(--muted)}
+/* moldura HUD */
+.moldura{clip-path:var(--chanfro);background:var(--ink);padding:1px}
+.moldura>div{clip-path:var(--chanfro);background:#fff;overflow:hidden}
+
+.dica{margin:12px 0 0;font:400 12px var(--mono);color:var(--muted)} .dica a{color:var(--accent)}
+/* filtros */
+.ferr{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:18px}
+.chip{height:34px;padding:0 14px;border-radius:999px;font:500 13px var(--sans);color:var(--ink2)}
+.chip.on{background:var(--ink);color:#fff}
+.busca{display:flex;align-items:center;gap:8px;height:42px;min-width:260px;padding:0 12px;background:#fff;border:1px solid var(--line2);clip-path:var(--chanfro)}
+.busca input{flex:1;border:0;outline:0;background:none;font:400 14px var(--sans)}
+/* cartões */
+.grade{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+#fxGrade{grid-template-columns:repeat(6,1fr);gap:12px}
+#fxGrade .c h3{font-size:13.5px}
+#fxGrade .c .r{font-size:12px;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+#fxGrade .txt{padding:10px 11px 12px}
+#fxGrade .mini-btn{padding:6px 8px;font-size:9px}
+.c{position:relative;transition:filter .3s,transform .3s}
+.c .b{clip-path:var(--chanfro);background:var(--line2);padding:1px;height:100%;transition:background .3s}
+.c .i{clip-path:var(--chanfro);background:linear-gradient(135deg,#fff,#f3f3f1);height:100%;display:flex;flex-direction:column;transition:background .3s,color .3s}
+.c:hover{transform:translateY(-3px);filter:drop-shadow(0 0 7px rgba(229,25,75,.35)) drop-shadow(0 10px 22px rgba(229,25,75,.14))}
+.c:hover .b{background:var(--accent)} .c:hover .i{background:linear-gradient(135deg,#17171A,#0B0B0D);color:#fff}
+.c:hover .r,.c:hover .meta{color:#B4B4BC}
+.c .txt{padding:14px 16px 16px;display:flex;flex-direction:column;gap:6px;flex:1}
+.c h3{font:700 16px/1.25 var(--sans)} .c .r{font:400 13px/1.5 var(--sans);color:var(--muted)}
+.c .meta{font:400 10.5px var(--mono);letter-spacing:.08em;color:var(--muted)}
+.c .acoes{display:flex;gap:6px;margin-top:auto;padding-top:8px;flex-wrap:wrap}
+.mini-btn{padding:8px 11px;clip-path:var(--chanfro);background:var(--ink);color:#fff;font:500 10px var(--mono);letter-spacing:.12em}
+.c:hover .mini-btn{background:var(--accent)}
+.mini-btn.claro{background:var(--line2);color:var(--ink)} .c:hover .mini-btn.claro{background:#2A2A2E;color:#fff}
+/* efeitos: prévia em palco (container) */
+.palco{position:relative;aspect-ratio:4/5;container-type:size;overflow:hidden;background:#1B1B20;color:var(--c);font-family:"Segoe UI",sans-serif;--o:#FF2E5F;--r:#FF8FA9;--a:#FFFFFF;--c:#FFFFFF}
+.palco .in{position:absolute;inset:0}
+.palco .sp{display:block;height:auto;fill:currentColor}
+
+
+/* mesa de combinação (estilo + efeitos) */
+.mesa-nova{display:grid;grid-template-columns:420px 1fr;gap:32px;align-items:start}
+.escolhas h4,.pedido h4{font:500 10.5px var(--mono);letter-spacing:.18em;color:var(--muted);margin:4px 0 10px}
+.escolhas h4 small{color:var(--accent);font:inherit}
+.escolhas .ferr{gap:6px;margin-bottom:22px}
+.escolhas .chip{border:1px solid var(--line2);height:32px;font-size:12.5px}
+.escolhas .chip.on{border-color:var(--ink)}
+.escolhas .chip:disabled{opacity:.35;cursor:not-allowed}
+.resultado{position:sticky;top:180px}
+.palco.grande{aspect-ratio:4/5;max-height:620px;margin:0 auto}
+.palco .camada{position:absolute;inset:0;container-type:size}
+.palco .rotulo-estilo{position:absolute;left:14px;top:12px;z-index:5;padding:5px 9px;background:var(--ink);color:#fff;font:500 10px var(--mono);letter-spacing:.14em;clip-path:polygon(5px 0,100% 0,100% calc(100% - 5px),calc(100% - 5px) 100%,0 100%,0 5px)}
+.palco .vazio-m{position:absolute;inset:0;display:grid;place-items:center;color:var(--muted);font:400 13px var(--mono)}
+.pedido{margin-top:16px;padding:16px 18px;background:#fff;border-left:2px solid var(--accent)}
+.pedido p{font-size:14px;line-height:1.6;color:var(--ink2);margin-bottom:12px;white-space:pre-line}
+@media (max-width:1100px){.mesa-nova{grid-template-columns:1fr}.resultado{position:relative;top:auto}}
+
+.linha-tempo{display:flex;gap:4px;margin-top:10px}
+.linha-tempo div{flex:1;cursor:pointer}
+.linha-tempo span{display:block;font:500 10px var(--mono);letter-spacing:.12em;color:var(--muted);margin-bottom:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.linha-tempo div.on span{color:var(--ink)}
+.linha-tempo i{display:block;height:3px;background:var(--line2);position:relative;overflow:hidden}
+.linha-tempo div.on i:after{content:"";position:absolute;inset:0;background:var(--accent);transform-origin:left;animation:enche var(--dur) linear forwards;box-shadow:0 0 8px rgba(229,25,75,.6)}
+.linha-tempo div.feito i{background:var(--ink)}
+@keyframes enche{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+.palco .camada{animation:entraCamada .45s ease both}
+@keyframes entraCamada{from{opacity:0;filter:blur(8px)}to{opacity:1;filter:none}}
+.palco .legenda-fx{position:absolute;left:14px;bottom:12px;z-index:5;max-width:70%;padding:8px 11px;background:rgba(14,14,16,.88);color:#fff;font:400 12.5px/1.4 var(--sans);clip-path:var(--chanfro)}
+.palco .legenda-fx b{display:block;font:500 10px var(--mono);letter-spacing:.14em;color:#FF7A99;margin-bottom:2px}
+/* janela do efeito grande */
+.janela{position:fixed;inset:0;z-index:80;display:none;place-items:center;background:rgba(14,14,16,.45);backdrop-filter:blur(6px);padding:20px}
+.janela.aberta{display:grid}
+.janela .caixa{width:min(900px,100%);display:grid;grid-template-columns:1fr 1fr;gap:0;background:#fff;clip-path:polygon(18px 0,100% 0,100% calc(100% - 18px),calc(100% - 18px) 100%,0 100%,0 18px)}
+.janela .palco{aspect-ratio:4/5;border:0;max-height:80vh}
+.janela .info{padding:28px 26px;display:flex;flex-direction:column;gap:12px}
+.janela .info .meta{font:500 10px var(--mono);letter-spacing:.16em;color:var(--accent)}
+.janela .info h3{font:800 28px/1.05 var(--sans);letter-spacing:-.02em}
+.janela .info p{color:var(--ink2);line-height:1.6}
+.janela .fechar{align-self:flex-end;width:34px;height:34px;display:grid;place-items:center;clip-path:var(--chanfro);background:var(--ink);color:#fff}
+.janela .fechar:hover{background:var(--accent)}
+.janela .acoes{display:flex;gap:8px;margin-top:auto}
+.c.efeito{cursor:zoom-in}
+@media (max-width:900px){.janela .caixa{grid-template-columns:1fr}}
+.moldura.cena>div{background:#0E0E10}
+.moldura.cena iframe{display:block;width:100%;aspect-ratio:9/16;max-height:600px;border:0;margin:0 auto;filter:hue-rotate(-28deg) saturate(1.08)}
+.escolhas .desc{margin:-12px 0 20px;font-size:13px;line-height:1.5;color:var(--muted);min-height:20px}
+.mesa-nova{grid-template-columns:1fr 360px!important}
+.pedido{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.pedido h4{width:100%}
+.lab{display:grid;grid-template-columns:1fr 400px;gap:28px;align-items:start}
+.lab-efeitos{min-width:0}
+.lab-efeitos #fxGrade{grid-template-columns:repeat(4,minmax(0,1fr))}
+html,body{overflow-x:hidden}
+.lab-painel{position:sticky;top:160px;padding:18px;background:#fff;clip-path:polygon(16px 0,100% 0,100% calc(100% - 16px),calc(100% - 16px) 100%,0 100%,0 16px);box-shadow:inset 0 0 0 1px var(--line2)}
+.lab-cab{display:flex;flex-direction:column;gap:3px;margin-bottom:14px}
+.lab-cab .rot{font:700 13px var(--mono);letter-spacing:.2em;color:var(--accent)}
+.lab-cab .sub{font:400 12px var(--sans);color:var(--muted)}
+.campo{display:flex;flex-direction:column;gap:5px;margin-bottom:10px}
+.campo span{font:500 9.5px var(--mono);letter-spacing:.16em;color:var(--muted)}
+.campo select{height:40px;padding:0 10px;font:500 14px var(--sans);color:var(--ink);background:#F7F7F5;border:1px solid var(--line2);border-radius:0;clip-path:var(--chanfro);cursor:pointer}
+.dois{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.lab-painel .desc{font-size:12.5px;line-height:1.45;color:var(--muted);margin:2px 0 12px;min-height:34px}
+.lab-painel .moldura.cena iframe{max-height:420px}
+.escolhidos{margin-top:12px}
+.escolhidos>span{font:500 9.5px var(--mono);letter-spacing:.16em;color:var(--muted)}
+.escolhidos div{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px;min-height:28px}
+.escolhidos button{padding:6px 10px;background:var(--ink);color:#fff;font:500 11px var(--sans);clip-path:var(--chanfro)}
+.escolhidos button:hover{background:var(--accent)}
+.escolhidos em{font:400 12px var(--sans);color:var(--muted);font-style:normal}
+.lab-painel .pedido{margin-top:12px;padding:0;background:none;border:0}
+/* efeito escolhido fica destacado */
+.c.efeito.sel .b{background:var(--accent)}
+.c.efeito.sel{filter:drop-shadow(0 0 8px rgba(229,25,75,.45))}
+.c.efeito.sel .txt h3:before{content:"✓ ";color:var(--accent)}
+.c.efeito .ver{background:var(--line2);color:var(--ink)}
+@media (max-width:1100px){.lab{grid-template-columns:1fr}.lab-painel{position:relative;top:auto}.lab-efeitos #fxGrade{grid-template-columns:repeat(3,1fr)}}
+/* referências */
+.filmes{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:48px}
+.thumb{position:relative;aspect-ratio:16/9;background:#e3e3e1;overflow:hidden}
+.thumb img,.thumb video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.thumb .play{position:absolute;left:12px;bottom:10px;width:34px;height:34px;display:grid;place-items:center;clip-path:var(--chanfro);background:rgba(14,14,16,.85);color:#fff}
+.mais-btn{display:block;margin:28px auto 0;padding:14px 26px;clip-path:var(--chanfro);background:var(--ink);color:#fff;font:500 11px var(--mono);letter-spacing:.16em}
+.mais-btn:hover{background:var(--accent)}
+.aviso-copia{position:fixed;left:50%;bottom:30px;transform:translateX(-50%) translateY(20px);z-index:70;padding:12px 18px;background:var(--ink);color:#fff;font:500 11px var(--mono);letter-spacing:.14em;clip-path:var(--chanfro);opacity:0;transition:all .3s}
+.aviso-copia.on{opacity:1;transform:translateX(-50%)}
+/* robô pequeno */
+.mini{position:fixed;right:22px;bottom:22px;z-index:55;width:84px;height:84px;cursor:pointer;filter:drop-shadow(0 10px 18px rgba(14,14,16,.25))}
+.mini canvas{width:84px;height:84px}
+.mini-balao{position:fixed;right:116px;bottom:34px;z-index:55;width:280px;padding:14px 16px;color:#fff;background:#0E0E10;clip-path:var(--chanfro);opacity:0;transform:translateY(6px);pointer-events:none;transition:opacity .25s,transform .25s}
+.mini-balao.aberto{opacity:1;transform:none;pointer-events:auto}
+.mini-balao .cab{font:500 9.5px var(--mono);letter-spacing:.18em;color:var(--accent);margin-bottom:6px}
+.mini-balao p{font:400 13.5px/1.5 var(--sans);padding-right:18px}
+.mini-balao button{position:absolute;right:8px;top:8px;width:22px;height:22px;color:#B4B4BC}
+footer{margin-top:100px;border-top:1px solid var(--line);background:#fff}
+.fwrap{max-width:1440px;margin:0 auto;padding:36px 40px;display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;font:400 12px var(--mono);color:var(--muted)}
+@media (max-width:1100px){#fxGrade{grid-template-columns:repeat(3,1fr)} .hwrap{padding:0 16px;gap:14px} nav.menu{gap:16px} .wrap{padding-left:16px;padding-right:16px} .grade,.filmes{grid-template-columns:1fr 1fr} .portas{grid-template-columns:1fr} .mesa iframe{height:640px}}
+@media (max-width:640px){.grade,.filmes{grid-template-columns:1fr} .marca span{display:none}}
+@media (prefers-reduced-motion:reduce){*{transition-duration:.01ms!important}}
+
+/* celular: cabeçalho enxuto e nada vazando para o lado */
+html,body{overflow-x:hidden}
+@media (max-width:640px){
+  .hperfis{display:none} .marca span{display:none}
+  .hwrap{padding:0 14px;gap:10px} nav.menu{gap:12px;margin:0 0 0 auto} nav.menu a{font-size:12.5px}
+  h1{font-size:40px}
+  .mini{width:60px;height:60px;right:12px;bottom:12px} .mini canvas{width:60px;height:60px}
+  .mini-balao{right:12px;bottom:84px;width:calc(100% - 24px)}
+}
+
+/* celular: laboratório primeiro, efeitos em 2 colunas, portas compactas */
+@media (max-width:640px){
+  .portas{position:relative;top:auto;grid-template-columns:1fr 1fr;gap:8px}
+  .porta{padding:12px;gap:10px} .porta b{font-size:14px} .porta small{display:none}
+  .lab{display:flex;flex-direction:column;gap:22px} .lab-painel{order:-1;position:relative;top:auto}
+  .lab-efeitos #fxGrade{grid-template-columns:repeat(2,minmax(0,1fr))}
+  #fxFiltros,#vFiltros{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none} #fxFiltros .chip,#vFiltros .chip{flex-shrink:0}
+  .dois{grid-template-columns:1fr}
+  .lab-painel .moldura.cena iframe{max-height:460px}
+  .busca{min-width:0;width:100%}
+}
+</style>
+</head>
+<body>
+<div class="grain" aria-hidden="true"></div>
+<header><div class="hwrap">
+  <a class="marca" href="inicio.html" aria-label="Início"><svg viewBox="68.14 56.29 389.24 552.68" aria-hidden="true"><g id="sp"><path fill="#0E0E10" d="M328.26 230.12 A77.50 77.50 0 0 0 341.32 176.02 A47.90 47.90 0 1 0 272.15 224.96 L378.11 278.76 A125.40 125.40 0 0 1 431.52 330.68 A47.90 47.90 0 0 1 433.50 334.77 A47.90 47.90 0 0 1 437.28 351.16 A77.50 77.50 0 0 1 433.57 379.04 A125.40 125.40 0 0 1 421.15 405.89 A202.91 202.91 0 0 1 371.88 460.55 A202.91 202.91 0 0 0 388.84 426.51 A47.90 47.90 0 0 0 391.93 405.64 A47.90 47.90 0 0 0 372.83 370.88 A18.30 18.30 0 0 0 370.17 369.22 L232.77 299.37 A328.31 328.31 0 0 1 189.88 273.26 A125.40 125.40 0 0 1 170.89 256.45 A77.50 77.50 0 0 1 150.45 207.53 A125.40 125.40 0 0 1 204.37 98.56 A125.40 125.40 0 0 1 325.72 86.68 A125.40 125.40 0 0 1 385.91 141.82 A47.90 47.90 0 0 1 389.95 177.59 A77.50 77.50 0 0 1 354.44 223.62 A47.90 47.90 0 0 1 334.85 229.95 A47.90 47.90 0 0 1 328.26 230.13 Z"/><path fill="#0E0E10" d="M124.30 226.30 A202.91 202.91 0 0 0 116.29 251.34 A29.60 29.60 0 0 0 117.30 268.90 A77.50 77.50 0 0 0 135.97 297.39 A47.90 47.90 0 0 0 148.72 306.24 L309.29 382.53 A77.50 77.50 0 0 1 352.11 467.34 A202.91 202.91 0 0 1 286.06 581.71 A29.60 29.60 0 0 1 250.52 584.20 A125.40 125.40 0 0 1 195.50 501.83 A47.90 47.90 0 0 1 226.20 448.11 L226.21 448.12 A77.50 77.50 0 0 0 226.45 513.37 A29.60 29.60 0 0 0 247.83 529.91 A29.60 29.60 0 0 0 279.79 513.95 A47.90 47.90 0 0 0 276.21 465.38 A77.50 77.50 0 0 0 246.32 439.82 L178.87 407.15 A328.31 328.31 0 0 1 143.96 387.54 A125.40 125.40 0 0 1 90.73 314.28 A77.50 77.50 0 0 1 103.57 248.03 A125.40 125.40 0 0 1 124.30 226.30 Z"/></g></svg><span>SAULO PIERROUT</span></a>
+  <nav class="menu" aria-label="Principal"><a href="inicio.html">Início</a><a href="biblioteca.html">Biblioteca</a><a href="protocolos.html">Protocolos</a><a class="on" href="animacao.html" aria-current="page">Animação</a></nav>
+</div></header>
+
+<main>
+  <section class="wrap topo">
+    <div class="rotulo"><i></i>04 · Animação</div>
+    <h1>ESTÚDIO<br><span class="de">de</span> ANIMAÇÃO<span class="ponto">.</span></h1>
+    <p>Três caminhos para criar motion com IA: monte o seu estilo e copie o pedido, escolha um efeito com prévia, ou procure uma referência pronta com o prompt de quem fez.</p>
+  </section>
+  <div class="wrap portas" role="tablist" aria-label="Caminhos do estúdio" id="portas"></div>
+
+  <section class="wrap parte" id="p-lab" role="tabpanel">
+    <div class="lab">
+      <div class="lab-efeitos">
+        <div class="subtit"><h2>Efeitos</h2><span id="nEfeitos"></span></div>
+        <div class="ferr" id="fxFiltros"></div>
+        <div class="grade" id="fxGrade"></div>
+      </div>
+      <aside class="lab-painel" aria-label="Laboratório de estilos">
+        <div class="lab-cab"><span class="rot">LABORATÓRIO DE ESTILOS</span><span class="sub">misture visual, movimento e efeitos</span></div>
+        <label class="campo"><span>COMBINAÇÃO PRONTA</span><select id="sCombo"><option value="">— escolher —</option></select></label>
+        <div class="dois">
+          <label class="campo"><span>VISUAL</span><select id="sVisual"></select></label>
+          <label class="campo"><span>MOVIMENTO</span><select id="sMov"></select></label>
+        </div>
+        <p class="desc" id="mDesc"></p>
+        <div class="moldura cena"><div><iframe id="mCena" title="Cena com o visual e o movimento escolhidos"></iframe></div></div>
+        <div class="escolhidos"><span>EFEITOS NA MISTURA</span><div id="mEfs"></div></div>
+        <div class="pedido"><button class="mini-btn" id="mCopiar">COPIAR PEDIDO</button><a class="mini-btn claro" id="mAbrir" target="_blank" rel="noopener">ABRIR A CENA ↗</a></div>
+      </aside>
+    </div>
+  </section>
+
+  <section class="wrap parte" id="p-refs" role="tabpanel">
+    <div class="subtit"><h2>Filmes de referência</h2><span>OBRAS DE MOTION PARA ESTUDAR</span></div>
+    <div class="filmes" id="filmes"></div>
+    <div class="subtit"><h2>Vídeos com prompt</h2><span id="nVideos"></span></div>
+    <div class="ferr"><label class="busca"><input id="vq" type="search" placeholder="Buscar no prompt (ex.: logo, 3D, texto)" aria-label="Buscar vídeos"></label><div id="vFiltros"></div></div>
+    <div class="grade" id="vGrade"></div>
+    <button class="mais-btn" id="vMais">MOSTRAR MAIS</button>
+  </section>
+</main>
+
+<footer><div class="fwrap"><span>SAULO PIERROUT · ESTÚDIO DE ANIMAÇÃO</span><span>Vídeos de referência: catálogo aberto (licença MIT) · prévias dos efeitos feitas aqui</span></div></footer>
+<div class="aviso-copia" id="aviso" role="status"></div>
+<div class="janela" id="janela" role="dialog" aria-modal="true" aria-labelledby="jTitulo"><div class="caixa">
+  <div class="palco" id="jPalco"></div>
+  <div class="info"><button class="fechar" id="jFechar" aria-label="Fechar">✕</button><span class="meta" id="jGrupo"></span><h3 id="jTitulo"></h3><p id="jTexto"></p>
+    <div class="acoes"><button class="mini-btn" id="jPedido">COPIAR PEDIDO</button></div></div>
+</div></div>
+
+<script src="icones.js"></script>
+<script src="efeitos.js"></script>
+<script>
+window.DICAS_ROBO = ["Comece por “Monte seu estilo”: escolha visual e movimento e copie o pedido pronto.","Em Efeitos, passe o mouse para ver o movimento e copie o pedido.","Nos vídeos com prompt, passe o mouse para tocar e copie o prompt de quem fez."];
+const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const copiar = (txt, msg) => navigator.clipboard.writeText(txt).then(() => { const a = document.getElementById("aviso"); a.textContent = msg; a.classList.add("on"); setTimeout(() => a.classList.remove("on"), 1500); });
+
+// ---------- três portas ----------
+const PORTAS = [{id:"lab", nome:"Laboratório de estilos", sub:"Efeitos, visual e movimento num lugar só", ic:"pincel"},
+                {id:"refs", nome:"Referências", sub:"Filmes e 703 vídeos com prompt", ic:"youtube"}];
+document.getElementById("portas").innerHTML = PORTAS.map(p => `<button class="porta" role="tab" data-id="${p.id}">${ico(p.ic, 22)}<span><b>${p.nome}</b><small>${p.sub}</small></span></button>`).join("");
+const montado = {};
+function abrirPorta(id){
+  document.querySelectorAll(".porta").forEach(b => b.setAttribute("aria-selected", b.dataset.id === id));
+  document.querySelectorAll(".parte").forEach(s => s.classList.toggle("on", s.id === "p-" + id));
+  history.replaceState(null, "", "#aba=" + id);
+  if (!montado[id]){ montado[id] = 1; if (id === "lab"){ montarMesa(); montarEfeitos(); } if (id === "refs") montarRefs(); }
+  if (window.roboMostra) roboMostra(id === "lab" ? "pincel" : "play");
+}
+document.getElementById("portas").addEventListener("click", e => { const b = e.target.closest(".porta"); if (b) abrirPorta(b.dataset.id); });
+
+// ---------- efeitos (CSS de cada efeito isolado no seu cartão) ----------
+// mesmo método da página antiga: prefixa cada seletor; ".fx" vira o próprio palco; @keyframes ficam como estão
+function escopoFX(css, pre){
+  let o = "", i = 0;
+  while (i < css.length){
+    const j = css.indexOf("{", i); if (j < 0) break;
+    const sel = css.slice(i, j).trim(); let d = 1, k = j + 1;
+    while (d && k < css.length){ if (css[k] === "{") d++; else if (css[k] === "}") d--; k++; }
+    const corpo = css.slice(j + 1, k - 1);
+    if (sel.startsWith("@")) o += sel + "{" + corpo + "}";
+    else o += sel.split(",").map(s => s.trim()).map(s => s.includes(".fx") ? s.replace(/\.fx/g, pre) : pre + " " + s).join(",") + "{" + corpo + "}";
+    i = k;
+  }
+  return o;
+}
+const fxHTML = (f, id) => `<div class="in">${f.h}</div><style>${escopoFX(f.c, "#" + id + " .in")}</style>`;
+let fxGrupo = 0;
+function montarEfeitos(){
+  const G = ["Todos", "Câmera, tela e transição", "Interface, edição e legenda"];
+  document.getElementById("fxFiltros").innerHTML = G.map((g, i) => `<button class="chip${i === 0 ? " on" : ""}" data-g="${i}">${g}</button>`).join("");
+  document.getElementById("fxFiltros").onclick = e => { const b = e.target.closest(".chip"); if (!b) return; fxGrupo = +b.dataset.g; document.querySelectorAll("#fxFiltros .chip").forEach(c => c.classList.toggle("on", c === b)); desenharEfeitos(); };
+  desenharEfeitos();
+}
+function desenharEfeitos(){
+  const L = FX.map((f, i) => ({...f, i})).filter(f => !fxGrupo || f.g === fxGrupo);
+  document.getElementById("nEfeitos").textContent = L.length + " EFEITOS · CLIQUE PARA SOMAR À MISTURA";
+  setTimeout(desenharMesa, 0);
+  document.getElementById("fxGrade").innerHTML = L.map(f => `<div class="c efeito" data-grande="${f.i}"><div class="b"><div class="i">
+      <div class="palco" id="fx${f.i}" data-grande="${f.i}">${fxHTML(f, "fx" + f.i)}</div>
+      <div class="txt"><h3>${esc(f.n)}</h3><p class="r">${esc(f.d)}</p>
+      <div class="acoes"><button class="mini-btn ver" data-ampliar="${f.i}">AMPLIAR</button><button class="mini-btn" data-pedido="${f.i}">COPIAR</button></div></div></div></div></div>`).join("");
+}
+document.getElementById("fxGrade").addEventListener("click", e => {
+  const amp = e.target.closest("[data-ampliar]"); if (amp) return abrirGrande(+amp.dataset.ampliar);
+  const b = e.target.closest("[data-pedido]");
+  if (!b){ const c = e.target.closest(".c.efeito"); if (!c) return; const i = +c.dataset.grande;
+    mFx = mFx.includes(i) ? mFx.filter(x => x !== i) : mFx.length < 3 ? [...mFx, i] : mFx;
+    if (window.roboMostra) roboMostra("play"); return desenharMesa(); }
+  const f = FX[+b.dataset.pedido];
+  copiar(`Aplique no meu vídeo o efeito "${f.n}": ${f.d} Mantenha a duração curta (até 0,6 s por movimento), respeite as margens seguras e não cubra o rosto.`, "PEDIDO COPIADO ✓");
+});
+
+
+// ---------- laboratório: visual + movimento (listas) e até 3 efeitos escolhidos na grade ----------
+let MESA = null, mV = 1, mM = 2, mFx = [];
+function montarMesa(){
+  fetch("mesa.json").then(r => r.json()).then(d => {
+    MESA = d;
+    document.getElementById("sCombo").innerHTML += d.combinacoes.map((c, k) => `<option value="${k}">${esc(c.nome)}</option>`).join("");
+    document.getElementById("sVisual").innerHTML = d.visuais.map(x => `<option value="${x.n}">${esc(x.nome)}</option>`).join("");
+    document.getElementById("sMov").innerHTML = d.movimentos.map(x => `<option value="${x.n}">${esc(x.nome)}</option>`).join("");
+    desenharMesa();
+  });
+}
+function desenharMesa(){
+  if (!MESA) return;
+  document.getElementById("sVisual").value = mV; document.getElementById("sMov").value = mM;
+  const vis = MESA.visuais.find(x => x.n === mV), mov = MESA.movimentos.find(x => x.n === mM);
+  document.getElementById("mDesc").textContent = (vis ? vis.nome + ": " + vis.oque : "") + (mov ? "  ·  " + mov.nome + ": " + mov.oque : "");
+  const url = `animacao/cena/combinar.html?v=${mV}&m=${mM}`;
+  const cena = document.getElementById("mCena"); if (cena.dataset.url !== url){ cena.src = url; cena.dataset.url = url; }
+  document.getElementById("mAbrir").href = url;
+  document.getElementById("mEfs").innerHTML = mFx.length ? mFx.map(i => `<button data-tira="${i}" title="Tirar da mistura">${esc(FX[i].n)} ✕</button>`).join("") : `<em>Clique nos efeitos à esquerda para somar (até 3).</em>`;
+  document.querySelectorAll("#fxGrade .c.efeito").forEach(c => c.classList.toggle("sel", mFx.includes(+c.dataset.grande)));
+}
+function pedidoMesa(){
+  const vis = MESA.visuais.find(x => x.n === mV), mov = MESA.movimentos.find(x => x.n === mM);
+  const efs = mFx.length ? `\n\nEFEITOS (nesta ordem)\n` + mFx.map((i, k) => `${k + 1}) ${FX[i].n}: ${FX[i].d}`).join("\n") : "";
+  return `Crie uma animação curta em um único arquivo HTML.\n\nVISUAL: ${vis.nome}\n${MESA.R["V" + mV] || ""}\n\nMOVIMENTO: ${mov.nome}\n${MESA.R["M" + mM] || ""}${efs}\n\nREGRAS GERAIS\n${MESA.G}\n\nFORMATO\n${MESA.F}\n\nIdentidade: fundo claro, preto e um único destaque rosa avermelhado (#E5194B).`;
+}
+document.getElementById("sVisual").addEventListener("change", e => { mV = +e.target.value; document.getElementById("sCombo").value = ""; desenharMesa(); });
+document.getElementById("sMov").addEventListener("change", e => { mM = +e.target.value; document.getElementById("sCombo").value = ""; desenharMesa(); });
+document.getElementById("sCombo").addEventListener("change", e => { if (e.target.value === "") return; const c = MESA.combinacoes[+e.target.value]; mV = c.v; mM = c.m; desenharMesa(); });
+document.getElementById("mEfs").addEventListener("click", e => { const b = e.target.closest("[data-tira]"); if (b){ mFx = mFx.filter(x => x !== +b.dataset.tira); desenharMesa(); } });
+document.getElementById("mCopiar").onclick = () => copiar(pedidoMesa(), "PEDIDO COPIADO ✓");
+
+let jAtual = -1;
+function abrirGrande(i){
+  const f = FX[i]; jAtual = i;
+  document.getElementById("jPalco").innerHTML = `<div class="camada" id="jx${i}">${fxHTML(f, "jx" + i)}</div>`;
+  document.getElementById("jGrupo").textContent = f.g === 1 ? "CÂMERA, TELA E TRANSIÇÃO" : "INTERFACE, EDIÇÃO E LEGENDA";
+  document.getElementById("jTitulo").textContent = f.n; document.getElementById("jTexto").textContent = f.d;
+  document.getElementById("janela").classList.add("aberta"); document.getElementById("jFechar").focus();
+}
+const fecharJanela = () => document.getElementById("janela").classList.remove("aberta");
+document.getElementById("jFechar").onclick = fecharJanela;
+document.getElementById("janela").addEventListener("click", e => { if (e.target.id === "janela") fecharJanela(); });
+addEventListener("keydown", e => { if (e.key === "Escape") fecharJanela(); });
+document.getElementById("jPedido").onclick = () => { const f = FX[jAtual]; copiar(`Aplique no meu vídeo o efeito "${f.n}": ${f.d} Mantenha cada movimento com até 0,6 s, respeite as margens seguras e não cubra o rosto.`, "PEDIDO COPIADO ✓"); };
+
+// ---------- referências: filmes + vídeos com prompt ----------
+let VIDEOS = [], vCat = "", vLim = 24;
+function montarRefs(){
+  fetch("filmes.json").then(r => r.json()).then(F => {
+    document.getElementById("filmes").innerHTML = F.map(f => `<a class="c" href="https://www.youtube.com/watch?v=${esc(f.id)}" target="_blank" rel="noopener"><div class="b"><div class="i">
+      <div class="thumb"><img loading="lazy" src="https://img.youtube.com/vi/${esc(f.id)}/hqdefault.jpg" alt="Filme ${esc(f.titulo)}"><span class="play">${ico("animacao", 16)}</span></div>
+      <div class="txt"><h3>${esc(f.titulo)}</h3><span class="meta">${esc(f.autor)}</span><p class="r">${esc((f.diz || "").slice(0, 140))}${(f.diz || "").length > 140 ? "…" : ""}</p></div></div></div></a>`).join("");
+  });
+  fetch("animacao/videos.json").then(r => r.json()).then(V => {
+    VIDEOS = V;
+    const cats = [["", "Todos"], ["motion", "Motion"], ["3d", "3D"], ["explainer", "Explicativo"], ["interactive", "Interativo"]];
+    document.getElementById("vFiltros").innerHTML = cats.map(([k, n]) => `<button class="chip${k === "" ? " on" : ""}" data-c="${k}">${n}</button>`).join("");
+    document.getElementById("vFiltros").onclick = e => { const b = e.target.closest(".chip"); if (!b) return; vCat = b.dataset.c; vLim = 24; document.querySelectorAll("#vFiltros .chip").forEach(c => c.classList.toggle("on", c === b)); desenharVideos(); };
+    desenharVideos();
+  });
+}
+const sem = s => (s || "").normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
+function desenharVideos(){
+  const q = sem(document.getElementById("vq").value);
+  const L = VIDEOS.filter(v => (!vCat || v.c === vCat) && (!q || sem(v.q + " " + v.t.join(" ")).includes(q)));
+  document.getElementById("nVideos").textContent = L.length + " VÍDEOS · PASSE O MOUSE PARA TOCAR";
+  document.getElementById("vGrade").innerHTML = L.slice(0, vLim).map(v => `<div class="c" data-s="${esc(v.s)}"><div class="b"><div class="i">
+    <div class="thumb"><img loading="lazy" src="${esc(v.i)}" alt="Vídeo de ${esc(v.a)}"></div>
+    <div class="txt"><span class="meta">${esc(v.c.toUpperCase())} · ${esc(v.t.slice(0, 3).join(", "))}</span><p class="r">${esc(v.q.slice(0, 110))}…</p>
+    <div class="acoes"><button class="mini-btn" data-prompt="${esc(v.s)}">COPIAR PROMPT</button><a class="mini-btn claro" href="${esc(v.p)}" target="_blank" rel="noopener">POST ↗</a></div></div></div></div></div>`).join("");
+  document.getElementById("vMais").style.display = L.length > vLim ? "" : "none";
+}
+document.getElementById("vq").addEventListener("input", () => { vLim = 24; desenharVideos(); });
+document.getElementById("vMais").onclick = () => { vLim += 24; desenharVideos(); };
+const vGrade = document.getElementById("vGrade");
+vGrade.addEventListener("click", e => { const b = e.target.closest("[data-prompt]"); if (b){ const v = VIDEOS.find(x => x.s === b.dataset.prompt); copiar(v.q, "PROMPT COPIADO ✓"); } });
+// toca o vídeo só quando o mouse passa por cima (economiza dados e bateria)
+vGrade.addEventListener("mouseover", e => {
+  const c = e.target.closest(".c"); if (!c || c.querySelector("video")) return;
+  const v = document.createElement("video"); v.muted = true; v.loop = true; v.playsInline = true; v.src = `https://media.skillry.dev/opus-5-5/${c.dataset.s}/original.mp4`;
+  v.onerror = () => v.remove(); c.querySelector(".thumb").appendChild(v); v.play().catch(() => {});
+  c.addEventListener("mouseleave", () => v.remove(), {once: true});
+});
+
+const inicial = new URLSearchParams(location.hash.slice(1)).get("aba");
+abrirPorta(PORTAS.some(p => p.id === inicial) ? inicial : "lab");
+</script>
+<script src="robo-mini.js"></script>
+<script src="titulo-blur.js"></script>
+</body>
+</html>

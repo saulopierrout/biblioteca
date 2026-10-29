@@ -1,0 +1,387 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Protocolos · roteiros para projetos com IA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,300..900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F7F7F5; --ink:#0E0E10; --ink2:#2A2A2E; --muted:#6A6A70;
+  --line:rgba(14,14,16,.12); --line2:rgba(14,14,16,.22);
+  --accent:#E5194B; --accent-soft:rgba(229,25,75,.10);
+  --mono:"JetBrains Mono",ui-monospace,Consolas,monospace; --sans:"Archivo",system-ui,sans-serif;
+  --chanfro:polygon(12px 0,100% 0,100% calc(100% - 12px),calc(100% - 12px) 100%,0 100%,0 12px);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+html,body{background:var(--bg);color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.grain{position:fixed;inset:-50%;width:200%;height:200%;pointer-events:none;z-index:90;opacity:.10;mix-blend-mode:multiply;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 .9 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>")}
+header{position:sticky;top:0;z-index:40;background:rgba(255,255,255,.88);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+.hwrap{max-width:1440px;margin:0 auto;height:68px;padding:0 40px;display:flex;align-items:center;gap:32px}
+.marca{display:flex;align-items:center;gap:12px;flex-shrink:0;font:600 11px/1 var(--mono);letter-spacing:.32em}
+.marca svg{height:30px;width:auto}
+nav.menu{display:flex;gap:28px;margin:0 auto}
+nav.menu a{font:500 14px/1 var(--sans);color:var(--ink2);position:relative;padding:6px 0}
+nav.menu a.on{color:var(--ink)}
+nav.menu a.on:after{content:"";position:absolute;left:0;right:0;bottom:-2px;height:2px;background:var(--accent)}
+.hperfis{display:flex}
+.hperfis img{width:30px;height:30px;border-radius:50%;object-fit:cover;border:2px solid #fff;margin-left:-8px;box-shadow:0 0 0 1px var(--line)}
+.hperfis a:first-child img{margin-left:0}
+.wrap{max-width:1440px;margin:0 auto;padding-left:40px;padding-right:40px}
+.rotulo{display:flex;align-items:center;gap:12px;font:500 11px var(--mono);letter-spacing:.28em;text-transform:uppercase;color:var(--muted)}
+.rotulo i{width:7px;height:7px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 4px var(--accent-soft)}
+h1{margin-top:16px;font-weight:900;font-stretch:108%;font-size:clamp(42px,5vw,76px);line-height:.9;letter-spacing:-.035em}
+h1 .de{color:var(--accent);font-weight:800}
+h1 .ponto{color:var(--accent)}
+.topo{padding-top:56px;padding-bottom:36px;display:flex;justify-content:space-between;align-items:flex-end;gap:30px;flex-wrap:wrap}
+.topo p{margin-top:14px;max-width:560px;color:var(--ink2);line-height:1.55}
+.passos{display:flex;gap:10px;font:400 10.5px var(--mono);letter-spacing:.14em;color:var(--muted)}
+.passos b{color:var(--ink)}
+
+/* cartão HUD */
+.c{position:relative;cursor:pointer;transition:filter .3s,transform .3s}
+.c .b{clip-path:var(--chanfro);background:var(--line2);padding:1px;height:100%;transition:background .3s}
+.c .i{clip-path:var(--chanfro);background:linear-gradient(135deg,#fff,#f3f3f1);height:100%;padding:20px 20px 18px;display:flex;flex-direction:column;gap:10px;transition:background .3s,color .3s}
+.c:hover,.c:focus-visible{transform:translateY(-3px);filter:drop-shadow(0 0 7px rgba(229,25,75,.35)) drop-shadow(0 10px 22px rgba(229,25,75,.14));outline:none}
+.c:hover .b,.c:focus-visible .b{background:var(--accent)}
+.c:hover .i,.c:focus-visible .i{background:linear-gradient(135deg,#17171A,#0B0B0D);color:#fff}
+.c:hover .r,.c:hover .meta,.c:focus-visible .r,.c:focus-visible .meta{color:#B4B4BC}
+.c h3{font:700 18px/1.2 var(--sans);letter-spacing:-.01em}
+.c .r{font:400 13.5px/1.5 var(--sans);color:var(--muted)}
+.c .meta{margin-top:auto;font:400 10.5px var(--mono);letter-spacing:.1em;color:var(--muted)}
+.c .meta b{color:var(--accent);font-weight:500}
+.c.preto .b{background:var(--ink)}
+.c.preto .i{background:linear-gradient(135deg,#17171A,#0B0B0D);color:#fff}
+.c.preto .r,.c.preto .meta{color:#B4B4BC}
+.c.preto:hover .b{background:var(--accent)}
+
+/* entrada: grupos por intenção */
+.comece{display:grid;grid-template-columns:1fr;margin-bottom:48px}
+.comece .c .i{padding:30px 32px;flex-direction:row;align-items:center;gap:30px}
+.comece .c h3{font-size:30px}
+.comece .selo{font:500 10px var(--mono);letter-spacing:.2em;color:var(--accent)}
+.comece .seta{margin-left:auto;flex-shrink:0;padding:14px 20px;clip-path:var(--chanfro);background:var(--accent);color:#fff;font:500 11px var(--mono);letter-spacing:.14em}
+.grupo{display:grid;grid-template-columns:220px 1fr;gap:24px;padding:30px 0;border-top:1px solid var(--line)}
+.grupo .nome{display:flex;align-items:flex-start;gap:12px}
+.grupo .nome svg.ic{flex-shrink:0;margin-top:2px}
+.pic{display:inline-grid;place-items:center;color:var(--ink);align-self:flex-start}
+.c:hover .pic,.c:focus-visible .pic,.c.preto .pic{color:var(--accent)}
+.pic.grande{flex-shrink:0}
+.lado-ic{margin-top:18px;color:var(--accent)}
+.grupo .nome b{display:block;font:800 22px var(--sans);letter-spacing:-.02em}
+.grupo .nome small{display:block;margin-top:4px;font:400 11px var(--mono);letter-spacing:.1em;color:var(--muted)}
+.grupo .lista{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+
+/* detalhe do protocolo */
+.detalhe{display:none;grid-template-columns:400px 1fr;gap:48px;padding-top:40px;padding-bottom:40px}
+body.vendo .detalhe{display:grid}
+body.vendo .hub{display:none}
+.lado{position:sticky;top:96px;align-self:start;max-height:calc(100vh - 110px);overflow:auto;padding-right:6px}
+.voltar{font:500 10.5px var(--mono);letter-spacing:.16em;color:var(--muted)}
+.voltar:hover{color:var(--accent)}
+.lado h2{margin-top:16px;font:900 38px/.98 var(--sans);font-stretch:105%;letter-spacing:-.03em}
+.lado .res{margin-top:14px;color:var(--ink2);line-height:1.55}
+.caixa{margin-top:18px;clip-path:var(--chanfro);background:var(--line2);padding:1px}
+.caixa>div{clip-path:var(--chanfro);background:#fff;padding:14px 16px}
+.caixa.preta{background:var(--ink)}
+.caixa.preta>div{background:linear-gradient(135deg,#17171A,#0B0B0D);color:#fff}
+.caixa h4{font:500 10px var(--mono);letter-spacing:.18em;color:var(--muted);margin-bottom:6px}
+.caixa.preta h4{color:var(--accent)}
+.caixa p{font-size:14px;line-height:1.5}
+.copiar-prompt{margin-top:18px;width:100%;display:flex;align-items:center;justify-content:center;gap:10px;padding:16px;clip-path:var(--chanfro);background:var(--accent);color:#fff;font:500 12px var(--mono);letter-spacing:.16em;filter:drop-shadow(0 0 10px rgba(229,25,75,.35))}
+.copiar-prompt:hover{background:var(--ink)}
+.kit{margin-top:22px}
+.kit h4{font:500 10px var(--mono);letter-spacing:.18em;color:var(--muted);margin-bottom:10px}
+.kit a{display:block;padding:10px 12px;border-left:2px solid var(--line2);margin-bottom:6px;transition:border-color .2s,background .2s}
+.kit a:hover{border-color:var(--accent);background:var(--accent-soft)}
+.kit b{display:block;font:600 14px var(--sans)}
+.kit small{display:block;margin-top:3px;font:400 12.5px/1.45 var(--sans);color:var(--muted)}
+.kit em{font-style:normal;font:500 9.5px var(--mono);letter-spacing:.1em;color:var(--accent)}
+.listinhas{margin-top:18px;display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.listinhas div h4{font:500 10px var(--mono);letter-spacing:.16em;color:var(--muted);margin-bottom:6px}
+.listinhas li{font-size:13px;line-height:1.45;margin-left:16px;color:var(--ink2)}
+
+/* trilha de etapas (nós ligados por uma linha que se preenche ao rolar) */
+.trilha{position:relative;padding-left:56px}
+.trilha .linha{position:absolute;left:19px;top:20px;bottom:20px;width:2px;background:var(--line2)}
+.trilha .linha i{position:absolute;left:0;top:0;width:100%;height:0;background:var(--accent);box-shadow:0 0 10px rgba(229,25,75,.6)}
+.intro{margin-bottom:26px;color:var(--ink2);line-height:1.6}
+.etapa{position:relative;margin-bottom:14px}
+.no{position:absolute;left:-56px;top:12px;width:40px;height:40px;display:grid;place-items:center;font:500 12px var(--mono);clip-path:var(--chanfro);background:var(--line2);transition:background .3s,filter .3s}
+.no:before{content:"";position:absolute;inset:1px;clip-path:var(--chanfro);background:#fff;z-index:-1;transition:background .3s}
+.no{isolation:isolate}
+.etapa.feita .no{background:var(--accent)}
+.etapa.aberta .no{background:var(--accent);color:#fff;filter:drop-shadow(0 0 8px rgba(229,25,75,.5))}
+.etapa.aberta .no:before{background:var(--ink)}
+.etapa .cab{width:100%;text-align:left;display:flex;align-items:center;gap:14px;padding:16px 18px;clip-path:var(--chanfro);background:var(--line2);position:relative;isolation:isolate}
+.etapa .cab:before{content:"";position:absolute;inset:1px;clip-path:var(--chanfro);background:linear-gradient(135deg,#fff,#f3f3f1);z-index:-1}
+.etapa .cab b{font:700 17px var(--sans)}
+.etapa .cab span{margin-left:auto;font:400 18px var(--mono);color:var(--muted);transition:transform .3s}
+.etapa.aberta .cab{background:var(--accent)}
+.etapa.aberta .cab span{transform:rotate(45deg);color:var(--accent)}
+.etapa .corpo{display:none;padding:18px 20px 8px;line-height:1.6;color:var(--ink2);font-size:15px}
+.etapa.aberta .corpo{display:block}
+.corpo p{margin-bottom:12px}
+.corpo ul,.corpo ol{margin:0 0 12px 20px}
+.corpo li{margin-bottom:6px}
+.corpo strong{color:var(--ink)}
+.corpo code{font:400 12.5px var(--mono);background:rgba(14,14,16,.06);padding:1px 5px}
+.corpo pre{font:400 12px/1.5 var(--mono);background:#0E0E10;color:#EDEDF0;padding:12px 14px;overflow:auto;margin-bottom:12px;white-space:pre-wrap}
+.notas-tit{margin:34px 0 12px;font:500 10.5px var(--mono);letter-spacing:.18em;color:var(--muted)}
+.etapa.nota .cab b{font-weight:500;font-size:15px;color:var(--ink2)}
+.etapa.nota .no{background:transparent}
+.abrir-tudo{margin:0 0 18px;font:500 10.5px var(--mono);letter-spacing:.14em;color:var(--muted)}
+.abrir-tudo:hover{color:var(--accent)}
+
+/* robô pequeno */
+.mini{position:fixed;right:22px;bottom:22px;z-index:55;width:84px;height:84px;cursor:pointer;filter:drop-shadow(0 10px 18px rgba(14,14,16,.25))}
+.mini canvas{width:84px;height:84px}
+.mini-balao{position:fixed;right:116px;bottom:34px;z-index:55;width:280px;padding:14px 16px;color:#fff;background:#0E0E10;clip-path:var(--chanfro);opacity:0;transform:translateY(6px);pointer-events:none;transition:opacity .25s,transform .25s}
+.mini-balao.aberto{opacity:1;transform:none;pointer-events:auto}
+.mini-balao .cab{font:500 9.5px var(--mono);letter-spacing:.18em;color:var(--accent);margin-bottom:6px}
+.mini-balao p{font:400 13.5px/1.5 var(--sans);padding-right:18px}
+.mini-balao button{position:absolute;right:8px;top:8px;width:22px;height:22px;color:#B4B4BC}
+.aviso-copia{position:fixed;left:50%;bottom:30px;transform:translateX(-50%) translateY(20px);z-index:70;padding:12px 18px;background:var(--ink);color:#fff;font:500 11px var(--mono);letter-spacing:.14em;clip-path:var(--chanfro);opacity:0;transition:all .3s}
+.aviso-copia.on{opacity:1;transform:translateX(-50%)}
+footer{margin-top:100px;border-top:1px solid var(--line);background:#fff}
+.fwrap{max-width:1440px;margin:0 auto;padding:36px 40px;display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;font:400 12px var(--mono);color:var(--muted)}
+@media (max-width:1100px){
+  .hwrap{padding:0 16px;gap:14px} nav.menu{gap:16px} .wrap{padding-left:16px;padding-right:16px}
+  .grupo{grid-template-columns:1fr} .grupo .lista{grid-template-columns:1fr 1fr}
+  .detalhe{grid-template-columns:1fr} .lado{position:relative;top:auto;max-height:none}
+  .comece .c .i{flex-direction:column;align-items:flex-start}
+  .comece .seta{margin-left:0}
+}
+@media (max-width:640px){ .grupo .lista{grid-template-columns:1fr} .marca span{display:none} .listinhas{grid-template-columns:1fr} }
+@media (prefers-reduced-motion:reduce){*{transition-duration:.01ms!important;scroll-behavior:auto!important}}
+
+/* celular: cabeçalho enxuto e nada vazando para o lado */
+html,body{overflow-x:hidden}
+@media (max-width:640px){
+  .hperfis{display:none} .marca span{display:none}
+  .hwrap{padding:0 14px;gap:10px} nav.menu{gap:12px;margin:0 0 0 auto} nav.menu a{font-size:12.5px}
+  h1{font-size:40px}
+  .mini{width:60px;height:60px;right:12px;bottom:12px} .mini canvas{width:60px;height:60px}
+  .mini-balao{right:12px;bottom:84px;width:calc(100% - 24px)}
+}
+</style>
+</head>
+<body>
+<div class="grain" aria-hidden="true"></div>
+<header>
+  <div class="hwrap">
+    <a class="marca" href="inicio.html" aria-label="Início"><svg viewBox="68.14 56.29 389.24 552.68" aria-hidden="true"><path fill="#0E0E10" d="M328.26 230.12 A77.50 77.50 0 0 0 341.32 176.02 A47.90 47.90 0 1 0 272.15 224.96 L378.11 278.76 A125.40 125.40 0 0 1 431.52 330.68 A47.90 47.90 0 0 1 433.50 334.77 A47.90 47.90 0 0 1 437.28 351.16 A77.50 77.50 0 0 1 433.57 379.04 A125.40 125.40 0 0 1 421.15 405.89 A202.91 202.91 0 0 1 371.88 460.55 A202.91 202.91 0 0 0 388.84 426.51 A47.90 47.90 0 0 0 391.93 405.64 A47.90 47.90 0 0 0 372.83 370.88 A18.30 18.30 0 0 0 370.17 369.22 L232.77 299.37 A328.31 328.31 0 0 1 189.88 273.26 A125.40 125.40 0 0 1 170.89 256.45 A77.50 77.50 0 0 1 150.45 207.53 A125.40 125.40 0 0 1 204.37 98.56 A125.40 125.40 0 0 1 325.72 86.68 A125.40 125.40 0 0 1 385.91 141.82 A47.90 47.90 0 0 1 389.95 177.59 A77.50 77.50 0 0 1 354.44 223.62 A47.90 47.90 0 0 1 334.85 229.95 A47.90 47.90 0 0 1 328.26 230.13 Z"/><path fill="#0E0E10" d="M124.30 226.30 A202.91 202.91 0 0 0 116.29 251.34 A29.60 29.60 0 0 0 117.30 268.90 A77.50 77.50 0 0 0 135.97 297.39 A47.90 47.90 0 0 0 148.72 306.24 L309.29 382.53 A77.50 77.50 0 0 1 352.11 467.34 A202.91 202.91 0 0 1 286.06 581.71 A29.60 29.60 0 0 1 250.52 584.20 A125.40 125.40 0 0 1 195.50 501.83 A47.90 47.90 0 0 1 226.20 448.11 L226.21 448.12 A77.50 77.50 0 0 0 226.45 513.37 A29.60 29.60 0 0 0 247.83 529.91 A29.60 29.60 0 0 0 279.79 513.95 A47.90 47.90 0 0 0 276.21 465.38 A77.50 77.50 0 0 0 246.32 439.82 L178.87 407.15 A328.31 328.31 0 0 1 143.96 387.54 A125.40 125.40 0 0 1 90.73 314.28 A77.50 77.50 0 0 1 103.57 248.03 A125.40 125.40 0 0 1 124.30 226.30 Z"/></svg><span>SAULO PIERROUT</span></a>
+    <nav class="menu" aria-label="Principal">
+      <a href="inicio.html">Início</a><a href="biblioteca.html">Biblioteca</a><a class="on" href="protocolos.html" aria-current="page">Protocolos</a><a href="animacao.html">Animação</a>
+    </nav>
+    <div class="hperfis"><a href="https://www.instagram.com/saulopierrout/" title="@saulopierrout"><img src="img/perfil-pessoal.jpg" alt="@saulopierrout"></a><a href="https://www.instagram.com/saulomotion/" title="@saulomotion"><img src="img/perfil-profissional.jpg" alt="@saulomotion"></a></div>
+  </div>
+</header>
+
+<main>
+  <!-- entrada: protocolos por intenção -->
+  <div class="hub">
+    <section class="wrap topo">
+      <div>
+        <div class="rotulo"><i></i>03 · Protocolos</div>
+        <h1>PROTOCOLOS<br><span class="de">de</span> PROJETO<span class="ponto">.</span></h1>
+        <p>Roteiros prontos para tirar uma ideia do papel com IA: o que fazer em cada etapa, quais ferramentas usar e quando está pronto. Escolha pelo que você quer fazer.</p>
+      </div>
+      <div class="passos"><span><b>1</b> ESCOLHA</span><span>·</span><span><b>2</b> SIGA AS ETAPAS</span><span>·</span><span><b>3</b> COPIE O PROMPT</span></div>
+    </section>
+    <section class="wrap" id="hub"></section>
+  </div>
+
+  <!-- detalhe de um protocolo -->
+  <section class="wrap detalhe" id="detalhe">
+    <aside class="lado" id="lado"></aside>
+    <div>
+      <button class="abrir-tudo" id="abrirTudo">ABRIR TODAS AS ETAPAS</button>
+      <div class="trilha" id="trilha"></div>
+    </div>
+  </section>
+</main>
+
+<footer><div class="fwrap"><span>SAULO PIERROUT · PROTOCOLOS</span><span>@saulopierrout · @saulomotion · saulopierrout.designer@gmail.com</span></div></footer>
+<div class="aviso-copia" id="avisoCopia" role="status">PROMPT COPIADO ✓</div>
+
+<div class="mini" id="mini" role="button" tabindex="0" aria-label="Robô assistente: clique para uma dica"><canvas width="168" height="168" id="miniCv"></canvas></div>
+<div class="mini-balao" id="miniBalao" role="status" aria-live="polite"><div class="cab">DICA · PROTOCOLOS</div><p id="miniTxt"></p><button id="miniX" aria-label="Fechar dica">✕</button></div>
+
+<script src="icones.js"></script>
+<script>
+const PIX = {
+  skills:["....###..","...###...","..###....",".#######.","....###..","...###...","..###....",".##......","........."],
+  pincel:[".......##","......###",".....###.","....###..","...###...","..##.....",".###.....","###......","##......."],
+  mega:["......##.","....####.","#.######.","########.","########.","#.######.","....####.","......##.","........."],
+  engren:["...###...",".#.###.#.","#########",".##...##.","###...###",".##...##.","#########",".#.###.#.","...###..."],
+  escudo:["..#####..",".#######.","#########","####.####","###...###",".##...##.","..##.##..","...###...","....#...."],
+  cursos:["....#....","..#####..","#########","..#####.#","...###..#","..#...#.#","..#####..",".........","........."],
+  protocolos:["..#####..",".#.....#.",".#....##.",".#...#.#.",".##.#..#.",".#.#...#.",".#.....#.",".#.###.#.",".#######."]
+};
+const pixelAlfa = (t, x, y) => { const s = Math.sin(x*12.9898 + y*78.233)*43758.5453; const f = s - Math.floor(s); return 0.55 + 0.45*(0.5 + 0.5*Math.sin(t*0.0035*(0.6 + f) + f*20)); };
+function desenhaPixels(cv, id, t, cor, brilho){
+  const g = cv.getContext("2d"), m = PIX[id]; if (!m) return;
+  const cel = cv.width/10, lado = cel*0.78, off = cel*0.5;
+  g.clearRect(0,0,cv.width,cv.height); g.shadowColor = brilho || "transparent"; g.shadowBlur = brilho ? cel*0.9 : 0;
+  for (let y=0;y<9;y++) for (let x=0;x<9;x++) if (m[y][x] === "#"){ g.globalAlpha = pixelAlfa(t,x,y); g.fillStyle = cor; g.fillRect(off + x*cel, off + y*cel, lado, lado); }
+  g.globalAlpha = 1;
+}
+const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+// markdown simples -> HTML (parágrafos, listas, negrito, código, tabelas como bloco)
+function md(txt){
+  const linhas = txt.split("\n"), out = []; let lista = null, bloco = [];
+  const inline = s => esc(s).replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>").replace(/`([^`]+)`/g, "<code>$1</code>");
+  const fechaLista = () => { if (lista){ out.push(`</${lista}>`); lista = null; } };
+  const fechaBloco = () => { if (bloco.length){ out.push(`<pre>${esc(bloco.join("\n"))}</pre>`); bloco = []; } };
+  for (const l of linhas){
+    if (/^\s*\|/.test(l)){ fechaLista(); bloco.push(l); continue; } else fechaBloco();
+    if (/^\s*[-*] /.test(l)){ if (lista !== "ul"){ fechaLista(); out.push("<ul>"); lista = "ul"; } out.push(`<li>${inline(l.replace(/^\s*[-*] /, ""))}</li>`); continue; }
+    if (/^\s*\d+\. /.test(l)){ if (lista !== "ol"){ fechaLista(); out.push("<ol>"); lista = "ol"; } out.push(`<li>${inline(l.replace(/^\s*\d+\. /, ""))}</li>`); continue; }
+    fechaLista();
+    if (/^#{3,} /.test(l)) out.push(`<p><strong>${inline(l.replace(/^#+ /, ""))}</strong></p>`);
+    else if (l.trim()) out.push(`<p>${inline(l)}</p>`);
+  }
+  fechaLista(); fechaBloco();
+  return out.join("");
+}
+
+const GRUPOS = [
+  {nome:"Criar", sub:"APPS, JOGOS E MOTION", ic:"pincel", ids:["aplicativo","jogos","motion"]},
+  {nome:"Comunicar", sub:"CANAL, MARKETING E REDES", ic:"mega", ids:["canal","marketing","conteudo"]},
+  {nome:"Organizar", sub:"PESSOAS, PROCESSOS E DADOS", ic:"engren", ids:["gestao","automacao","dados","produtividade"]},
+  {nome:"Proteger", sub:"SEGURANÇA E CONFORMIDADE", ic:"escudo", ids:["seguranca"]},
+  {nome:"Estudar", sub:"CARREIRA E APRENDIZADO", ic:"cursos", ids:["estudo"]}
+];
+const PIC = {mestre:"foguete", gestao:"pessoas", aplicativo:"app", jogos:"controle", canal:"youtube", motion:"animacao", marketing:"mega",
+  conteudo:"conversa", automacao:"robo", dados:"grafico", seguranca:"escudo", produtividade:"terminal", estudo:"cursos"};
+let PROT = [], DADOS = [];
+Promise.all([fetch("protocolos.json").then(r => r.json()), fetch("dados.json?v=" + Date.now()).then(r => r.json()).catch(() => [])]).then(([p, d]) => {
+  PROT = p; DADOS = d; montarHub(); rota();
+});
+const cartao = (p, extra = "") => `<a class="c ${extra}" href="#p=${p.id}"><div class="b"><div class="i"><span class="pic">${ico(PIC[p.id], 26)}</span><h3>${esc(p.nome)}</h3><p class="r">${esc(p.resumo)}</p><span class="meta"><b>${p.etapas.filter(e => !/lacuna|acrescentad|refor[çc]o|hist[óo]rico|\d{2}\/\d{2}\/\d{4}/i.test(e.t)).length}</b> ETAPAS · <b>${p.kit.length}</b> NO KIT</span></div></div></a>`;
+function montarHub(){
+  const m = PROT.find(p => p.id === "mestre");
+  document.getElementById("hub").innerHTML =
+    `<div class="comece"><a class="c preto" href="#p=mestre"><div class="b"><div class="i"><span class="pic grande">${ico("foguete", 44)}</span><div><span class="selo">COMECE POR AQUI</span><h3>${esc(m.nome)}</h3><p class="r" style="margin-top:8px;max-width:640px">${esc(m.resumo)}</p></div><span class="seta">ABRIR PROTOCOLO →</span></div></div></a></div>`
+    + GRUPOS.map(g => `<div class="grupo"><div class="nome">${ico(g.ic, 24)}<div><b>${g.nome}</b><small>${g.sub}</small></div></div>
+      <div class="lista">${g.ids.map(id => PROT.find(p => p.id === id)).filter(Boolean).map(p => cartao(p)).join("")}</div></div>`).join("");
+}
+
+// ---------- detalhe ----------
+function itemDoKit(lib){ const x = DADOS.find(d => d.n.toLowerCase().startsWith(lib.toLowerCase())); return x ? `biblioteca.html#aba=${x.a}&abrir=${encodeURIComponent(x.n)}` : `biblioteca.html#aba=skills`; }
+function mostrar(id){
+  const p = PROT.find(x => x.id === id); if (!p) return;
+  document.body.classList.add("vendo");
+  document.title = p.nome + " · Protocolos";
+  const lst = (t, arr) => arr.length ? `<div><h4>${t}</h4><ul>${arr.map(x => `<li>${esc(x)}</li>`).join("")}</ul></div>` : "";
+  document.getElementById("lado").innerHTML = `<a class="voltar" href="#">← TODOS OS PROTOCOLOS</a>
+    <span class="pic lado-ic">${ico(PIC[p.id], 34)}</span><h2>${esc(p.nome)}</h2><p class="res">${esc(p.resumo)}</p>
+    ${p.quando ? `<div class="caixa"><div><h4>QUANDO USAR</h4><p>${esc(p.quando)}</p></div></div>` : ""}
+    ${p.gatilho ? `<div class="caixa preta"><div><h4>PRIMEIRO PASSO</h4><p>${esc(p.gatilho)}</p></div></div>` : ""}
+    <button class="copiar-prompt" id="copiarPrompt">COPIAR O PROMPT DO PROTOCOLO</button>
+    <div class="kit"><h4>KIT PRINCIPAL · ${p.kit.length}</h4>${p.kit.map(k => `<a href="${itemDoKit(k.lib)}"><em>${esc(k.tipo).toUpperCase()}</em><b>${esc(k.lib)}</b><small>${esc(k.papel)} ${k.como ? "· " + esc(k.como) : ""}</small></a>`).join("")}</div>
+    <div class="listinhas">${lst("ENTRADAS", p.entradas)}${lst("ENTREGAS", p.entregas)}${lst("PRONTO QUANDO", p.pronto)}${lst("RISCOS", p.riscos)}</div>`;
+  // seções de manutenção (lacunas, acréscimos datados, reforços) não são passos: vão para o fim, separadas
+  const ehNota = e => /lacuna|acrescentad|refor[çc]o|hist[óo]rico|\d{2}\/\d{2}\/\d{4}/i.test(e.t);
+  const passos = p.etapas.filter(e => !ehNota(e)), notas = p.etapas.filter(ehNota);
+  document.getElementById("trilha").innerHTML = `<div class="linha"><i id="linhaCheia"></i></div>${p.intro ? `<div class="intro">${md(p.intro)}</div>` : ""}`
+    + passos.map((e, i) => `<div class="etapa${i === 0 ? " aberta" : ""}" id="e${i}"><span class="no">${String(i+1).padStart(2,"0")}</span>
+      <button class="cab" aria-expanded="${i === 0}"><b>${esc(e.t)}</b><span>+</span></button><div class="corpo">${md(e.c)}</div></div>`).join("")
+    + (notas.length ? `<div class="notas-tit">ATUALIZAÇÕES E NOTAS · ${notas.length}</div>` + notas.map(e => `<div class="etapa nota"><span class="no">·</span>
+      <button class="cab" aria-expanded="false"><b>${esc(e.t)}</b><span>+</span></button><div class="corpo">${md(e.c)}</div></div>`).join("") : "");
+  document.getElementById("copiarPrompt").onclick = () => {
+    const prompt = `Siga este protocolo no meu projeto, etapa por etapa. Antes de começar, me faça as perguntas que faltarem. Ao fim de cada etapa, me mostre o resultado e espere o meu OK.\n\n${p.md}`;
+    navigator.clipboard.writeText(prompt).then(() => { const a = document.getElementById("avisoCopia"); a.classList.add("on"); setTimeout(() => a.classList.remove("on"), 1600); });
+  };
+  scrollTo({top:0, behavior:"instant"});
+  linhaRolagem();
+}
+document.getElementById("trilha").addEventListener("click", e => {
+  const b = e.target.closest(".cab"); if (!b) return;
+  const et = b.parentElement, aberta = et.classList.toggle("aberta"); b.setAttribute("aria-expanded", aberta);
+  linhaRolagem();
+});
+let tudoAberto = false;
+document.getElementById("abrirTudo").onclick = e => {
+  tudoAberto = !tudoAberto;
+  document.querySelectorAll(".etapa").forEach(et => { et.classList.toggle("aberta", tudoAberto); et.querySelector(".cab").setAttribute("aria-expanded", tudoAberto); });
+  e.target.textContent = tudoAberto ? "FECHAR TODAS AS ETAPAS" : "ABRIR TODAS AS ETAPAS"; linhaRolagem();
+};
+// a linha da trilha se preenche conforme a leitura avança; as etapas já passadas ficam marcadas
+function linhaRolagem(){
+  const tr = document.getElementById("trilha"), cheia = document.getElementById("linhaCheia"); if (!cheia) return;
+  const r = tr.getBoundingClientRect(), alvo = innerHeight*0.55;
+  const prog = Math.max(0, Math.min(1, (alvo - r.top)/(r.height - 40)));
+  cheia.style.height = (prog*100) + "%";
+  document.querySelectorAll(".etapa").forEach(et => et.classList.toggle("feita", et.getBoundingClientRect().top < alvo));
+}
+addEventListener("scroll", linhaRolagem, {passive:true});
+function rota(){
+  const id = new URLSearchParams(location.hash.slice(1)).get("p");
+  if (id){ mostrar(id); robo.mostrar("protocolos"); }
+  else { document.body.classList.remove("vendo"); document.title = "Protocolos · roteiros para projetos com IA"; }
+}
+addEventListener("hashchange", rota);
+
+// ---------- robô pequeno (mesmo da Biblioteca) ----------
+const DICAS = ["Não sabe por onde começar? Abra “Começar um projeto com IA”.","Copie o prompt do protocolo e cole no seu projeto: a IA segue as etapas com você.","Os itens do kit levam direto para a Biblioteca, com o resumo e o link oficial.","Role a trilha: a linha rosa mostra até onde você já leu."];
+const robo = (() => {
+  const cv = document.getElementById("miniCv"), g = cv.getContext("2d"), S = cv.width;
+  let mx = innerWidth, my = innerHeight, icone = null, ate = 0, troca = 0, piscar = 0;
+  addEventListener("mousemove", e => { mx = e.clientX; my = e.clientY; });
+  setInterval(() => { piscar = 7; }, 3600);
+  function quadro(t){
+    g.clearRect(0,0,S,S);
+    const c = S/2, R = S*0.46;
+    let gr = g.createRadialGradient(c - R*.35, c - R*.4, R*.1, c, c, R); gr.addColorStop(0,"#FFFFFF"); gr.addColorStop(.7,"#EDEDEB"); gr.addColorStop(1,"#C9C9CC");
+    g.fillStyle = gr; g.beginPath(); g.arc(c, c, R, 0, 7); g.fill();
+    g.fillStyle = "#0C0C0F"; g.beginPath(); g.arc(c, c, R*.74, 0, 7); g.fill();
+    g.shadowColor = "rgba(229,25,75,.9)"; g.shadowBlur = 10; g.strokeStyle = "#E5194B"; g.lineWidth = S*0.018; g.beginPath(); g.arc(c, c, R*.66, 0, 7); g.stroke();
+    g.strokeStyle = "#FF7A99"; g.lineWidth = S*0.022; const a0 = t*0.002; g.beginPath(); g.arc(c, c, R*.66, a0, a0 + .7); g.stroke(); g.shadowBlur = 0;
+    g.fillStyle = "#101014"; g.beginPath(); g.arc(c, c, R*.58, 0, 7); g.fill();
+    const r = cv.getBoundingClientRect(), ox = Math.max(-1, Math.min(1, (mx - (r.left + r.width/2))/400))*S*0.05, oy = Math.max(-1, Math.min(1, (my - (r.top + r.height/2))/400))*S*0.04;
+    const mostrando = icone && t < ate, f = Math.min(1, (t - troca)/320);
+    g.save(); g.beginPath(); g.arc(c, c, R*.56, 0, 7); g.clip();
+    if (mostrando){
+      const m = PIX[icone], cel = S*0.052, x0 = c - 4.5*cel + ox*.4, y0 = c - 4.5*cel + oy*.4;
+      g.shadowColor = "rgba(255,255,255,.9)"; g.shadowBlur = 8; g.fillStyle = "#fff";
+      for (let y=0;y<9;y++) for (let x=0;x<9;x++) if (m[y][x] === "#"){ g.globalAlpha = f*pixelAlfa(t,x,y); g.fillRect(x0 + x*cel, y0 + y*cel, cel*.8, cel*.8); }
+    } else {
+      const cel = S*0.03, h = piscar > 0 ? 1 : 5;
+      g.shadowColor = "rgba(255,255,255,.9)"; g.shadowBlur = 8; g.fillStyle = "#fff";
+      [-1,1].forEach(lado => { for (let y=0;y<h;y++) for (let x=0;x<3;x++) g.fillRect(c + lado*S*0.09 - 1.5*cel + x*cel*1.15 + ox, c - S*0.07 + (5-h)*cel*.6 + y*cel*1.15 + oy, cel, cel); });
+      g.shadowColor = "rgba(229,25,75,.95)"; g.fillStyle = "#FF5A7F";
+      [[-2,0],[2,0],[-1,1],[0,1],[1,1]].forEach(([x,y]) => g.fillRect(c + x*cel*1.15 - cel/2 + ox, c + S*0.1 + y*cel*1.15 + oy, cel, cel));
+    }
+    g.restore(); g.shadowBlur = 0; g.globalAlpha = 1;
+    if (piscar > 0) piscar--;
+    requestAnimationFrame(quadro);
+  }
+  requestAnimationFrame(quadro);
+  return { mostrar(ic){ icone = ic; troca = performance.now(); ate = troca + 1800; } };
+})();
+let dicaN = -1;
+const miniBalao = document.getElementById("miniBalao");
+function miniFala(){ dicaN = (dicaN + 1) % DICAS.length; document.getElementById("miniTxt").textContent = DICAS[dicaN]; miniBalao.classList.add("aberto"); }
+document.getElementById("mini").addEventListener("click", miniFala);
+document.getElementById("mini").addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " "){ e.preventDefault(); miniFala(); } });
+document.getElementById("miniX").onclick = () => miniBalao.classList.remove("aberto");
+addEventListener("keydown", e => { if (e.key === "Escape") miniBalao.classList.remove("aberto"); });
+
+function iconesQuadro(t){
+  if (!document.hidden) document.querySelectorAll("canvas[data-ic]").forEach(cv => desenhaPixels(cv, cv.dataset.ic, t, "#0E0E10", ""));
+  requestAnimationFrame(iconesQuadro);
+}
+requestAnimationFrame(iconesQuadro);
+</script>
+<script src="titulo-blur.js"></script>
+</body>
+</html>
