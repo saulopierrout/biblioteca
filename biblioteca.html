@@ -105,6 +105,13 @@ h1 .ponto{color:var(--accent)}
 .c:hover svg.ic,.c:focus-visible svg.ic{color:var(--accent)}
 .c .cat{font:500 10px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
 .c .tp{margin-left:auto;font:500 10px var(--mono);letter-spacing:.1em;color:var(--accent)}
+.c .dt{font:500 10px var(--mono);letter-spacing:.08em;color:var(--muted);white-space:nowrap}
+.c .dt.novo{color:var(--accent)}
+.c:hover .dt,.c:focus-visible .dt{color:#B4B4BC}
+.ordem{display:flex;align-items:center;gap:8px;height:46px;padding:0 12px;background:#fff;border:1px solid var(--line2);clip-path:var(--chanfro)}
+.ordem:focus-within{border-color:var(--ink)}
+.ordem span{font:500 10px var(--mono);letter-spacing:.12em;color:var(--muted)}
+.ordem select{border:0;outline:0;background:none;font:600 13px var(--sans);color:var(--ink);cursor:pointer;padding-right:2px}
 .c h3{font:700 16.5px/1.22 var(--sans);letter-spacing:-.01em}
 .c .r{font:400 13.5px/1.5 var(--sans);color:var(--muted);display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
 .c .est{margin-top:auto;font:400 11px var(--mono);color:var(--muted)}
@@ -356,6 +363,14 @@ html,body{overflow-x:hidden}
     <div class="ferr">
       <label class="busca"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
         <input id="q" type="search" placeholder="Buscar nesta aba" aria-label="Buscar nesta aba" autocomplete="off"></label>
+      <label class="ordem"><span>ORDENAR</span>
+        <select id="ordem" aria-label="Ordenar itens">
+          <option value="padrao">Padrão</option>
+          <option value="recentes">Mais recentes</option>
+          <option value="antigos">Mais antigos</option>
+          <option value="estrelas">Mais estrelas</option>
+          <option value="az">A–Z</option>
+        </select></label>
       <div class="chips" id="chips" role="group" aria-label="Filtrar por categoria"><div class="goo" aria-hidden="true"><div class="gota"></div><div class="gota g2"></div></div></div>
     </div>
     <div class="contagem" id="contagem" aria-live="polite"></div>
@@ -415,6 +430,11 @@ const ABAS = [
   {id:"codigos", nome:"Códigos", ic:"codigos"}
 ];
 let DADOS = [], aba = "skills", cat = "Todas", busca = "", limite = 24, idxSite = 0, idxCurso = 0;
+let ordem = "padrao"; try { ordem = localStorage.getItem("ordem") || "padrao"; } catch(e){}
+const ORDEM_NOME = {recentes: "MAIS RECENTES", antigos: "MAIS ANTIGOS", estrelas: "MAIS ESTRELAS", az: "A–Z"};
+// "novo" = entrou nos últimos 7 dias
+const HOJE = Date.now(), novo = d => d && (HOJE - new Date(d + "T12:00:00")) < 7 * 864e5;
+const dataCurta = d => d ? d.slice(8, 10) + "/" + d.slice(5, 7) : "";
 const painel = document.getElementById("painel");
 
 let INSTALADAS = [];
@@ -473,23 +493,32 @@ document.getElementById("q").addEventListener("input", e => { busca = e.target.v
 
 function lista(){
   const termos = sem(busca).split(/\s+/).filter(Boolean);
-  return DADOS.filter(x => x.a === aba && (cat === "Todas" || x.c === cat) &&
+  const L = DADOS.filter(x => x.a === aba && (cat === "Todas" || x.c === cat) &&
     termos.every(w => sem(x.n + " " + x.r + " " + x.c + " " + x.t).includes(w)));
+  // a posição na lista acompanha a ordem em que cada item entrou
+  if (ordem === "recentes") L.sort((a, b) => b.o - a.o);
+  else if (ordem === "antigos") L.sort((a, b) => a.o - b.o);
+  else if (ordem === "estrelas") L.sort((a, b) => b.e - a.e || b.o - a.o);
+  else if (ordem === "az") L.sort((a, b) => a.n.localeCompare(b.n, "pt-BR"));
+  return L;
 }
+const selOrdem = document.getElementById("ordem");
+selOrdem.value = ordem;
+selOrdem.addEventListener("change", e => { ordem = e.target.value; limite = 24; idxSite = 0; idxCurso = 0; try { localStorage.setItem("ordem", ordem); } catch(err){} render(); });
 
 // ---------- cartões ----------
 function cartao(x, i, comImg){
   const ic = ICONE_CAT[x.c] || "skills";
   const img = comImg ? `<div class="thumb${x.img ? "" : " capa-feita"}">${x.img ? `<img loading="lazy" src="${esc(x.img)}" alt="Prévia de ${esc(x.n)}">` : `<span>${ico(ic, 34)}</span><b>${esc(x.n)}</b>`}</div>` : "";
   return `<div class="c" tabindex="0" role="button" data-n="${esc(x.n)}" aria-label="${esc(x.n)}: ver detalhes"><div class="b"><div class="i">${img}<div class="${comImg ? "txt" : ""}" style="display:flex;flex-direction:column;gap:8px">
-    <div class="top">${ico(ic, 18)}<span class="cat">${esc(x.c)}</span><span class="tp">${esc(x.t)}</span></div>
+    <div class="top">${ico(ic, 18)}<span class="cat">${esc(x.c)}</span><span class="tp">${esc(x.t)}</span>${x.dt ? `<span class="dt${novo(x.dt) ? " novo" : ""}" title="Entrou na biblioteca em ${dataCurta(x.dt)}">${novo(x.dt) ? "NOVO · " : "+"}${dataCurta(x.dt)}</span>` : ""}</div>
     <h3>${esc(x.n)}</h3><p class="r">${esc(x.r)}</p>
     ${x.e ? `<span class="est"><b>★</b> ${x.e.toLocaleString("pt-BR")} estrelas</span>` : ""}</div></div></div></div>`;
 }
 
 function render(){
   const L = lista();
-  document.getElementById("contagem").innerHTML = `<b>${L.length}</b> ${L.length === 1 ? "ITEM" : "ITENS"}${cat !== "Todas" ? " · " + esc(cat).toUpperCase() : ""}${busca ? " · BUSCA: " + esc(busca).toUpperCase() : ""}`;
+  document.getElementById("contagem").innerHTML = `<b>${L.length}</b> ${L.length === 1 ? "ITEM" : "ITENS"}${cat !== "Todas" ? " · " + esc(cat).toUpperCase() : ""}${busca ? " · BUSCA: " + esc(busca).toUpperCase() : ""}${ORDEM_NOME[ordem] ? " · " + ORDEM_NOME[ordem] : ""}`;
   if (!L.length){ painel.innerHTML = `<div class="vazio">Nada por aqui com esse filtro. Tente outra palavra ou “Todas”.</div>`; return; }
   ({skills: rSkills, sites: rSites, cursos: rCursos, livros: rLivros, codigos: rCodigos})[aba](L);
 }
@@ -509,10 +538,10 @@ function blocoRanking(){
 function animarBarras(){ requestAnimationFrame(() => document.querySelectorAll(".rk .barra i").forEach(b => b.style.width = b.dataset.w + "%")); }
 function rSkills(L){
   const resto = L.slice(0, limite);
-  const mostraRk = !busca && cat === "Todas";
+  const mostraRk = !busca && cat === "Todas" && ordem === "padrao";
   let fechado = false; try { fechado = localStorage.getItem("rkFechado") === "1"; } catch(e){}
   painel.innerHTML = (mostraRk ? `<div class="${fechado ? "rk-fechado" : ""}" id="rkBloco"><div class="subtit"><h2>Ranking</h2><span>O QUE A COMUNIDADE MAIS USA</span></div>${blocoRanking()}<div class="rk-acoes"><button class="mais10" id="rk10">VER TOP 10 ↓</button><button id="rkFecha">${fechado ? "MOSTRAR RANKING" : "RECOLHER RANKING"}</button></div></div>` : "")
-    + `<div class="subtit"><h2>Todas</h2><span>${L.length} ITENS</span></div><div class="grade">${resto.map(x => cartao(x)).join("")}</div>`
+    + `<div class="subtit"><h2>${ordem === "recentes" ? "Mais recentes" : ordem === "antigos" ? "Mais antigos" : ordem === "estrelas" ? "Mais estrelas" : ordem === "az" ? "De A a Z" : "Todas"}</h2><span>${L.length} ITENS</span></div><div class="grade">${resto.map(x => cartao(x)).join("")}</div>`
     + (L.length > limite ? `<button class="mais-btn" id="maisBtn">MOSTRAR MAIS ${Math.min(24, L.length - limite)}</button>` : "");
   const mb = document.getElementById("maisBtn"); if (mb) mb.onclick = () => { limite += 24; render(); };
   if (mostraRk){
@@ -552,7 +581,7 @@ function rSites(L){
 // Cursos em destaque (os mais importantes; trocar os nomes aqui para mudar a escolha)
 const DESTAQUE_CURSOS = ["6 cursos de Harvard grátis (CS50)", "IBM SkillsBuild (IA)", "Aula Stanford sobre LLMs (YouTube)"];
 function rCursos(L){
-  const dest = !busca && cat === "Todas" ? DESTAQUE_CURSOS.map(n => L.find(x => x.n === n)).filter(Boolean) : [];
+  const dest = !busca && cat === "Todas" && ordem === "padrao" ? DESTAQUE_CURSOS.map(n => L.find(x => x.n === n)).filter(Boolean) : [];
   const resto = L.filter(x => !dest.includes(x));
   const cartaoDest = x => cartao(x, 0, true).replace('<div class="top">', '<span class="selo">DESTAQUE</span><div class="top">');
   painel.innerHTML = (dest.length ? `<div class="subtit"><h2>Para começar</h2><span>OS MAIS IMPORTANTES · GRÁTIS</span></div><div class="destaque-cursos grade-img">${dest.map(cartaoDest).join("")}</div>` : "")
