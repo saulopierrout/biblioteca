@@ -98,6 +98,13 @@ h1:before{content:attr(data-eco);position:absolute;left:14px;top:12px;white-spac
 /* robô */
 #palco{position:absolute;z-index:2;width:620px;height:620px;left:calc(57% - 310px);top:calc(50% - 320px)}
 #palco canvas{width:100%!important;height:100%!important;display:block}
+/* inicialização holográfica do robô: rótulo de progresso */
+.boot-hud{position:absolute;left:50%;bottom:9%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:7px;pointer-events:none;z-index:3;transition:opacity .45s}
+.boot-hud .b-lin{display:flex;gap:10px;font:500 10px var(--mono,"JetBrains Mono",monospace);letter-spacing:.18em;color:#74747A;white-space:nowrap}
+.boot-hud .b-pct{color:#E5194B;min-width:3.2em;text-align:right}
+.boot-hud .b-barra{width:150px;height:1px;background:rgba(14,14,16,.14);overflow:hidden}
+.boot-hud .b-barra b{display:block;height:100%;background:#E5194B;transform-origin:left;transform:scaleX(0)}
+.boot-hud.fim{opacity:0}
 .sombra{position:absolute;left:50%;bottom:-6px;width:46%;height:26px;transform:translateX(-50%);background:radial-gradient(closest-side,rgba(14,14,16,.28),transparent);filter:blur(6px);animation:sombra 4.2s ease-in-out infinite}
 @keyframes sombra{50%{transform:translateX(-50%) scale(.86);opacity:.7}}
 .aneis{position:absolute;inset:-30px;pointer-events:none;z-index:1}
@@ -870,7 +877,9 @@ if (USAR_TRIPO) carregador.load("robo-v3.glb", gltf => {
   m.traverse(o => { if (o.isMesh && o.material){ o.material.envMapIntensity = 1; } });
   robo.add(piv); window.ROBO_MODELO = piv;
   aplicarModo(modo);
-}, undefined, () => { /* sem modelo: fica o robô em código */ });
+  bootChegou(piv);
+}, x => { if (x.total){ BOOT.total = x.total; BOOT.prog = x.loaded; } },
+() => { /* sem modelo: fica o robô em código */ BOOT.falhou = true; });
 
 // ---------- robô feito em código (parecido com o modelo do Tripo) + modo raio-X ----------
 const codigo = new THREE.Group(); robo.add(codigo);
@@ -1183,6 +1192,115 @@ function aplicarModo(m){
 }
 aplicarModo(modo);
 
+// ---------- inicialização holográfica: a estrutura se desenha em linhas e depois o 3D se materializa ----------
+// O modelo não é alterado: a animação só cobre o tempo de download e some quando ele chega.
+const PULAR_BOOT = calmo || /[?&]og=/.test(location.search);
+R.localClippingEnabled = true;
+const BOOT = { ini: performance.now(), total: 0, prog: 0, mostra: 0, carregou: false, falhou: false, t3: 0, revela: 0, acende: 0, fim: PULAR_BOOT, MIN: 1500, DUR: 1000 };
+const suave = x => 1 - Math.pow(1 - x, 3), suave2 = x => x < .5 ? 4*x*x*x : 1 - Math.pow(-2*x + 2, 3)/2;
+const lim01 = x => Math.max(0, Math.min(1, x));
+// planos de corte: o fio aparece de cima para baixo; na materialização, o sólido ocupa o lugar do fio
+const clipFio = new THREE.Plane(new THREE.Vector3(0, 1, 0), -1.3);     // mostra y acima da linha
+const clipResto = new THREE.Plane(new THREE.Vector3(0, -1, 0), 1.3);   // fio só abaixo da fronteira
+const clipSolido = new THREE.Plane(new THREE.Vector3(0, 1, 0), -1.3);  // sólido só acima da fronteira
+const holo = new THREE.Group(); holo.visible = !PULAR_BOOT; robo.add(holo);
+const fioMat = (cor, op) => new THREE.LineBasicMaterial({color: cor, transparent: true, opacity: 0, depthWrite: false, clippingPlanes: [clipFio, clipResto]});
+const malha = fioMat(0x0E0E10); holo.add(new THREE.LineSegments(new THREE.WireframeGeometry(new THREE.SphereGeometry(1, 30, 20)), malha));
+const circulo = (r, seg = 128) => new THREE.BufferGeometry().setFromPoints(new THREE.EllipseCurve(0, 0, r, r, 0, Math.PI*2).getPoints(seg));
+// detalhes que acendem em sequência: moldura da tela, anéis de luz, disco de trás, equador e o núcleo
+const detalhes = [];
+const detalhe = (geo, cor, op, pos, rot) => { const m = fioMat(cor); const l = new THREE.LineLoop(geo, m); if (pos) l.position.set(...pos); if (rot) l.rotation.set(...rot); holo.add(l); detalhes.push({m, op}); return l; };
+detalhe(circulo(.74), 0x0E0E10, .55, [0, 0, .66]);
+detalhe(circulo(.62), 0x0E0E10, .7, [0, 0, .77]);
+detalhe(circulo(.565), ACC, 1, [0, 0, .86]);
+detalhe(circulo(.705), ACC, .8, [0, 0, .8]);
+detalhe(circulo(.62), 0x0E0E10, .5, [0, 0, -.785]);
+detalhe(circulo(1.004), ACC, .55, null, [Math.PI/2, 0, 0]);
+const nucleoFio = new THREE.LineSegments(new THREE.EdgesGeometry(new THREE.IcosahedronGeometry(.3, 1)), fioMat(ACC)); holo.add(nucleoFio); detalhes.push({m: nucleoFio.material, op: .9});
+// partículas que convergem para a superfície
+const NP = 520, alvoP = new Float32Array(NP*3), iniP = new Float32Array(NP*3);
+for (let i = 0; i < NP; i++){
+  const d = new THREE.Vector3(Math.random()*2 - 1, Math.random()*2 - 1, Math.random()*2 - 1).normalize();
+  alvoP.set([d.x, d.y, d.z], i*3); const f = 1.7 + Math.random()*1.1; iniP.set([d.x*f, d.y*f, d.z*f], i*3);
+}
+const geoP = new THREE.BufferGeometry(); geoP.setAttribute("position", new THREE.BufferAttribute(iniP.slice(), 3));
+const matP = new THREE.PointsMaterial({color: ACC, size: .022, transparent: true, opacity: 0, depthWrite: false});
+const pontos = new THREE.Points(geoP, matP); holo.add(pontos);
+// linha de varredura: um anel horizontal que percorre a esfera
+const varre = new THREE.Group(); holo.add(varre);
+const geoVarre = circulo(1, 160); geoVarre.rotateX(Math.PI/2);
+const matVarre = new THREE.LineBasicMaterial({color: ACC, transparent: true, opacity: 0, depthWrite: false});
+varre.add(new THREE.LineLoop(geoVarre, matVarre));
+const v2 = new THREE.LineLoop(geoVarre, new THREE.LineBasicMaterial({color: ACC, transparent: true, opacity: 0, depthWrite: false})); v2.position.y = .025; varre.add(v2);
+const posVarre = y => { varre.position.y = y; varre.scale.setScalar(Math.sqrt(Math.max(.0001, 1.02 - y*y))); };
+// rótulo de progresso (HTML) embaixo do robô
+let hud = null, hudTxt, hudPct, hudBarra;
+if (!PULAR_BOOT){
+  hud = document.createElement("div"); hud.className = "boot-hud"; hud.setAttribute("aria-hidden", "true");
+  hud.innerHTML = '<div class="b-lin"><span class="b-txt">INICIANDO SISTEMA</span><span class="b-pct">0%</span></div><i class="b-barra"><b></b></i>';
+  palco.appendChild(hud); hudTxt = hud.querySelector(".b-txt"); hudPct = hud.querySelector(".b-pct"); hudBarra = hud.querySelector(".b-barra b");
+  codigo.visible = false; telaG.visible = false;
+}
+let modeloBoot = null, matsModelo = [];
+function bootChegou(piv){
+  BOOT.carregou = true;
+  if (BOOT.fim) return;
+  modeloBoot = piv; piv.visible = false;
+  piv.traverse(o => { if (o.isMesh) (Array.isArray(o.material) ? o.material : [o.material]).forEach(m => { m.clippingPlanes = [clipSolido]; m.needsUpdate = true; matsModelo.push(m); }); });
+}
+function terminarBoot(){
+  BOOT.fim = true; holo.visible = false;
+  matsModelo.forEach(m => { m.clippingPlanes = null; m.needsUpdate = true; });
+  if (hud){ hud.classList.add("fim"); setTimeout(() => hud.remove(), 600); }
+}
+function atualizarBoot(){
+  if (BOOT.fim && BOOT.acende >= 1) return;
+  const agora = performance.now(), e = agora - BOOT.ini;
+  // o rosto acende por último, depois que o corpo se materializou
+  if (BOOT.fim){
+    BOOT.acende = lim01((agora - BOOT.tFim)/450);
+    telaG.visible = true; tela.material.opacity = suave(BOOT.acende); return;
+  }
+  const tremida = .78 + .22*Math.sin(e*.047)*Math.sin(e*.011 + 1.3);
+  // progresso: real quando o servidor informa o tamanho; senão, estimado pelo tempo (fica em até 95% até chegar)
+  let p = BOOT.total ? BOOT.prog/BOOT.total : 1 - Math.exp(-e/2600);
+  p = (BOOT.carregou || BOOT.falhou) ? 1 : Math.min(p, .95);
+  BOOT.mostra += (p - BOOT.mostra)*.1;
+  hudPct.textContent = Math.round(BOOT.mostra*100) + "%"; hudBarra.style.transform = `scaleX(${BOOT.mostra})`;
+  // fase 1 (0 a 0,7 s): a malha se desenha de cima para baixo
+  const f1 = suave(lim01(e/700)), y1 = 1.3 - 2.6*f1;
+  clipFio.constant = -y1;
+  const some = 1 - BOOT.revela;
+  malha.opacity = .34*tremida*some;
+  // fase 2 (0,5 a 1,4 s): os detalhes acendem em sequência e as partículas convergem
+  detalhes.forEach((d, i) => { d.m.opacity = d.op*suave(lim01((e - 480 - i*110)/320))*tremida*some; });
+  nucleoFio.rotation.y = e*.0012; nucleoFio.rotation.x = e*.0007;
+  const kP = suave(lim01((e - 200)/1300)), pa = geoP.attributes.position.array;
+  for (let i = 0; i < NP*3; i++) pa[i] = iniP[i] + (alvoP[i] - iniP[i])*kP;
+  geoP.attributes.position.needsUpdate = true;
+  matP.opacity = lim01(e/300)*(1 - .55*kP)*some;
+  // fase 3: com o modelo pronto e o tempo mínimo cumprido, o sólido toma o lugar do fio, de cima para baixo
+  let yV;
+  if ((BOOT.carregou || BOOT.falhou) && e > BOOT.MIN){
+    if (!BOOT.t3){
+      BOOT.t3 = agora; hudTxt.textContent = "MATERIALIZANDO";
+      if (modeloBoot) modeloBoot.visible = true; else { codigo.visible = true; aplicarModo("codigo"); }
+    }
+    BOOT.revela = lim01((agora - BOOT.t3)/BOOT.DUR);
+    const L = 1.25 - 2.5*suave2(BOOT.revela);
+    clipSolido.constant = -L; clipResto.constant = L; yV = L;
+    if (BOOT.revela >= 1){ BOOT.tFim = agora; terminarBoot(); }
+  } else {
+    hudTxt.textContent = e < 700 ? "INICIANDO SISTEMA" : e < BOOT.MIN ? "MONTANDO ESTRUTURA" : "CARREGANDO MODELO 3D";
+    // enquanto espera, a varredura sobe e desce devagar, como quem processa
+    yV = e < 700 ? y1 : Math.cos((e - 700)*.0024)*.92;
+  }
+  posVarre(yV);
+  const op = (e < 700 ? lim01(e/150) : .75)*(BOOT.t3 ? 1 : tremida);
+  matVarre.opacity = op; v2.material.opacity = op*.35;
+}
+if (PULAR_BOOT) BOOT.acende = 1;
+
 function tamanho(){ const r = palco.getBoundingClientRect(); R.setSize(r.width, r.height, false); cam.aspect = r.width/r.height; cam.updateProjectionMatrix(); }
 addEventListener("resize", tamanho); tamanho();
 
@@ -1219,6 +1337,7 @@ function quadro(t){
   if (window.ROBO_AJUSTE){ Object.assign(AJUSTE, window.ROBO_AJUSTE); window.ROBO_AJUSTE = null; if (window.ROBO_MODELO) window.ROBO_MODELO.rotation.y = AJUSTE.giroY; telaG.position.y = AJUSTE.tela.y; tela.position.z = AJUSTE.tela.z; vidro.position.z = AJUSTE.tela.z + .006; tela.geometry = new THREE.CircleGeometry(AJUSTE.tela.raio, 96); vidro.geometry = tela.geometry; }
   anelAcc.material.color.copy(ACC).multiplyScalar(ROBO.alvo ? 1 : .85 + Math.sin(t*0.004)*.15);
   if (piscar>0) piscar--;
+  atualizarBoot();
   desenhar(t);
   R.render(cena, cam);
   requestAnimationFrame(quadro);
