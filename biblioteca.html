@@ -614,10 +614,8 @@ function estudo(){
   <p class="est-obs">A IA pode errar ou inventar trechos: confira as ideias no próprio livro.</p><div style="height:40px"></div>`;
 }
 function rLivros(L){
-  const rec = L.filter(x => x.vd !== "bom"), bons = L.filter(x => x.vd === "bom");
   painel.innerHTML = (!busca && cat === "Todas" ? estudo() : "")
-    + (rec.length ? estante(rec, "Recomendados", "LEITURAS QUE VALEM DE VERDADE") : "")
-    + (bons.length ? `<div style="height:40px"></div>` + estante(bons, "Famosos e bons, mas não essenciais", "VALEM A LEITURA, NÃO SÃO PRIORIDADE") : "");
+    + (L.length ? estante(L, "Estante", "LEITURAS QUE EU RECOMENDO") : "");
 }
 function prevHTML(x){ return `<div class="prev"><iframe sandbox="allow-scripts" loading="lazy" tabindex="-1" title="Prévia de ${esc(x.n)}" srcdoc="${esc(x.k)}"></iframe></div>`; }
 function escalaPrevs(){ document.querySelectorAll(".prev iframe").forEach(f => { const w = f.parentElement.clientWidth; f.style.transform = `scale(${w/1000})`; }); }
