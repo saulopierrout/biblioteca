@@ -172,6 +172,16 @@ h1 .ponto{color:var(--accent)}
 
 /* LIVROS: estante */
 .estante{position:relative;padding:40px 0 0;perspective:1200px}
+.estudo{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}
+.est-c{display:flex;flex-direction:column;gap:8px;padding:16px;border:1px solid var(--line);background:#fff}
+.est-c b{font:500 11px var(--mono);letter-spacing:.14em;color:var(--accent)}
+.est-c h3{font:800 17px var(--sans);letter-spacing:-.01em}
+.est-c p{font-size:13px;color:var(--muted);flex:1}
+.est-c .btn{align-self:flex-start;padding:9px 12px;font-size:10px}
+.est-c .btn:hover{background:var(--accent)}
+.est-obs{margin-top:10px;font:400 11px var(--mono);color:var(--muted)}
+@media (max-width:900px){.estudo{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:520px){.estudo{grid-template-columns:1fr}}
 .livros{display:flex;gap:20px;align-items:flex-end;justify-content:center;flex-wrap:wrap;padding:0 10px 18px}
 .livro{width:118px;cursor:pointer;transform:rotateY(-16deg);transform-origin:left center;transition:transform .45s cubic-bezier(.2,.7,.2,1),filter .45s}
 .livro .capa{aspect-ratio:2/3;background:#e3e3e1;box-shadow:inset 6px 0 10px rgba(0,0,0,.25),6px 10px 18px rgba(14,14,16,.22);overflow:hidden;border-radius:2px 4px 4px 2px}
@@ -590,9 +600,23 @@ function rCursos(L){
 function estante(L, titulo, sub){
   return `<div class="subtit"><h2>${titulo}</h2><span>${sub} · ${L.length}</span></div><div class="estante"><div class="livros">${L.map(x => `<div class="livro" tabindex="0" role="button" data-n="${esc(x.n)}" aria-label="${esc(x.n)}: ver resumo"><div class="capa">${x.img ? `<img src="${esc(x.img)}" alt="Capa de ${esc(x.n)}">` : ""}</div><span>${esc(x.n)}</span></div>`).join("")}</div><div class="prateleira"></div></div>`;
 }
+// Prompts para estudar um livro com IA (anexe o livro no chat e cole o prompt)
+const ESTUDO = [
+  ["Mapa mental", "As ideias do livro em ramos, do centro para fora.", "Leia o livro anexado e monte um mapa mental: o tema central, de 5 a 7 ramos com as ideias principais e, em cada ramo, de 2 a 4 subideias com um exemplo do próprio livro. Entregue em lista indentada e também em código Mermaid (mindmap)."],
+  ["Sketchnote", "Uma página visual para desenhar ou gerar.", "Resuma o livro anexado como uma sketchnote: título, as 6 ideias principais em blocos curtos (uma frase e um ícone sugerido para cada), setas mostrando como uma ideia leva à outra e uma frase de fechamento. Descreva o layout da página para eu desenhar ou gerar a imagem."],
+  ["Flashcards", "Pergunta e resposta para revisar e fixar.", "Crie 20 flashcards do livro anexado no formato pergunta / resposta curta. Misture conceitos, exemplos e aplicações práticas e ordene do básico ao avançado. No fim, marque os 5 mais importantes para revisar primeiro."],
+  ["Fluxograma", "A ordem para entender e aplicar.", "Transforme o livro anexado num fluxo de aprendizado: as etapas na ordem em que devo entender e aplicar as ideias, o que fazer em cada etapa e como saber que estou pronto para a próxima. Entregue também em código Mermaid (flowchart)."],
+  ["Quadrinhos", "As premissas contadas em cenas.", "Explique as 5 premissas principais do livro anexado em quadrinhos: para cada uma, de 3 a 4 quadros com cena, personagem e fala curta. Use os mesmos personagens do começo ao fim e feche cada tira com a lição em uma frase."]
+];
+function estudo(){
+  return `<div class="subtit"><h2>Estude um livro com IA</h2><span>ANEXE O LIVRO NO CHAT E COLE O PROMPT</span></div>
+  <div class="estudo">${ESTUDO.map(([t, d, p], i) => `<div class="est-c"><b>0${i + 1}</b><h3>${t}</h3><p>${d}</p><button class="btn" data-copiar="${esc(p)}">COPIAR PROMPT</button></div>`).join("")}</div>
+  <p class="est-obs">A IA pode errar ou inventar trechos: confira as ideias no próprio livro.</p><div style="height:40px"></div>`;
+}
 function rLivros(L){
   const rec = L.filter(x => x.vd !== "bom"), bons = L.filter(x => x.vd === "bom");
-  painel.innerHTML = (rec.length ? estante(rec, "Recomendados", "LEITURAS QUE VALEM DE VERDADE") : "")
+  painel.innerHTML = (!busca && cat === "Todas" ? estudo() : "")
+    + (rec.length ? estante(rec, "Recomendados", "LEITURAS QUE VALEM DE VERDADE") : "")
     + (bons.length ? `<div style="height:40px"></div>` + estante(bons, "Famosos e bons, mas não essenciais", "VALEM A LEITURA, NÃO SÃO PRIORIDADE") : "");
 }
 function prevHTML(x){ return `<div class="prev"><iframe sandbox="allow-scripts" loading="lazy" tabindex="-1" title="Prévia de ${esc(x.n)}" srcdoc="${esc(x.k)}"></iframe></div>`; }
@@ -606,6 +630,8 @@ function rCodigos(L){
 
 // abrir detalhes ao clicar ou dar Enter num cartão / livro
 painel.addEventListener("click", e => {
+  const cp = e.target.closest("[data-copiar]");
+  if (cp) return navigator.clipboard.writeText(cp.dataset.copiar).then(() => { const o = cp.textContent; cp.textContent = "COPIADO ✓"; setTimeout(() => cp.textContent = o, 1400); });
   const c = e.target.closest(".c,.livro,.rk li[data-n]"); if (c) return abrir(c.dataset.n);
   const r = e.target.closest(".rk li[data-repo]"); if (!r) return;
   const item = DADOS.find(x => (x.u || "").toLowerCase().includes(r.dataset.repo.toLowerCase()));
