@@ -117,6 +117,7 @@ section.parte{display:none;padding-top:26px} section.parte.on{display:block}
 .tut-intro{max-width:760px;color:var(--ink2);line-height:1.6;margin:-6px 0 16px}
 .selo{display:inline-block;font:600 10px var(--mono);letter-spacing:.12em;padding:4px 7px;background:var(--ink);color:#fff;margin-right:6px}
 .selo.script{background:var(--accent)} .selo.claro{background:var(--line);color:var(--ink)}
+#tGrade .c[data-t]{cursor:pointer}
 #tGrade .thumb video{width:100%;height:100%;object-fit:contain;display:block;background:#0B0B0D}
 .janela .acoes{flex-wrap:wrap} .modo{display:inline-flex;gap:4px;margin-right:8px} .modo button[aria-pressed="false"]{background:var(--line);color:var(--ink)}
 .j-extra{display:flex;flex-direction:column;gap:10px;overflow:auto;max-height:46vh}
@@ -449,9 +450,12 @@ function desenharTut(){
   document.getElementById("tGrade").innerHTML = L.map(t => { const m = MODO[t.modo] || ["", "claro"]; return `<div class="c" data-t="${esc(t.id)}"><div class="b"><div class="i">
     <div class="thumb">${t.previa ? `<video muted loop playsinline autoplay preload="metadata" poster="${esc(t.capa)}" src="${esc(t.previa)}" aria-label="Prévia: ${esc(t.titulo)}"></video>` : `<img loading="lazy" src="${esc(t.capa)}" alt="Vídeo: ${esc(t.titulo)}"><span class="play">${ico("youtube", 16)}</span>`}</div>
     <div class="txt"><span class="meta"><span class="selo">${esc(FERR[t.ferramenta] || t.ferramenta)}</span><span class="selo ${m[1]}">${m[0]}</span>${t.codigo ? `<span class="selo claro">+ CÓDIGO</span>` : ""}</span><h3>${esc(t.titulo)}</h3><p class="r">${esc(t.resumo)}</p>
-    <div class="acoes"><button class="mini-btn" data-abre="${esc(t.id)}">PASSO A PASSO</button>${t.script ? `<a class="mini-btn claro" href="${esc(t.script)}" download>BAIXAR ARQUIVOS</a>` : ""}${t.youtube ? `<a class="mini-btn claro" href="https://www.youtube.com/watch?v=${esc(t.youtube)}" target="_blank" rel="noopener">VÍDEO ↗</a>` : ""}${t.site ? `<a class="mini-btn claro" href="${esc(t.site)}" target="_blank" rel="noopener">SITE ↗</a>` : ""}</div></div></div></div></div>`; }).join("");
+    <div class="acoes"><button class="mini-btn" data-abre="${esc(t.id)}">PASSO A PASSO</button>${t.script ? `<a class="mini-btn claro" href="${esc(t.script)}" download>BAIXAR ARQUIVOS</a>` : ""}${t.site ? `<a class="mini-btn claro" href="${esc(t.site)}" target="_blank" rel="noopener">SITE ↗</a>` : ""}</div></div></div></div></div>`; }).join("");
 }
-document.getElementById("tGrade").addEventListener("click", e => { const b = e.target.closest("[data-abre]"); if (b) abrirTut(b.dataset.abre); });
+document.getElementById("tGrade").addEventListener("click", e => {
+  if (e.target.closest("a")) return;                       // baixar arquivos continua baixando
+  const c = e.target.closest(".c[data-t]"); if (c) abrirTut(c.dataset.t);   // clicar no card abre o passo a passo
+});
 function abrirTut(id){
   const t = TUT.find(x => x.id === id); jAtual = -1;
   const palco = modo => { document.getElementById("jPalco").innerHTML = modo === "codigo" ? `<iframe src="${esc(t.codigo)}" title="Versão em código" style="width:100%;height:100%;border:0;display:block;background:#000"></iframe>`
@@ -464,7 +468,7 @@ function abrirTut(id){
   document.getElementById("jAcoes").innerHTML = ((t.codigo || (t.youtube && t.previa)) ? `<span id="jModo" class="modo"><button class="mini-btn" data-m="after">AFTER</button>${t.codigo ? `<button class="mini-btn" data-m="codigo">CÓDIGO</button>` : ""}${t.youtube && t.previa ? `<button class="mini-btn" data-m="video">VÍDEO DO AUTOR</button>` : ""}</span>` : "")
     + `<button class="mini-btn" id="jReceita">COPIAR RECEITA</button>` + (t.script ? `<a class="mini-btn claro" href="${esc(t.script)}" download>BAIXAR ARQUIVOS</a>` : "")
     + (t.codigo ? `<a class="mini-btn claro" href="${esc(t.codigo)}" download>BAIXAR HTML</a>` : "") + (t.site ? `<a class="mini-btn claro" href="${esc(t.site)}" target="_blank" rel="noopener">SITE ↗</a>` : "");
-  palco("after");
+  palco(t.youtube ? "video" : "after");   // com vídeo do autor, ele é a capa da janela
   const jm = document.getElementById("jModo"); if (jm) jm.onclick = e => { const b = e.target.closest("[data-m]"); if (b) palco(b.dataset.m); };
   document.getElementById("jReceita").onclick = () => copiar(t.titulo + "\n" + t.passos.map((p, i) => (i + 1) + ". " + p).join("\n"), "RECEITA COPIADA ✓");
   document.getElementById("janela").classList.add("aberta"); document.getElementById("jFechar").focus();
