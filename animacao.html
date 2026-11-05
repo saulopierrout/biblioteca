@@ -36,7 +36,7 @@ h1 .de,h1 .ponto{color:var(--accent)} h1 .de{font-weight:800}
 .topo{padding-top:56px;padding-bottom:28px}
 .topo p{margin-top:14px;max-width:600px;color:var(--ink2);line-height:1.55}
 /* três portas */
-.portas{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;padding-top:14px;padding-bottom:14px;position:sticky;top:68px;z-index:30;background:rgba(247,247,245,.92);backdrop-filter:blur(12px)}
+.portas{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;padding-top:14px;padding-bottom:14px;position:sticky;top:68px;z-index:30;background:rgba(247,247,245,.92);backdrop-filter:blur(12px)}
 .porta{position:relative;isolation:isolate;display:flex;align-items:center;gap:14px;padding:16px 18px;clip-path:var(--chanfro);background:var(--line2);text-align:left}
 .porta:before{content:"";position:absolute;inset:1px;clip-path:var(--chanfro);background:linear-gradient(135deg,#fff,#f0f0ee);z-index:-1}
 .porta b{display:block;font:700 17px var(--sans)} .porta small{display:block;margin-top:3px;font:400 11px var(--mono);letter-spacing:.06em;color:var(--muted)}
@@ -113,6 +113,16 @@ section.parte{display:none;padding-top:26px} section.parte.on{display:block}
 @keyframes entraCamada{from{opacity:0;filter:blur(8px)}to{opacity:1;filter:none}}
 .palco .legenda-fx{position:absolute;left:14px;bottom:12px;z-index:5;max-width:70%;padding:8px 11px;background:rgba(14,14,16,.88);color:#fff;font:400 12.5px/1.4 var(--sans);clip-path:var(--chanfro)}
 .palco .legenda-fx b{display:block;font:500 10px var(--mono);letter-spacing:.14em;color:#FF7A99;margin-bottom:2px}
+/* tutoriais */
+.tut-intro{max-width:760px;color:var(--ink2);line-height:1.6;margin:-6px 0 16px}
+.selo{display:inline-block;font:600 10px var(--mono);letter-spacing:.12em;padding:4px 7px;background:var(--ink);color:#fff;margin-right:6px}
+.selo.script{background:var(--accent)} .selo.claro{background:var(--line);color:var(--ink)}
+#tGrade .thumb video{width:100%;height:100%;object-fit:contain;display:block;background:#0B0B0D}
+.janela .acoes{flex-wrap:wrap} .modo{display:inline-flex;gap:4px;margin-right:8px} .modo button[aria-pressed="false"]{background:var(--line);color:var(--ink)}
+.j-extra{display:flex;flex-direction:column;gap:10px;overflow:auto;max-height:46vh}
+.j-extra ol,.j-extra ul{padding-left:20px;display:flex;flex-direction:column;gap:6px;line-height:1.5;color:var(--ink2);font-size:14px}
+.j-extra h4{font:600 10px var(--mono);letter-spacing:.16em;color:var(--muted);margin-top:4px}
+.janela .palco video{width:100%;height:100%;object-fit:contain;background:#0B0B0D;display:block}
 /* janela do efeito grande */
 .janela{position:fixed;inset:0;z-index:80;display:none;place-items:center;background:rgba(14,14,16,.45);backdrop-filter:blur(6px);padding:20px}
 .janela.aberta{display:grid}
@@ -251,14 +261,20 @@ html,body{overflow-x:hidden}
     <div class="grade" id="vGrade"></div>
     <button class="mais-btn" id="vMais">MOSTRAR MAIS</button>
   </section>
+  <section class="wrap parte" id="p-tut" role="tabpanel">
+    <div class="subtit"><h2>Tutoriais</h2><span id="nTut"></span></div>
+    <p class="tut-intro">Efeitos vistos em vídeos e carrosséis, recriados aqui. Cada um diz <b>onde se faz</b> e <b>quem faz</b>: com <b>script pronto</b> o programa monta tudo sozinho; com <b>à mão</b>, siga o passo a passo.</p>
+    <div class="ferr" id="tFiltros"></div>
+    <div class="grade" id="tGrade"></div>
+  </section>
 </main>
 
 <footer><div class="fwrap"><span>SAULO PIERROUT · ESTÚDIO DE ANIMAÇÃO</span><span>Vídeos de referência: catálogo aberto (licença MIT) · prévias dos efeitos feitas aqui</span></div></footer>
 <div class="aviso-copia" id="aviso" role="status"></div>
 <div class="janela" id="janela" role="dialog" aria-modal="true" aria-labelledby="jTitulo"><div class="caixa">
   <div class="palco" id="jPalco"></div>
-  <div class="info"><button class="fechar" id="jFechar" aria-label="Fechar">✕</button><span class="meta" id="jGrupo"></span><h3 id="jTitulo"></h3><p id="jTexto"></p>
-    <div class="acoes"><button class="mini-btn" id="jPedido">COPIAR PEDIDO</button></div></div>
+  <div class="info"><button class="fechar" id="jFechar" aria-label="Fechar">✕</button><span class="meta" id="jGrupo"></span><h3 id="jTitulo"></h3><p id="jTexto"></p><div id="jExtra" class="j-extra"></div>
+    <div class="acoes" id="jAcoes"><button class="mini-btn" id="jPedido">COPIAR PEDIDO</button></div></div>
 </div></div>
 
 <script src="icones.js"></script>
@@ -270,14 +286,15 @@ const copiar = (txt, msg) => navigator.clipboard.writeText(txt).then(() => { con
 
 // ---------- três portas ----------
 const PORTAS = [{id:"lab", nome:"Laboratório de estilos", sub:"Efeitos, visual e movimento num lugar só", ic:"pincel"},
-                {id:"refs", nome:"Referências", sub:"Filmes e 703 vídeos com prompt", ic:"youtube"}];
+                {id:"refs", nome:"Referências", sub:"Filmes e 703 vídeos com prompt", ic:"youtube"},
+                {id:"tut", nome:"Tutoriais", sub:"Efeitos recriados, com passo a passo e script", ic:"terminal"}];
 document.getElementById("portas").innerHTML = PORTAS.map(p => `<button class="porta" role="tab" data-id="${p.id}">${ico(p.ic, 22)}<span><b>${p.nome}</b><small>${p.sub}</small></span></button>`).join("");
 const montado = {};
 function abrirPorta(id){
   document.querySelectorAll(".porta").forEach(b => b.setAttribute("aria-selected", b.dataset.id === id));
   document.querySelectorAll(".parte").forEach(s => s.classList.toggle("on", s.id === "p-" + id));
   history.replaceState(null, "", "#aba=" + id);
-  if (!montado[id]){ montado[id] = 1; if (id === "lab"){ montarMesa(); montarEfeitos(); } if (id === "refs") montarRefs(); }
+  if (!montado[id]){ montado[id] = 1; if (id === "lab"){ montarMesa(); montarEfeitos(); } if (id === "refs") montarRefs(); if (id === "tut") montarTut(); }
   if (window.roboMostra) roboMostra(id === "lab" ? "pincel" : "play");
 }
 document.getElementById("portas").addEventListener("click", e => { const b = e.target.closest(".porta"); if (b) abrirPorta(b.dataset.id); });
@@ -364,13 +381,15 @@ function abrirGrande(i){
   document.getElementById("jPalco").innerHTML = `<div class="camada" id="jx${i}">${fxHTML(f, "jx" + i)}</div>`;
   document.getElementById("jGrupo").textContent = f.g === 1 ? "CÂMERA, TELA E TRANSIÇÃO" : "INTERFACE, EDIÇÃO E LEGENDA";
   document.getElementById("jTitulo").textContent = f.n; document.getElementById("jTexto").textContent = f.d;
+  document.getElementById("jExtra").innerHTML = ""; document.getElementById("jAcoes").innerHTML = `<button class="mini-btn" id="jPedido">COPIAR PEDIDO</button>`; document.getElementById("jPedido").onclick = pedidoFX;
   document.getElementById("janela").classList.add("aberta"); document.getElementById("jFechar").focus();
 }
 const fecharJanela = () => document.getElementById("janela").classList.remove("aberta");
 document.getElementById("jFechar").onclick = fecharJanela;
 document.getElementById("janela").addEventListener("click", e => { if (e.target.id === "janela") fecharJanela(); });
 addEventListener("keydown", e => { if (e.key === "Escape") fecharJanela(); });
-document.getElementById("jPedido").onclick = () => { const f = FX[jAtual]; copiar(`Aplique no meu vídeo o efeito "${f.n}": ${f.d} Mantenha cada movimento com até 0,6 s, respeite as margens seguras e não cubra o rosto.`, "PEDIDO COPIADO ✓"); };
+const pedidoFX = () => { const f = FX[jAtual]; copiar(`Aplique no meu vídeo o efeito "${f.n}": ${f.d} Mantenha cada movimento com até 0,6 s, respeite as margens seguras e não cubra o rosto.`, "PEDIDO COPIADO ✓"); };
+document.getElementById("jPedido").onclick = pedidoFX;
 
 // ---------- referências: filmes + vídeos com prompt ----------
 let VIDEOS = [], vCat = "", vLim = 24;
@@ -410,6 +429,46 @@ vGrade.addEventListener("mouseover", e => {
   v.onerror = () => v.remove(); c.querySelector(".thumb").appendChild(v); v.play().catch(() => {});
   c.addEventListener("mouseleave", () => v.remove(), {once: true});
 });
+
+// ---------- tutoriais ----------
+const FERR = {after:"AFTER EFFECTS", premiere:"PREMIERE", navegador:"NAVEGADOR (HTML)", ia:"IA DE VÍDEO", outro:"OUTRO PROGRAMA"};
+const MODO = {script:["SCRIPT PRONTO","script"], manual:["À MÃO","claro"], html:["CÓDIGO PRONTO","script"], preset:["PRESET GRÁTIS","claro"], plugin:["PLUGIN","claro"]};
+let TUT = [], tF = "";
+function montarTut(){
+  fetch("tutoriais.json").then(r => r.json()).then(T => {
+    TUT = T;
+    const fs = [...new Set(T.map(t => t.ferramenta))];
+    document.getElementById("tFiltros").innerHTML = `<button class="chip on" data-f="">Todos</button>` + fs.map(k => `<button class="chip" data-f="${esc(k)}">${esc(FERR[k] || k)}</button>`).join("");
+    document.getElementById("tFiltros").onclick = e => { const b = e.target.closest(".chip"); if (!b) return; tF = b.dataset.f; document.querySelectorAll("#tFiltros .chip").forEach(c => c.classList.toggle("on", c === b)); desenharTut(); };
+    desenharTut();
+  });
+}
+function desenharTut(){
+  const L = TUT.filter(t => !tF || t.ferramenta === tF);
+  document.getElementById("nTut").textContent = L.length + (L.length === 1 ? " TUTORIAL" : " TUTORIAIS");
+  document.getElementById("tGrade").innerHTML = L.map(t => { const m = MODO[t.modo] || ["", "claro"]; return `<div class="c" data-t="${esc(t.id)}"><div class="b"><div class="i">
+    <div class="thumb">${t.previa ? `<video muted loop playsinline autoplay preload="metadata" poster="${esc(t.capa)}" src="${esc(t.previa)}" aria-label="Prévia: ${esc(t.titulo)}"></video>` : `<img loading="lazy" src="${esc(t.capa)}" alt="Vídeo: ${esc(t.titulo)}"><span class="play">${ico("youtube", 16)}</span>`}</div>
+    <div class="txt"><span class="meta"><span class="selo">${esc(FERR[t.ferramenta] || t.ferramenta)}</span><span class="selo ${m[1]}">${m[0]}</span>${t.codigo ? `<span class="selo claro">+ CÓDIGO</span>` : ""}</span><h3>${esc(t.titulo)}</h3><p class="r">${esc(t.resumo)}</p>
+    <div class="acoes"><button class="mini-btn" data-abre="${esc(t.id)}">PASSO A PASSO</button>${t.script ? `<a class="mini-btn claro" href="${esc(t.script)}" download>BAIXAR ARQUIVOS</a>` : ""}${t.site ? `<a class="mini-btn claro" href="${esc(t.site)}" target="_blank" rel="noopener">SITE ↗</a>` : ""}</div></div></div></div></div>`; }).join("");
+}
+document.getElementById("tGrade").addEventListener("click", e => { const b = e.target.closest("[data-abre]"); if (b) abrirTut(b.dataset.abre); });
+function abrirTut(id){
+  const t = TUT.find(x => x.id === id); jAtual = -1;
+  const palco = modo => { document.getElementById("jPalco").innerHTML = modo === "codigo" ? `<iframe src="${esc(t.codigo)}" title="Versão em código" style="width:100%;height:100%;border:0;display:block;background:#000"></iframe>`
+      : t.youtube ? `<iframe src="https://www.youtube-nocookie.com/embed/${esc(t.youtube)}" title="Vídeo: ${esc(t.titulo)}" allow="encrypted-media; picture-in-picture" allowfullscreen style="width:100%;height:100%;border:0;display:block;background:#000"></iframe>`
+      : `<video muted loop playsinline autoplay src="${esc(t.previa)}" poster="${esc(t.capa)}"></video>`;
+    document.querySelectorAll("#jModo button").forEach(b => b.setAttribute("aria-pressed", b.dataset.m === modo)); };
+  document.getElementById("jGrupo").textContent = (FERR[t.ferramenta] || t.ferramenta) + " · " + t.nivel.toUpperCase() + " · " + t.tempo.toUpperCase();
+  document.getElementById("jTitulo").textContent = t.titulo; document.getElementById("jTexto").textContent = t.resumo;
+  document.getElementById("jExtra").innerHTML = `<h4>PASSO A PASSO</h4><ol>${t.passos.map(p => `<li>${esc(p)}</li>`).join("")}</ol>` + (t.dicas && t.dicas.length ? `<h4>DICAS</h4><ul>${t.dicas.map(p => `<li>${esc(p)}</li>`).join("")}</ul>` : "");
+  document.getElementById("jAcoes").innerHTML = (t.codigo ? `<span id="jModo" class="modo"><button class="mini-btn" data-m="after">AFTER</button><button class="mini-btn" data-m="codigo">CÓDIGO</button></span>` : "")
+    + `<button class="mini-btn" id="jReceita">COPIAR RECEITA</button>` + (t.script ? `<a class="mini-btn claro" href="${esc(t.script)}" download>BAIXAR ARQUIVOS</a>` : "")
+    + (t.codigo ? `<a class="mini-btn claro" href="${esc(t.codigo)}" download>BAIXAR HTML</a>` : "") + (t.site ? `<a class="mini-btn claro" href="${esc(t.site)}" target="_blank" rel="noopener">SITE ↗</a>` : "");
+  palco("after");
+  const jm = document.getElementById("jModo"); if (jm) jm.onclick = e => { const b = e.target.closest("[data-m]"); if (b) palco(b.dataset.m); };
+  document.getElementById("jReceita").onclick = () => copiar(t.titulo + "\n" + t.passos.map((p, i) => (i + 1) + ". " + p).join("\n"), "RECEITA COPIADA ✓");
+  document.getElementById("janela").classList.add("aberta"); document.getElementById("jFechar").focus();
+}
 
 const inicial = new URLSearchParams(location.hash.slice(1)).get("aba");
 abrirPorta(PORTAS.some(p => p.id === inicial) ? inicial : "lab");

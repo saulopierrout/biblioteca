@@ -1,0 +1,53 @@
+[
+  {
+    "id": "icone-degrade",
+    "titulo": "Ícone em degradê vivo",
+    "ferramenta": "after",
+    "modo": "script",
+    "nivel": "Iniciante",
+    "tempo": "1 min com o script · 20 min à mão",
+    "resumo": "Ícone de app com cantos redondos, cores que descem sem parar, volume de bolha, borda que se atrasa no tempo e brilho suave. Troque as cores do ciclo e sai um ícone novo.",
+    "previa": "tutoriais/icone-degrade/previa.mp4",
+    "capa": "tutoriais/icone-degrade/capa.jpg",
+    "script": "tutoriais/icone-degrade/icone-degrade.zip",
+    "passos": [
+      "Pre-comp 1 (1080×1080): uma forma que cobre o quadro com Gradient Ramp vertical e Colorama. Anime o Phase Shift do Colorama de 0 a -1080° em 7,5 s (as cores descem três voltas).",
+      "Na mesma camada: Turbulent Displace (Amount 119, Size 295, Evolution de 0 a 720°, Cycle Evolution ligado) e Fast Box Blur com raio 54.",
+      "Displacement footage (1080×1080): retângulo de 683 px com Roundness 157, cinza escuro, escala 139%, e o estilo de camada Inner Glow branco (Size 54, Range 100).",
+      "Base (1080×1920): coloque o Displacement footage em cima, desligado, e use-o como Alpha Matte da Pre-comp 1.",
+      "Na Pre-comp 1 dentro da Base: Turbulent Displace (Amount 147, Size 218, Evolution de 0 a 720°), VR Plane to Sphere (campo de visão 88 × 143, Scale 103) e Time Displacement usando o Displacement footage (Max -0,65 s, 90 fps). A borda clara do Inner Glow é o que faz a beirada se atrasar.",
+      "Final File (1080×1920): a Base em 64% e, por cima, uma camada de ajuste com Noise (5%) e um brilho grande e suave (Deep Glow com Radius 438 e Exposure 0,33, ou o preset grátis AfterGlow)."
+    ],
+    "dicas": [
+      "O script monta as 5 composições sozinho. O ciclo de cores vem numa imagem (ciclo-de-cor.png), porque o After não deixa script escolher as cores do Colorama; para outras cores, troque a imagem ou volte ao Colorama à mão.",
+      "Sem o Deep Glow (pago), use o AfterGlow, preset grátis (veja o tutorial dele nesta aba): deixe o AfterGlow.ffx na pasta do script que ele é aplicado sozinho. Sem nenhum dos dois, entra o Glow nativo.",
+      "O Time Displacement é o segredo do acabamento: sem ele a borda fica dura.",
+      "Sem After? Use a versão em código (botão CÓDIGO): roda no navegador, com o mesmo ciclo de cores, turbulência, bolha, borda atrasada e brilho. Troque as cores na lista CORES do arquivo."
+    ],
+    "codigo": "tutoriais/icone-degrade/codigo.html"
+  },
+  {
+    "id": "afterglow",
+    "titulo": "AfterGlow: brilho bonito e grátis",
+    "ferramenta": "after",
+    "modo": "preset",
+    "nivel": "Iniciante",
+    "tempo": "2 min para instalar",
+    "resumo": "Preset grátis de brilho para o After, feito só com efeitos nativos (vários Glow empilhados, com controles). Serve no lugar de plugins de brilho pagos e não precisa de instalador.",
+    "youtube": "wHvecGrCwdg",
+    "site": "https://www.creationeffects.com",
+    "capa": "https://img.youtube.com/vi/wHvecGrCwdg/hqdefault.jpg",
+    "passos": [
+      "Baixe o AfterGlow no site da Creation Effects (grátis).",
+      "Copie o AfterGlow.ffx para a pasta de presets do After: no Windows, Program Files\\Adobe\\Adobe After Effects (versão)\\Support Files\\Presets (crie uma pasta Creation Effects dentro dela). No Mac: Applications/Adobe After Effects/Presets.",
+      "Reabra o After. No painel Effects & Presets, abra Animation Presets e procure AfterGlow.",
+      "Arraste para a camada ou, melhor, para uma camada de ajuste por cima de tudo.",
+      "Ajuste em AfterGlow Controls: Threshold (a partir de que brilho acende), Radius, Intensity e Opacity. Há também brilho grande (Large Glow) e riscos de luz (Streak)."
+    ],
+    "dicas": [
+      "Sem instalar: em Animation > Apply Animation Preset, escolha o arquivo .ffx direto da pasta onde baixou.",
+      "Para um brilho suave e largo, suba o Threshold e baixe Intensity e Opacity.",
+      "Como são efeitos nativos, o projeto abre em qualquer After sem aviso de plugin faltando."
+    ]
+  }
+]

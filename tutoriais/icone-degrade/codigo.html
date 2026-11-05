@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Ícone em degradê vivo · versão em código</title>
+<style>
+  html,body{margin:0;height:100%;background:#000;overflow:hidden}
+  canvas{display:block;width:100%;height:100%}
+</style>
+</head>
+<body>
+<!-- Ícone em degradê vivo, só com código (WebGL, sem After).
+     Mesma receita do After: ciclo de cores que desce, turbulência, máscara arredondada,
+     volume de bolha, borda atrasada no tempo, brilho e grão.
+     Para trocar as cores, edite a lista CORES (posição de 0 a 1 e cor RGB). -->
+<canvas id="c" aria-label="Ícone em degradê animado"></canvas>
+<script>
+const CORES = [
+  [0.00, [255,223, 51]], [0.17, [255,144, 37]], [0.30, [255, 25, 17]], [0.33, [  0,  0,  0]],
+  [0.39, [  0,  0,  0]], [0.44, [  0,  0,117]], [0.50, [  0,  0,235]], [0.56, [ 23, 50,255]],
+  [0.67, [ 78,172,255]], [0.78, [231,235,216]], [0.94, [249,234, 93]], [1.00, [255,223, 51]]
+];
+const VOLTA = 2.5;   // segundos por volta do ciclo de cores (3 voltas em 7,5 s, como no original)
+
+const cv = document.getElementById("c"), gl = cv.getContext("webgl");
+// paleta vira uma textura de 256 x 1
+const pal = new Uint8Array(256 * 4);
+for (let i = 0; i < 256; i++){
+  const x = i / 255; let k = 0; while (k < CORES.length - 2 && CORES[k + 1][0] < x) k++;
+  const [a, ca] = CORES[k], [b, cb] = CORES[k + 1], t = Math.min(1, Math.max(0, (x - a) / (b - a || 1)));
+  for (let j = 0; j < 3; j++) pal[i * 4 + j] = ca[j] + (cb[j] - ca[j]) * t; pal[i * 4 + 3] = 255;
+}
+const tex = gl.createTexture(); gl.bindTexture(gl.TEXTURE_2D, tex);
+gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 256, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE, pal);
+gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.REPEAT); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+
+const vs = `attribute vec2 p; void main(){ gl_Position = vec4(p, 0., 1.); }`;
+const fs = `precision highp float;
+uniform vec2 res; uniform float t, volta; uniform sampler2D pal;
+float h(vec2 p){ return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }
+float n(vec2 p){ vec2 i = floor(p), f = fract(p); f = f*f*(3.-2.*f);
+  return mix(mix(h(i), h(i+vec2(1,0)), f.x), mix(h(i+vec2(0,1)), h(i+vec2(1,1)), f.x), f.y); }
+// turbulência suave e larga (Turbulent Displace com Size grande): soma de ondas lentas
+vec2 turb(vec2 p, float tt, float forca){
+  float e = tt * .35;
+  float dy = sin(p.x * 1.7 + e * 2.1) * .55 + sin(p.x * 2.9 - p.y * 1.1 + e * 1.3) * .30 + sin(p.y * 2.2 + e) * .15;
+  float dx = sin(p.y * 1.5 - e * 1.7) * .5 + sin(p.x * 2.3 + p.y * 1.9 + e) * .5;
+  return forca * vec2(dx * .35, dy);
+}
+float caixa(vec2 p, float lado, float r){ vec2 d = abs(p) - vec2(lado - r); return length(max(d, 0.)) + min(max(d.x, d.y), 0.) - r; }
+// cor com desfoque no próprio ciclo (Fast Box Blur): média ponderada de 11 fases vizinhas
+vec3 ciclo(float fase){
+  vec3 c = vec3(0.); float tw = 0.;
+  for (int k = -5; k <= 5; k++){ float w = 1. - abs(float(k)) / 6.; c += w * texture2D(pal, vec2(fract(fase + float(k) * .012), .5)).rgb; tw += w; }
+  return c / tw;
+}
+vec3 corEm(vec2 p, float tt){
+  vec2 q = p + turb(p, tt, .22) + turb(p * .6 + 3.1, tt * .7, .12);   // duas turbulências, como no original
+  float fase = (q.y * .5 + .5) - tt / volta;                           // ciclo que desce (Colorama + Phase Shift)
+  return ciclo(fase);
+}
+void main(){
+  vec2 p = (gl_FragCoord.xy - .5 * res) / min(res.x, res.y) * 2.;
+  p.y = -p.y;
+  float LADO = .48, RAIO = .17;
+  vec2 pd = p + turb(p * 1.2, t, .010);                 // borda quase parada, só respira
+  float d = caixa(pd, LADO, RAIO);
+  // volume de bolha (VR Plane to Sphere): comprime de leve para o centro
+  float r2 = dot(pd, pd) / (LADO * LADO * 2.);
+  vec2 pb = pd * (.84 + .16 * r2);
+  // borda atrasada no tempo (Time Displacement com mapa de Inner Glow)
+  float borda = smoothstep(-.14, 0., d);
+  float tt = t - .65 * borda * borda;
+  vec3 cor = corEm(pb / LADO, tt);
+  cor += borda * borda * borda * .30 * (cor + .25);     // brilho interno suave na borda
+  float dentro = 1. - smoothstep(-.005, .005, d);
+  vec3 col = cor * dentro;
+  // brilho largo por fora (AfterGlow): cor da borda mais próxima
+  vec3 corBorda = corEm(clamp(pb / LADO, -1., 1.), t);
+  col += corBorda * exp(-max(d, 0.) * 8.) * .35 * (1. - dentro);
+  col += col * .12;                                    // leve exposição
+  col += (h(gl_FragCoord.xy + fract(t) * 100.) - .5) * .05; // grão (Noise 5%)
+  gl_FragColor = vec4(col, 1.);
+}`;
+function sh(tipo, src){ const s = gl.createShader(tipo); gl.shaderSource(s, src); gl.compileShader(s); if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) throw gl.getShaderInfoLog(s); return s; }
+const pr = gl.createProgram(); gl.attachShader(pr, sh(gl.VERTEX_SHADER, vs)); gl.attachShader(pr, sh(gl.FRAGMENT_SHADER, fs)); gl.linkProgram(pr); gl.useProgram(pr);
+gl.bindBuffer(gl.ARRAY_BUFFER, gl.createBuffer()); gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1, 1,-1, -1,1, 1,1]), gl.STATIC_DRAW);
+const ap = gl.getAttribLocation(pr, "p"); gl.enableVertexAttribArray(ap); gl.vertexAttribPointer(ap, 2, gl.FLOAT, false, 0, 0);
+const U = n => gl.getUniformLocation(pr, n);
+gl.uniform1f(U("volta"), VOLTA); gl.uniform1i(U("pal"), 0);
+const parado = matchMedia("(prefers-reduced-motion: reduce)").matches;
+function quadro(ms){
+  const dpr = Math.min(devicePixelRatio || 1, 2), w = cv.clientWidth * dpr | 0, hh = cv.clientHeight * dpr | 0;
+  if (cv.width !== w || cv.height !== hh){ cv.width = w; cv.height = hh; gl.viewport(0, 0, w, hh); }
+  gl.uniform2f(U("res"), w, hh); gl.uniform1f(U("t"), parado ? 1.2 : ms / 1000);
+  gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+  if (!parado) requestAnimationFrame(quadro);
+}
+requestAnimationFrame(quadro);
+</script>
+</body>
+</html>
