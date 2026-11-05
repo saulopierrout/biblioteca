@@ -432,7 +432,7 @@ vGrade.addEventListener("mouseover", e => {
 
 // ---------- tutoriais ----------
 const FERR = {after:"AFTER EFFECTS", premiere:"PREMIERE", navegador:"NAVEGADOR (HTML)", ia:"IA DE VÍDEO", outro:"OUTRO PROGRAMA"};
-const MODO = {script:["SCRIPT PRONTO","script"], manual:["À MÃO","claro"], html:["CÓDIGO PRONTO","script"], preset:["PRESET GRÁTIS","claro"], plugin:["PLUGIN","claro"]};
+const MODO = {script:["SCRIPT PRONTO","script"], manual:["À MÃO","claro"], html:["CÓDIGO PRONTO","script"], preset:["PRESET GRÁTIS","script"], plugin:["PLUGIN","claro"]};
 let TUT = [], tF = "";
 function montarTut(){
   fetch("tutoriais.json").then(r => r.json()).then(T => {
@@ -455,13 +455,13 @@ document.getElementById("tGrade").addEventListener("click", e => { const b = e.t
 function abrirTut(id){
   const t = TUT.find(x => x.id === id); jAtual = -1;
   const palco = modo => { document.getElementById("jPalco").innerHTML = modo === "codigo" ? `<iframe src="${esc(t.codigo)}" title="Versão em código" style="width:100%;height:100%;border:0;display:block;background:#000"></iframe>`
-      : t.youtube ? `<iframe src="https://www.youtube-nocookie.com/embed/${esc(t.youtube)}" title="Vídeo: ${esc(t.titulo)}" allow="encrypted-media; picture-in-picture" allowfullscreen style="width:100%;height:100%;border:0;display:block;background:#000"></iframe>`
+      : (modo === "video" || !t.previa) && t.youtube ? `<iframe src="https://www.youtube-nocookie.com/embed/${esc(t.youtube)}" title="Vídeo: ${esc(t.titulo)}" allow="encrypted-media; picture-in-picture" allowfullscreen style="width:100%;height:100%;border:0;display:block;background:#000"></iframe>`
       : `<video muted loop playsinline autoplay src="${esc(t.previa)}" poster="${esc(t.capa)}"></video>`;
     document.querySelectorAll("#jModo button").forEach(b => b.setAttribute("aria-pressed", b.dataset.m === modo)); };
   document.getElementById("jGrupo").textContent = (FERR[t.ferramenta] || t.ferramenta) + " · " + t.nivel.toUpperCase() + " · " + t.tempo.toUpperCase();
   document.getElementById("jTitulo").textContent = t.titulo; document.getElementById("jTexto").textContent = t.resumo;
   document.getElementById("jExtra").innerHTML = `<h4>PASSO A PASSO</h4><ol>${t.passos.map(p => `<li>${esc(p)}</li>`).join("")}</ol>` + (t.dicas && t.dicas.length ? `<h4>DICAS</h4><ul>${t.dicas.map(p => `<li>${esc(p)}</li>`).join("")}</ul>` : "");
-  document.getElementById("jAcoes").innerHTML = (t.codigo ? `<span id="jModo" class="modo"><button class="mini-btn" data-m="after">AFTER</button><button class="mini-btn" data-m="codigo">CÓDIGO</button></span>` : "")
+  document.getElementById("jAcoes").innerHTML = ((t.codigo || (t.youtube && t.previa)) ? `<span id="jModo" class="modo"><button class="mini-btn" data-m="after">AFTER</button>${t.codigo ? `<button class="mini-btn" data-m="codigo">CÓDIGO</button>` : ""}${t.youtube && t.previa ? `<button class="mini-btn" data-m="video">VÍDEO DO AUTOR</button>` : ""}</span>` : "")
     + `<button class="mini-btn" id="jReceita">COPIAR RECEITA</button>` + (t.script ? `<a class="mini-btn claro" href="${esc(t.script)}" download>BAIXAR ARQUIVOS</a>` : "")
     + (t.codigo ? `<a class="mini-btn claro" href="${esc(t.codigo)}" download>BAIXAR HTML</a>` : "") + (t.site ? `<a class="mini-btn claro" href="${esc(t.site)}" target="_blank" rel="noopener">SITE ↗</a>` : "");
   palco("after");

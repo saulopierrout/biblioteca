@@ -49,5 +49,83 @@
       "Como são efeitos nativos, o projeto abre em qualquer After sem aviso de plugin faltando."
     ],
     "script": "tutoriais/afterglow/afterglow.zip"
+  },
+  {
+    "id": "fractal-noisier",
+    "titulo": "Fractal Noisier: textura que vira seda",
+    "ferramenta": "after",
+    "modo": "preset",
+    "nivel": "Iniciante",
+    "tempo": "2 min para aplicar",
+    "resumo": "Preset grátis que empilha 15 Turbulent Displace sobre um Fractal Noise, tudo num painel só. Tem looks prontos (seda, tinta escorrendo, pintura, VHS) e serve de fundo, textura ou mapa de deslocamento.",
+    "previa": "tutoriais/fractal-noisier/previa.mp4",
+    "capa": "tutoriais/fractal-noisier/capa.jpg",
+    "script": "tutoriais/fractal-noisier/fractal-noisier.zip",
+    "codigo": "tutoriais/fractal-noisier/codigo.html",
+    "youtube": "EnHpImafh0A",
+    "passos": [
+      "Baixe o preset no botão \"Baixar arquivos\" e descompacte. Para instalar, copie o .ffx para Program Files\\Adobe\\Adobe After Effects (versão)\\Support Files\\Presets (crie uma pasta Creation Effects). Ou use direto: Animation > Apply Animation Preset.",
+      "Crie um sólido do tamanho da composição e aplique o Fractal Noisier.",
+      "Em Fractal Noisier Controls, escolha um look em \"Choose A Preset\" (antes de trocar, clique em Reset).",
+      "Ajuste a textura (contraste, escala, velocidade da evolução) e a turbulência (quantidade, tamanho e o quanto cada cópia aumenta).",
+      "Para entortar uma filmagem em vez de criar textura, ligue \"Hide Fractal Noise (Warp Only)\" e aplique na própria filmagem."
+    ],
+    "dicas": [
+      "\"Remove Movement From Presets\" congela o movimento dos looks prontos: bom para fundo estático.",
+      "O efeito Posterize (desligado) deixa o resultado com cara de desenho.",
+      "Na versão em código, PASSOS faz o papel da pilha de Turbulent Displace."
+    ]
+  },
+  {
+    "id": "dust-pollen",
+    "titulo": "Dust & Pollen: poeira flutuando em 3D",
+    "ferramenta": "after",
+    "modo": "preset",
+    "nivel": "Iniciante",
+    "tempo": "2 min para aplicar",
+    "resumo": "Preset grátis de partículas 3D (CC Particle World) para poeira, pólen, bokeh, neve ou partículas embaixo d'água. Funciona com a câmera do After: a câmera passa por dentro das partículas.",
+    "previa": "tutoriais/dust-pollen/previa.mp4",
+    "capa": "tutoriais/dust-pollen/capa.jpg",
+    "script": "tutoriais/dust-pollen/dust-pollen.zip",
+    "codigo": "tutoriais/dust-pollen/codigo.html",
+    "youtube": "Ia_Z8xE8QHo",
+    "passos": [
+      "Baixe o preset no botão \"Baixar arquivos\" e descompacte. Para instalar, copie o .ffx para Program Files\\Adobe\\Adobe After Effects (versão)\\Support Files\\Presets (crie uma pasta Creation Effects). Ou use direto: Animation > Apply Animation Preset.",
+      "Crie um sólido do tamanho da composição por cima da cena e aplique o Dust & Pollen.",
+      "Em Particle Controls: Brightness (opacidade máxima), Quantity (quantidade), Speed (velocidade), raio e posição de onde nascem, cores e tamanhos.",
+      "Na prévia daqui: Brightness 85, Quantity 70 e Soften 1,5, com a camada começando 6 s antes para a tela já começar cheia.",
+      "Para mudar a direção, ajuste Direction Axis em Physics dentro do CC Particle World. Para textura própria, ligue \"Turn on Texture\" e escolha a camada."
+    ],
+    "dicas": [
+      "Os valores padrão são bem sutis: suba Brightness e Quantity para aparecer mais.",
+      "Para profundidade de verdade, crie uma câmera 3D e mexa nela: as partículas acompanham.",
+      "A versão em código é um canvas transparente: dá para pôr por cima de qualquer página ou vídeo."
+    ]
+  },
+  {
+    "id": "heat-haze",
+    "titulo": "Heat Haze: ar tremendo de calor",
+    "ferramenta": "after",
+    "modo": "preset",
+    "nivel": "Iniciante",
+    "tempo": "2 min para aplicar",
+    "resumo": "Preset grátis em duas camadas: uma de mapa (ruído que sobe) e a principal, que desfoca e entorta a imagem a partir desse mapa. Serve para asfalto quente, deserto, motor a jato ou embaixo d'água.",
+    "previa": "tutoriais/heat-haze/previa.mp4",
+    "capa": "tutoriais/heat-haze/capa.jpg",
+    "script": "tutoriais/heat-haze/heat-haze.zip",
+    "codigo": "tutoriais/heat-haze/codigo.html",
+    "youtube": "Im3jCEajuyQ",
+    "passos": [
+      "Baixe o preset no botão \"Baixar arquivos\" e descompacte. Para instalar, copie o .ffx para Program Files\\Adobe\\Adobe After Effects (versão)\\Support Files\\Presets (crie uma pasta Creation Effects). Ou use direto: Animation > Apply Animation Preset. São 2 arquivos: Map Layer e Main Effect.",
+      "Crie um sólido do tamanho da composição, aplique \"Heat Haze (Map Layer)\" e desligue o olho da camada.",
+      "Crie uma camada de ajuste por cima da filmagem e aplique \"Heat Haze (Main Effect)\".",
+      "Na camada de ajuste, abra Camera Lens Blur e Displacement Map e escolha a camada de mapa nos dois (sem isso não funciona).",
+      "Ajuste na camada principal o desfoque e a distorção (horizontal e vertical) e, no mapa, o look em \"Heat Haze Presets\", velocidade e direção."
+    ],
+    "dicas": [
+      "Para o calor sumir para cima, faça uma máscara com feather na camada de mapa e use Mask Reference no Turbulent Noise.",
+      "Embaixo d'água: distorção maior, movimento mais lento e sem máscara.",
+      "Na versão em código, o efeito vem de feTurbulence + feDisplacementMap do SVG."
+    ]
   }
 ]

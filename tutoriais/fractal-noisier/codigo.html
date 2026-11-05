@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Fractal Noisier · versão em código</title>
+<style>html,body{margin:0;height:100%;background:#0E0E10;overflow:hidden}canvas{display:block;width:100%;height:100%}</style>
+</head>
+<body>
+<!-- Fractal Noisier em código (WebGL): ruído fractal deformado várias vezes por ele mesmo
+     ("domain warping"), o mesmo princípio de empilhar Turbulent Displace no After.
+     Ajuste PASSOS (quantas deformações), FORCA e as três CORES. -->
+<canvas id="c" aria-label="Textura líquida animada"></canvas>
+<script>
+const PASSOS = 6, FORCA = 1.05, ESCALA = 1.8, VELOCIDADE = 0.07;
+const CORES = { sombra: [18, 18, 20], meio: [128, 128, 132], luz: [240, 240, 240] };   // seda cinza, como o look padrão
+
+const cv = document.getElementById("c"), gl = cv.getContext("webgl");
+const vs = "attribute vec2 p;void main(){gl_Position=vec4(p,0.,1.);}";
+const fs = `precision highp float;
+uniform vec2 res; uniform float t; uniform vec3 c0, c1, c2;
+float h(vec2 p){ return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }
+float n(vec2 p){ vec2 i = floor(p), f = fract(p); f = f*f*(3.-2.*f);
+  return mix(mix(h(i), h(i+vec2(1,0)), f.x), mix(h(i+vec2(0,1)), h(i+vec2(1,1)), f.x), f.y); }
+float fbm(vec2 p){ float s = 0., a = .5; mat2 r = mat2(.8, .6, -.6, .8);
+  for (int i = 0; i < 5; i++){ s += a * n(p); p = r * p * 2.02; a *= .5; } return s; }
+void main(){
+  vec2 p = (gl_FragCoord.xy - .5 * res) / min(res.x, res.y) * ${ESCALA.toFixed(2)};
+  float tt = t * ${VELOCIDADE.toFixed(3)};
+  vec2 q = p;
+  for (int i = 0; i < ${PASSOS}; i++){        // cada volta é um "Turbulent Displace" a mais
+    q += ${FORCA.toFixed(2)} * (vec2(fbm(q + vec2(1.7, 9.2) + tt * 1.3), fbm(q + vec2(8.3, 2.8) - tt)) - .5);
+  }
+  float v = fbm(q + tt);
+  v = smoothstep(.15, .85, v);          // contraste (como no Fractal Noise)
+  vec3 col = v < .5 ? mix(c0, c1, smoothstep(0., .5, v)) : mix(c1, c2, smoothstep(.5, 1., v));  // Tritone
+  gl_FragColor = vec4(col, 1.);
+}`;
+function sh(k, s){ const o = gl.createShader(k); gl.shaderSource(o, s); gl.compileShader(o); if (!gl.getShaderParameter(o, gl.COMPILE_STATUS)) throw gl.getShaderInfoLog(o); return o; }
+const pr = gl.createProgram(); gl.attachShader(pr, sh(gl.VERTEX_SHADER, vs)); gl.attachShader(pr, sh(gl.FRAGMENT_SHADER, fs)); gl.linkProgram(pr); gl.useProgram(pr);
+gl.bindBuffer(gl.ARRAY_BUFFER, gl.createBuffer()); gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1,1,-1,-1,1,1,1]), gl.STATIC_DRAW);
+const a = gl.getAttribLocation(pr, "p"); gl.enableVertexAttribArray(a); gl.vertexAttribPointer(a, 2, gl.FLOAT, false, 0, 0);
+const U = n => gl.getUniformLocation(pr, n), rgb = c => c.map(x => x / 255);
+gl.uniform3fv(U("c0"), rgb(CORES.sombra)); gl.uniform3fv(U("c1"), rgb(CORES.meio)); gl.uniform3fv(U("c2"), rgb(CORES.luz));
+const parado = matchMedia("(prefers-reduced-motion: reduce)").matches;
+function quadro(ms){
+  const d = Math.min(devicePixelRatio || 1, 2), w = cv.clientWidth * d | 0, hh = cv.clientHeight * d | 0;
+  if (cv.width !== w || cv.height !== hh){ cv.width = w; cv.height = hh; gl.viewport(0, 0, w, hh); }
+  gl.uniform2f(U("res"), w, hh); gl.uniform1f(U("t"), parado ? 3 : ms / 1000);
+  gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4); if (!parado) requestAnimationFrame(quadro);
+}
+requestAnimationFrame(quadro);
+</script>
+</body>
+</html>

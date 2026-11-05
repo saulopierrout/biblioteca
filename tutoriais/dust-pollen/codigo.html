@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Dust & Pollen · versão em código</title>
+<style>
+  html,body{margin:0;height:100%;overflow:hidden;background:radial-gradient(120% 90% at 70% 0%,#6b4a2e 0%,#2a1d16 45%,#08080a 100%)}
+  canvas{display:block;width:100%;height:100%}
+</style>
+</head>
+<body>
+<!-- Poeira flutuando em código (canvas 2D).
+     Cada grão tem uma profundidade: os de perto são maiores, mais rápidos e desfocados; os de longe, pequenos e nítidos.
+     Coloque este canvas por cima de qualquer coisa (fundo transparente se tirar o background do body).
+     Ajuste QTD, COR, SUBIDA (negativo = cai, como neve) e TAM. -->
+<canvas id="c" aria-hidden="true"></canvas>
+<script>
+const QTD = 160, COR = "255,250,221", SUBIDA = 10, TAM = [0.8, 5];   // creme, como Birth Color do preset
+const cv = document.getElementById("c"), ctx = cv.getContext("2d");
+let W, H, d;
+function medir(){ d = Math.min(devicePixelRatio || 1, 2); W = cv.width = innerWidth * d; H = cv.height = innerHeight * d; }
+medir(); addEventListener("resize", medir);
+const graos = Array.from({length: QTD}, () => {
+  const z = Math.random();                       // 0 = longe, 1 = perto
+  return { x: Math.random(), y: Math.random(), z, fase: Math.random() * 6.28, freq: .3 + Math.random() * .6,
+           r: TAM[0] + (TAM[1] - TAM[0]) * z * z, alfa: .35 + .55 * Math.random() };
+});
+// sprite de luz suave (um degradê radial), desenhado uma vez só
+const sprite = document.createElement("canvas"); sprite.width = sprite.height = 64;
+const sc = sprite.getContext("2d"), gr = sc.createRadialGradient(32, 32, 0, 32, 32, 32);
+gr.addColorStop(0, `rgba(${COR},1)`); gr.addColorStop(.35, `rgba(${COR},.55)`); gr.addColorStop(1, `rgba(${COR},0)`);
+sc.fillStyle = gr; sc.fillRect(0, 0, 64, 64);
+const parado = matchMedia("(prefers-reduced-motion: reduce)").matches;
+let antes = performance.now();
+function quadro(agora){
+  const dt = Math.min(.05, (agora - antes) / 1000); antes = agora; const t = agora / 1000;
+  ctx.clearRect(0, 0, W, H); ctx.globalCompositeOperation = "lighter";
+  for (const g of graos){
+    if (!parado){ g.y -= (SUBIDA * (.4 + g.z)) * d * dt / H; if (g.y < -.05) g.y += 1.1; if (g.y > 1.05) g.y -= 1.1; }
+    const x = (g.x + Math.sin(t * g.freq + g.fase) * .012 * (1 + g.z)) * W;
+    const y = g.y * H + Math.cos(t * g.freq * .8 + g.fase) * 6 * d;
+    const s = g.r * d * (1 + g.z * 2.2);           // os de perto viram bokeh
+    ctx.globalAlpha = g.alfa * (.6 + .4 * Math.sin(t * g.freq * 1.7 + g.fase)) * (1 - g.z * .45);
+    ctx.drawImage(sprite, x - s * 2, y - s * 2, s * 4, s * 4);
+  }
+  ctx.globalAlpha = 1;
+  if (!parado) requestAnimationFrame(quadro);
+}
+requestAnimationFrame(quadro);
+</script>
+</body>
+</html>
