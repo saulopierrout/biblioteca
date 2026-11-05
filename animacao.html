@@ -448,7 +448,7 @@ function desenharTut(){
   const L = TUT.filter(t => !tF || t.ferramenta === tF);
   document.getElementById("nTut").textContent = L.length + (L.length === 1 ? " TUTORIAL" : " TUTORIAIS");
   document.getElementById("tGrade").innerHTML = L.map(t => { const m = MODO[t.modo] || ["", "claro"]; return `<div class="c" data-t="${esc(t.id)}"><div class="b"><div class="i">
-    <div class="thumb">${t.previa ? `<video muted loop playsinline autoplay preload="metadata" poster="${esc(t.capa)}" src="${esc(t.previa)}" aria-label="Prévia: ${esc(t.titulo)}"></video>` : `<img loading="lazy" src="${esc(t.capa)}" alt="Vídeo: ${esc(t.titulo)}"><span class="play">${ico("youtube", 16)}</span>`}</div>
+    <div class="thumb">${t.previa && !t.youtube ? `<video muted loop playsinline autoplay preload="metadata" poster="${esc(t.capa)}" src="${esc(t.previa)}" aria-label="Prévia: ${esc(t.titulo)}"></video>` : `<img loading="lazy" src="${esc(t.youtube ? "https://img.youtube.com/vi/" + t.youtube + "/hqdefault.jpg" : t.capa)}" alt="Vídeo: ${esc(t.titulo)}"><span class="play">${ico("youtube", 16)}</span>`}</div>
     <div class="txt"><span class="meta"><span class="selo">${esc(FERR[t.ferramenta] || t.ferramenta)}</span><span class="selo ${m[1]}">${m[0]}</span>${t.codigo ? `<span class="selo claro">+ CÓDIGO</span>` : ""}</span><h3>${esc(t.titulo)}</h3><p class="r">${esc(t.resumo)}</p>
     <div class="acoes"><button class="mini-btn" data-abre="${esc(t.id)}">PASSO A PASSO</button>${t.script ? `<a class="mini-btn claro" href="${esc(t.script)}" download>BAIXAR ARQUIVOS</a>` : ""}${t.site ? `<a class="mini-btn claro" href="${esc(t.site)}" target="_blank" rel="noopener">SITE ↗</a>` : ""}</div></div></div></div></div>`; }).join("");
 }
