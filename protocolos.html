@@ -137,6 +137,10 @@ body.vendo .hub{display:none}
 .corpo li{margin-bottom:6px}
 .corpo strong{color:var(--ink)}
 .corpo code{font:400 12.5px var(--mono);background:rgba(14,14,16,.06);padding:1px 5px}
+.prompt-pronto{position:relative;margin-bottom:12px}
+.prompt-pronto pre{padding-top:44px!important}
+.copiar-bloco{position:absolute;top:8px;right:8px;font:600 11px/1 var(--mono);letter-spacing:.08em;background:#E5194B;color:#fff;border:0;padding:8px 10px;cursor:pointer;min-height:32px}
+.copiar-bloco:focus-visible{outline:2px solid #fff;outline-offset:2px}
 .corpo pre{font:400 12px/1.5 var(--mono);background:#0E0E10;color:#EDEDF0;padding:12px 14px;overflow:auto;margin-bottom:12px;white-space:pre-wrap}
 .notas-tit{margin:34px 0 12px;font:500 10.5px var(--mono);letter-spacing:.18em;color:var(--muted)}
 .etapa.nota .cab b{font-weight:500;font-size:15px;color:var(--ink2)}
@@ -241,11 +245,15 @@ function desenhaPixels(cv, id, t, cor, brilho){
 const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 // markdown simples -> HTML (parágrafos, listas, negrito, código, tabelas como bloco)
 function md(txt){
-  const linhas = txt.split("\n"), out = []; let lista = null, bloco = [];
+  const linhas = txt.split("\n"), out = []; let lista = null, bloco = [], cerca = null;
   const inline = s => esc(s).replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>").replace(/`([^`]+)`/g, "<code>$1</code>");
   const fechaLista = () => { if (lista){ out.push(`</${lista}>`); lista = null; } };
   const fechaBloco = () => { if (bloco.length){ out.push(`<pre>${esc(bloco.join("\n"))}</pre>`); bloco = []; } };
   for (const l of linhas){
+    if (/^\s*```/.test(l)){ fechaLista(); fechaBloco();
+      if (cerca === null) cerca = []; else { out.push(`<div class="prompt-pronto"><button type="button" class="copiar-bloco">COPIAR ESTE PROMPT</button><pre>${esc(cerca.join("\n"))}</pre></div>`); cerca = null; }
+      continue; }
+    if (cerca !== null){ cerca.push(l); continue; }
     if (/^\s*\|/.test(l)){ fechaLista(); bloco.push(l); continue; } else fechaBloco();
     if (/^\s*[-*] /.test(l)){ if (lista !== "ul"){ fechaLista(); out.push("<ul>"); lista = "ul"; } out.push(`<li>${inline(l.replace(/^\s*[-*] /, ""))}</li>`); continue; }
     if (/^\s*\d+\. /.test(l)){ if (lista !== "ol"){ fechaLista(); out.push("<ol>"); lista = "ol"; } out.push(`<li>${inline(l.replace(/^\s*\d+\. /, ""))}</li>`); continue; }
@@ -259,13 +267,13 @@ function md(txt){
 
 const GRUPOS = [
   {nome:"Criar", sub:"APPS, JOGOS E MOTION", ic:"pincel", ids:["aplicativo","jogos","motion"]},
-  {nome:"Comunicar", sub:"CANAL, MARKETING E REDES", ic:"mega", ids:["canal","marketing","conteudo"]},
+  {nome:"Comunicar", sub:"CANAL, MARKETING E REDES", ic:"mega", ids:["proposito","canal","marketing","conteudo"]},
   {nome:"Organizar", sub:"PESSOAS, PROCESSOS E DADOS", ic:"engren", ids:["gestao","automacao","dados","produtividade"]},
   {nome:"Proteger", sub:"SEGURANÇA E CONFORMIDADE", ic:"escudo", ids:["seguranca"]},
   {nome:"Estudar", sub:"CARREIRA E APRENDIZADO", ic:"cursos", ids:["estudo"]}
 ];
 const PIC = {mestre:"foguete", gestao:"pessoas", aplicativo:"app", jogos:"controle", canal:"youtube", motion:"animacao", marketing:"mega",
-  conteudo:"conversa", automacao:"robo", dados:"grafico", seguranca:"escudo", produtividade:"terminal", estudo:"cursos"};
+  conteudo:"conversa", automacao:"robo", dados:"grafico", seguranca:"escudo", produtividade:"terminal", estudo:"cursos", proposito:"lupa"};
 let PROT = [], DADOS = [];
 Promise.all([fetch("protocolos.json").then(r => r.json()), fetch("dados.json?v=" + Date.now()).then(r => r.json()).catch(() => [])]).then(([p, d]) => {
   PROT = p; DADOS = d; montarHub(); rota();
@@ -309,6 +317,8 @@ function mostrar(id){
   linhaRolagem();
 }
 document.getElementById("trilha").addEventListener("click", e => {
+  const cp = e.target.closest(".copiar-bloco");
+  if (cp){ navigator.clipboard.writeText(cp.nextElementSibling.textContent).then(() => { const a = document.getElementById("avisoCopia"); a.classList.add("on"); setTimeout(() => a.classList.remove("on"), 1600); }); return; }
   const b = e.target.closest(".cab"); if (!b) return;
   const et = b.parentElement, aberta = et.classList.toggle("aberta"); b.setAttribute("aria-expanded", aberta);
   linhaRolagem();
