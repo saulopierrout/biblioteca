@@ -35,19 +35,19 @@
     "tempo": "2 min para instalar",
     "resumo": "Preset grátis de brilho para o After, feito só com efeitos nativos (vários Glow empilhados, com controles). Serve no lugar de plugins de brilho pagos e não precisa de instalador.",
     "youtube": "wHvecGrCwdg",
-    "site": "https://www.creationeffects.com",
     "capa": "https://img.youtube.com/vi/wHvecGrCwdg/hqdefault.jpg",
     "passos": [
-      "Baixe o AfterGlow no site da Creation Effects (grátis).",
+      "Baixe o AfterGlow aqui no botão \"Baixar arquivos\" e descompacte (vem o AfterGlow.ffx). O vídeo acima mostra tudo.",
       "Copie o AfterGlow.ffx para a pasta de presets do After: no Windows, Program Files\\Adobe\\Adobe After Effects (versão)\\Support Files\\Presets (crie uma pasta Creation Effects dentro dela). No Mac: Applications/Adobe After Effects/Presets.",
       "Reabra o After. No painel Effects & Presets, abra Animation Presets e procure AfterGlow.",
       "Arraste para a camada ou, melhor, para uma camada de ajuste por cima de tudo.",
       "Ajuste em AfterGlow Controls: Threshold (a partir de que brilho acende), Radius, Intensity e Opacity. Há também brilho grande (Large Glow) e riscos de luz (Streak)."
     ],
     "dicas": [
-      "Sem instalar: em Animation > Apply Animation Preset, escolha o arquivo .ffx direto da pasta onde baixou.",
+      "Sem instalar: em Animation > Apply Animation Preset, escolha o AfterGlow.ffx direto da pasta onde descompactou.",
       "Para um brilho suave e largo, suba o Threshold e baixe Intensity e Opacity.",
       "Como são efeitos nativos, o projeto abre em qualquer After sem aviso de plugin faltando."
-    ]
+    ],
+    "script": "tutoriais/afterglow/afterglow.zip"
   }
 ]
