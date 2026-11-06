@@ -297,7 +297,7 @@ const copiar = (txt, msg) => navigator.clipboard.writeText(txt).then(() => { con
 
 // ---------- três portas ----------
 const PORTAS = [{id:"lab", nome:"Laboratório de estilos", sub:"Efeitos, visual e movimento num lugar só", ic:"pincel"},
-                {id:"refs", nome:"Vídeos com prompt", sub:"703 vídeos com o prompt de quem fez", ic:"youtube"},
+                {id:"refs", nome:"Vídeos com prompt", sub:"784 vídeos com o prompt de quem fez", ic:"youtube"},
                 {id:"tut", nome:"Tutoriais", sub:"Efeitos recriados, com passo a passo e script", ic:"terminal"},
                 {id:"sites", nome:"Sites e filmes", sub:"Onde pesquisar e obras para estudar", ic:"lupa"}];
 document.getElementById("portas").innerHTML = PORTAS.map(p => `<button class="porta" role="tab" data-id="${p.id}">${ico(p.ic, 22)}<span><b>${p.nome}</b><small>${p.sub}</small></span></button>`).join("");
@@ -406,9 +406,9 @@ document.getElementById("jPedido").onclick = pedidoFX;
 // ---------- referências: filmes + vídeos com prompt ----------
 let VIDEOS = [], vCat = "", vLim = 24;
 function montarRefs(){
-  fetch("animacao/videos.json").then(r => r.json()).then(V => {
+  fetch("animacao/videos.json?v=784").then(r => r.json()).then(V => {
     VIDEOS = V;
-    const cats = [["", "Todos"], ["motion", "Motion"], ["3d", "3D"], ["explainer", "Explicativo"], ["interactive", "Interativo"]];
+    const cats = [["", "Todos"], ["estilo", "Estilos prontos"], ["motion", "Motion"], ["3d", "3D"], ["explainer", "Explicativo"], ["interactive", "Interativo"]];
     document.getElementById("vFiltros").innerHTML = cats.map(([k, n]) => `<button class="chip${k === "" ? " on" : ""}" data-c="${k}">${n}</button>`).join("");
     document.getElementById("vFiltros").onclick = e => { const b = e.target.closest(".chip"); if (!b) return; vCat = b.dataset.c; vLim = 24; document.querySelectorAll("#vFiltros .chip").forEach(c => c.classList.toggle("on", c === b)); desenharVideos(); };
     desenharVideos();
@@ -417,7 +417,7 @@ function montarRefs(){
 const sem = s => (s || "").normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
 function desenharVideos(){
   const q = sem(document.getElementById("vq").value);
-  const L = VIDEOS.filter(v => (!vCat || v.c === vCat) && (!q || sem(v.q + " " + v.t.join(" ")).includes(q)));
+  const L = VIDEOS.filter(v => (!vCat || v.c === vCat || (vCat === "estilo" && v.t.includes("estilo"))) && (!q || sem(v.q + " " + v.t.join(" ")).includes(q)));
   document.getElementById("nVideos").textContent = L.length + " VÍDEOS · PASSE O MOUSE PARA TOCAR";
   document.getElementById("vGrade").innerHTML = L.slice(0, vLim).map(v => `<div class="c" data-s="${esc(v.s)}"><div class="b"><div class="i">
     <div class="thumb"><img loading="lazy" src="${esc(v.i)}" alt="Vídeo de ${esc(v.a)}"></div>
@@ -432,7 +432,7 @@ vGrade.addEventListener("click", e => { const b = e.target.closest("[data-prompt
 // toca o vídeo só quando o mouse passa por cima (economiza dados e bateria)
 vGrade.addEventListener("mouseover", e => {
   const c = e.target.closest(".c"); if (!c || c.querySelector("video")) return;
-  const v = document.createElement("video"); v.muted = true; v.loop = true; v.playsInline = true; v.src = `https://media.skillry.dev/opus-5-5/${c.dataset.s}/original.mp4`;
+  const v = document.createElement("video"); v.muted = true; v.loop = true; v.playsInline = true; const it = VIDEOS.find(x => x.s === c.dataset.s); v.src = (it && it.v) || `https://media.skillry.dev/opus-5-5/${c.dataset.s}/original.mp4`;
   v.onerror = () => v.remove(); c.querySelector(".thumb").appendChild(v); v.play().catch(() => {});
   c.addEventListener("mouseleave", () => v.remove(), {once: true});
 });

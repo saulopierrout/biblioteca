@@ -19,3 +19,9 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+
+Estilos prontos (acrescentados em 06/11/2026):
+- mg-styles-15, de Vincentwei1021 (https://github.com/Vincentwei1021/mg-styles-15), licença MIT: 15 estilos com vídeo, prompt e código.
+- lemo-opuscar, de Lemomo (https://github.com/lemomo-ai/lemo-opuscar), licença MIT: 66 estilos com guia de estilo e filme de demonstração.
+Vídeos e imagens são carregados dos repositórios de origem.
