@@ -19,5 +19,19 @@
     "tipo": "Clima e paleta",
     "img": "sites-ref/filmvibes.jpg",
     "texto": "Curadoria de cenas por clima e paleta de cores: escolha cores numa roda (complementar, análoga…), plano, hora do dia e movimento de câmera, e ele devolve um mural de cenas com aquela vibe. Ótimo para moodboard e para alinhar direção visual com o cliente."
+  },
+  {
+    "nome": "Godly",
+    "url": "https://godly.website",
+    "tipo": "Sites animados",
+    "img": "sites-ref/godly.jpg",
+    "texto": "Galeria dos sites mais animados da internet, com vídeo de cada um. Bom para ver como estúdios usam scroll, 3D, transições e microinterações, e para achar referência de movimento para uma página."
+  },
+  {
+    "nome": "Siteinspire",
+    "url": "https://www.siteinspire.com",
+    "tipo": "Layouts",
+    "img": "sites-ref/siteinspire.jpg",
+    "texto": "Coleção de sites escolhidos a dedo, organizados por estilo, tipo e assunto. Serve para estudar layout, grade e tipografia antes de montar uma página ou pedir uma para a IA."
   }
 ]
