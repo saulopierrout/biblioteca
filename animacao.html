@@ -36,7 +36,7 @@ h1 .de,h1 .ponto{color:var(--accent)} h1 .de{font-weight:800}
 .topo{padding-top:56px;padding-bottom:28px}
 .topo p{margin-top:14px;max-width:600px;color:var(--ink2);line-height:1.55}
 /* três portas */
-.portas{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;padding-top:14px;padding-bottom:14px;position:sticky;top:68px;z-index:30;background:rgba(247,247,245,.92);backdrop-filter:blur(12px)}
+.portas{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;padding-top:14px;padding-bottom:14px;position:sticky;top:68px;z-index:30;background:rgba(247,247,245,.92);backdrop-filter:blur(12px)}
 .porta{position:relative;isolation:isolate;display:flex;align-items:center;gap:14px;padding:16px 18px;clip-path:var(--chanfro);background:var(--line2);text-align:left}
 .porta:before{content:"";position:absolute;inset:1px;clip-path:var(--chanfro);background:linear-gradient(135deg,#fff,#f0f0ee);z-index:-1}
 .porta b{display:block;font:700 17px var(--sans)} .porta small{display:block;margin-top:3px;font:400 11px var(--mono);letter-spacing:.06em;color:var(--muted)}
@@ -113,6 +113,11 @@ section.parte{display:none;padding-top:26px} section.parte.on{display:block}
 @keyframes entraCamada{from{opacity:0;filter:blur(8px)}to{opacity:1;filter:none}}
 .palco .legenda-fx{position:absolute;left:14px;bottom:12px;z-index:5;max-width:70%;padding:8px 11px;background:rgba(14,14,16,.88);color:#fff;font:400 12.5px/1.4 var(--sans);clip-path:var(--chanfro)}
 .palco .legenda-fx b{display:block;font:500 10px var(--mono);letter-spacing:.14em;color:#FF7A99;margin-bottom:2px}
+/* sites de referência */
+#sGrade .thumb{display:grid;place-items:center;background:#0E0E10}
+#sGrade .thumb img{width:100%;height:100%;object-fit:cover;display:block}
+#sGrade .thumb .marca-site{font:800 clamp(22px,3vw,34px)/1 var(--sans);letter-spacing:-.02em;color:#F7F7F5;text-align:center;padding:16px}
+#sGrade .thumb .marca-site i{display:block;font:500 10px var(--mono);font-style:normal;letter-spacing:.16em;color:var(--accent);margin-top:10px}
 /* tutoriais */
 .tut-intro{max-width:760px;color:var(--ink2);line-height:1.6;margin:-6px 0 16px}
 .selo{display:inline-block;font:600 10px var(--mono);letter-spacing:.12em;padding:4px 7px;background:var(--ink);color:#fff;margin-right:6px}
@@ -268,6 +273,11 @@ html,body{overflow-x:hidden}
     <div class="ferr" id="tFiltros"></div>
     <div class="grade" id="tGrade"></div>
   </section>
+  <section class="wrap parte" id="p-sites" role="tabpanel">
+    <div class="subtit"><h2>Sites de referência</h2><span id="nSites"></span></div>
+    <p class="tut-intro">Lugares para pesquisar referência visual fora do feed: o nome de uma técnica, como um frame foi construído, o clima e a paleta de uma cena.</p>
+    <div class="grade" id="sGrade"></div>
+  </section>
 </main>
 
 <footer><div class="fwrap"><span>SAULO PIERROUT · ESTÚDIO DE ANIMAÇÃO</span><span>Vídeos de referência: catálogo aberto (licença MIT) · prévias dos efeitos feitas aqui</span></div></footer>
@@ -288,14 +298,15 @@ const copiar = (txt, msg) => navigator.clipboard.writeText(txt).then(() => { con
 // ---------- três portas ----------
 const PORTAS = [{id:"lab", nome:"Laboratório de estilos", sub:"Efeitos, visual e movimento num lugar só", ic:"pincel"},
                 {id:"refs", nome:"Referências", sub:"Filmes e 703 vídeos com prompt", ic:"youtube"},
-                {id:"tut", nome:"Tutoriais", sub:"Efeitos recriados, com passo a passo e script", ic:"terminal"}];
+                {id:"tut", nome:"Tutoriais", sub:"Efeitos recriados, com passo a passo e script", ic:"terminal"},
+                {id:"sites", nome:"Sites de referência", sub:"Onde achar técnica, frame e paleta", ic:"lupa"}];
 document.getElementById("portas").innerHTML = PORTAS.map(p => `<button class="porta" role="tab" data-id="${p.id}">${ico(p.ic, 22)}<span><b>${p.nome}</b><small>${p.sub}</small></span></button>`).join("");
 const montado = {};
 function abrirPorta(id){
   document.querySelectorAll(".porta").forEach(b => b.setAttribute("aria-selected", b.dataset.id === id));
   document.querySelectorAll(".parte").forEach(s => s.classList.toggle("on", s.id === "p-" + id));
   history.replaceState(null, "", "#aba=" + id);
-  if (!montado[id]){ montado[id] = 1; if (id === "lab"){ montarMesa(); montarEfeitos(); } if (id === "refs") montarRefs(); if (id === "tut") montarTut(); }
+  if (!montado[id]){ montado[id] = 1; if (id === "lab"){ montarMesa(); montarEfeitos(); } if (id === "refs") montarRefs(); if (id === "tut") montarTut(); if (id === "sites") montarSites(); }
   if (window.roboMostra) roboMostra(id === "lab" ? "pincel" : "play");
 }
 document.getElementById("portas").addEventListener("click", e => { const b = e.target.closest(".porta"); if (b) abrirPorta(b.dataset.id); });
@@ -430,6 +441,16 @@ vGrade.addEventListener("mouseover", e => {
   v.onerror = () => v.remove(); c.querySelector(".thumb").appendChild(v); v.play().catch(() => {});
   c.addEventListener("mouseleave", () => v.remove(), {once: true});
 });
+
+// ---------- sites de referência ----------
+function montarSites(){
+  fetch("sites.json").then(r => r.json()).then(S => {
+    document.getElementById("nSites").textContent = S.length + " SITES";
+    document.getElementById("sGrade").innerHTML = S.map(x => `<a class="c" href="${esc(x.url)}" target="_blank" rel="noopener"><div class="b"><div class="i">
+      <div class="thumb">${x.img ? `<img loading="lazy" src="${esc(x.img)}" alt="${esc(x.nome)}">` : `<div class="marca-site">${esc(x.nome)}<i>${esc(x.tipo.toUpperCase())}</i></div>`}</div>
+      <div class="txt"><span class="meta"><span class="selo claro">${esc(x.tipo.toUpperCase())}</span></span><h3>${esc(x.nome)} ↗</h3><p class="r">${esc(x.texto)}</p></div></div></div></a>`).join("");
+  });
+}
 
 // ---------- tutoriais ----------
 const FERR = {after:"AFTER EFFECTS", premiere:"PREMIERE", navegador:"NAVEGADOR (HTML)", ia:"IA DE VÍDEO", outro:"OUTRO PROGRAMA"};

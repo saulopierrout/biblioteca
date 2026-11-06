@@ -1,0 +1,23 @@
+[
+  {
+    "nome": "EyeCannndy",
+    "url": "https://eyecannndy.com",
+    "tipo": "Técnicas visuais",
+    "texto": "Biblioteca de técnicas visuais organizada por nome (VHS, split screen, datamosh…). Cada técnica tem página com exemplos reais de filmes, clipes e comerciais, os créditos de quem fez e, às vezes, tutorial. Serve para descobrir como se chama aquele efeito que você viu.",
+    "img": "sites-ref/eyecannndy.jpg"
+  },
+  {
+    "nome": "FrameSet",
+    "url": "https://frameset.app",
+    "tipo": "Frames de cinema",
+    "texto": "Acervo de frames de filmes, séries, clipes e comerciais com busca por cor, luz, enquadramento e movimento. Bom para estudar como a imagem foi construída e montar referência para um job. A busca grátis tem limite por dia.",
+    "img": "sites-ref/frameset.jpg"
+  },
+  {
+    "nome": "Film Vibes",
+    "url": "https://filmvibes.io",
+    "tipo": "Clima e paleta",
+    "img": "sites-ref/filmvibes.jpg",
+    "texto": "Curadoria de cenas por clima e paleta de cores: escolha cores numa roda (complementar, análoga…), plano, hora do dia e movimento de câmera, e ele devolve um mural de cenas com aquela vibe. Ótimo para moodboard e para alinhar direção visual com o cliente."
+  }
+]
