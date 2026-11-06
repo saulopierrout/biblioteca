@@ -127,5 +127,32 @@
       "Embaixo d'água: distorção maior, movimento mais lento e sem máscara.",
       "Na versão em código, o efeito vem de feTurbulence + feDisplacementMap do SVG."
     ]
+  },
+  {
+    "id": "flash-crop",
+    "titulo": "Flash Crop: corte com recorte e flash",
+    "ferramenta": "premiere",
+    "modo": "script",
+    "nivel": "Iniciante",
+    "tempo": "5 min no Premiere · 1 min com o script",
+    "resumo": "Antes de cada corte, um pedaço recortado do próximo clipe entra por 3 quadros, estourado de branco, inclinando e borrado. Deixa a montagem rápida com cara de clipe de festa.",
+    "previa": "tutoriais/flash-crop/previa.mp4",
+    "capa": "tutoriais/flash-crop/capa.jpg",
+    "script": "tutoriais/flash-crop/flash-crop.zip",
+    "prompt": "Quero aplicar o efeito Flash Crop nos meus vídeos. Use o Claude Opus 5.5 com esforço alto.\n\nMaterial: [liste os vídeos na ordem, ex.: clipe1.mp4, clipe2.mp4, clipe3.mp4]\nRitmo dos cortes: [ex.: cada clipe com 0,6 s, ou no tempo da música musica.mp3, ou nestes tempos: 0:01.2, 0:02.0…]\nFormato: [vertical 1080x1920 / horizontal 1920x1080], [30] fps.\n\nO efeito, em cada corte: o próximo clipe entra 3 quadros antes do corte, numa camada por cima, só dentro de um retângulo (recorte diferente a cada corte, alto e muitas vezes encostado numa borda). Nesses 3 quadros: flash (Níveis com entrada de branco começando em 140 e voltando a 255), uma tremida mínima de posição e escala nos 2 primeiros quadros, inclinação horizontal de 0 a 20 graus e desfoque de movimento como obturador acima de 300. Depois do corte, o próximo clipe segue limpo.\n\nPode usar o script flash_crop.py (Python, numpy, Pillow e PyAV) se eu anexar, ou montar o efeito no editor de vídeo que estiver instalado (por exemplo, o HyperFrames). Renderize um MP4, me mostre uma prévia em meia velocidade para eu conferir e me pergunte antes de mudar a força do flash ou a inclinação.",
+    "passos": [
+      "Na timeline, coloque o clipe seguinte 3 a 4 quadros antes do corte, numa trilha acima do clipe atual.",
+      "Nesse pedaço de cima, aplique os efeitos Cortar, Níveis e Transformar.",
+      "Cortar: recorte um retângulo do jeito que quiser (troque o recorte a cada corte).",
+      "Níveis: no início do pedaço, keyframe na entrada de branco em 140 (ou menos, para um flash mais forte); no fim, 255.",
+      "Posição e escala: keyframe no início e, 2 quadros depois, um ajuste mínimo nas duas.",
+      "Transformar: inclinação 0 no início e 20 no fim; ângulo do obturador acima de 300.",
+      "Copie os efeitos para os outros cortes, mudando só o recorte."
+    ],
+    "dicas": [
+      "Sem Premiere: o script flash_crop.py faz tudo sozinho (python flash_crop.py clipe1.mp4 clipe2.mp4 … -o saida.mp4), com opções de quadros, flash, inclinação e duração.",
+      "O botão Copiar prompt traz um pedido pronto para o Claude montar o efeito com os seus vídeos e o seu ritmo.",
+      "Funciona melhor com clipes com movimento (festa, esporte, show) e cortes curtos, de 0,3 a 0,8 s."
+    ]
   }
 ]

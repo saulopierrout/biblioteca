@@ -464,7 +464,7 @@ function montarSites(){
 }
 
 // ---------- tutoriais ----------
-const FERR = {after:"AFTER EFFECTS", premiere:"PREMIERE", navegador:"NAVEGADOR (HTML)", ia:"IA DE VÍDEO", outro:"OUTRO PROGRAMA"};
+const FERR = {after:"AFTER EFFECTS", premiere:"PREMIERE PRO", navegador:"NAVEGADOR (HTML)", ia:"IA DE VÍDEO", outro:"OUTRO PROGRAMA"};
 const MODO = {script:["SCRIPT PRONTO","script"], manual:["À MÃO","claro"], html:["CÓDIGO PRONTO","script"], preset:["PRESET GRÁTIS","script"], plugin:["PLUGIN","claro"]};
 let TUT = [], tF = "";
 function montarTut(){
@@ -498,10 +498,11 @@ function abrirTut(id){
   document.getElementById("jTitulo").textContent = t.titulo; document.getElementById("jTexto").textContent = t.resumo;
   document.getElementById("jExtra").innerHTML = `<h4>PASSO A PASSO</h4><ol>${t.passos.map(p => `<li>${esc(p)}</li>`).join("")}</ol>` + (t.dicas && t.dicas.length ? `<h4>DICAS</h4><ul>${t.dicas.map(p => `<li>${esc(p)}</li>`).join("")}</ul>` : "");
   document.getElementById("jAcoes").innerHTML = ((t.codigo || (t.youtube && t.previa)) ? `<span id="jModo" class="modo"><button class="mini-btn" data-m="after">AFTER</button>${t.codigo ? `<button class="mini-btn" data-m="codigo">CÓDIGO</button>` : ""}${t.youtube && t.previa ? `<button class="mini-btn" data-m="video">VÍDEO DO AUTOR</button>` : ""}</span>` : "")
-    + `<button class="mini-btn" id="jReceita">COPIAR RECEITA</button>` + (t.script ? `<a class="mini-btn claro" href="${esc(t.script)}" download>BAIXAR ARQUIVOS</a>` : "")
+    + (t.prompt ? `<button class="mini-btn" id="jPrompt">COPIAR PROMPT</button>` : "") + `<button class="mini-btn" id="jReceita">COPIAR RECEITA</button>` + (t.script ? `<a class="mini-btn claro" href="${esc(t.script)}" download>BAIXAR ARQUIVOS</a>` : "")
     + (t.codigo ? `<a class="mini-btn claro" href="${esc(t.codigo)}" download>BAIXAR HTML</a>` : "") + (t.site ? `<a class="mini-btn claro" href="${esc(t.site)}" target="_blank" rel="noopener">SITE ↗</a>` : "");
   palco(t.youtube ? "video" : "after");   // com vídeo do autor, ele é a capa da janela
   const jm = document.getElementById("jModo"); if (jm) jm.onclick = e => { const b = e.target.closest("[data-m]"); if (b) palco(b.dataset.m); };
+  if (t.prompt) document.getElementById("jPrompt").onclick = () => copiar(t.prompt, "PROMPT COPIADO ✓");
   document.getElementById("jReceita").onclick = () => copiar(t.titulo + "\n" + t.passos.map((p, i) => (i + 1) + ". " + p).join("\n"), "RECEITA COPIADA ✓");
   document.getElementById("janela").classList.add("aberta"); document.getElementById("jFechar").focus();
 }
