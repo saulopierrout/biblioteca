@@ -428,7 +428,9 @@ function desenharVideos(){
 document.getElementById("vq").addEventListener("input", () => { vLim = 24; desenharVideos(); });
 document.getElementById("vMais").onclick = () => { vLim += 24; desenharVideos(); };
 const vGrade = document.getElementById("vGrade");
-vGrade.addEventListener("click", e => { const b = e.target.closest("[data-prompt]"); if (b){ const v = VIDEOS.find(x => x.s === b.dataset.prompt); copiar(v.q, "PROMPT COPIADO ✓"); } });
+vGrade.addEventListener("click", e => { const b = e.target.closest("[data-prompt]"); if (b){ const v = VIDEOS.find(x => x.s === b.dataset.prompt); copiar("Faça no Claude Opus 5.5, com nível de esforço alto (extra alto se o vídeo for longo ou tiver muitas cenas).
+
+" + v.q, "PROMPT COPIADO ✓"); } });
 // toca o vídeo só quando o mouse passa por cima (economiza dados e bateria)
 vGrade.addEventListener("mouseover", e => {
   const c = e.target.closest(".c"); if (!c || c.querySelector("video")) return;
