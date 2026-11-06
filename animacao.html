@@ -114,6 +114,7 @@ section.parte{display:none;padding-top:26px} section.parte.on{display:block}
 .palco .legenda-fx{position:absolute;left:14px;bottom:12px;z-index:5;max-width:70%;padding:8px 11px;background:rgba(14,14,16,.88);color:#fff;font:400 12.5px/1.4 var(--sans);clip-path:var(--chanfro)}
 .palco .legenda-fx b{display:block;font:500 10px var(--mono);letter-spacing:.14em;color:#FF7A99;margin-bottom:2px}
 /* sites de referência */
+#oGrade .thumb img{width:100%;height:100%;object-fit:cover;display:block}
 #sGrade .thumb{display:grid;place-items:center;background:#0E0E10}
 #sGrade .thumb img{width:100%;height:100%;object-fit:cover;display:block}
 #sGrade .thumb .marca-site{font:800 clamp(22px,3vw,34px)/1 var(--sans);letter-spacing:-.02em;color:#F7F7F5;text-align:center;padding:16px}
@@ -275,6 +276,9 @@ html,body{overflow-x:hidden}
     <div class="subtit"><h2>Sites de referência</h2><span id="nSites"></span></div>
     <p class="tut-intro">Lugares para pesquisar referência visual fora do feed: o nome de uma técnica, como um frame foi construído, o clima e a paleta de uma cena.</p>
     <div class="grade" id="sGrade"></div>
+    <div class="subtit"><h2>Seções de site animadas</h2><span id="nOver"></span></div>
+    <p class="tut-intro">41 seções grátis do Oversight Supply: heros, histórias no scroll e tabelas de preço com animação. Clique para ver a prévia ao vivo; o prompt e o código saem de graça lá, com uma conta.</p>
+    <div class="grade" id="oGrade"></div>
     <div class="subtit"><h2>Filmes de referência</h2><span>OBRAS DE MOTION PARA ESTUDAR</span></div>
     <div class="filmes" id="filmes"></div>
   </section>
@@ -439,6 +443,13 @@ vGrade.addEventListener("mouseover", e => {
 
 // ---------- sites de referência ----------
 function montarSites(){
+  const TIPO_OV = {"Hero section": "Hero", "Portfolio hero": "Hero de portfólio", "Pricing section": "Preços", "Scroll story": "História no scroll", "Template section": "Seção de template"};
+  fetch("oversight.json").then(r => r.json()).then(O => {
+    document.getElementById("nOver").textContent = O.length + " SEÇÕES · OVERSIGHT SUPPLY";
+    document.getElementById("oGrade").innerHTML = O.map(x => `<a class="c" href="https://supply.madebyoversight.com/sections?preview=${esc(x.slug)}" target="_blank" rel="noopener"><div class="b"><div class="i">
+      <div class="thumb"><img loading="lazy" src="https://supply.madebyoversight.com/sections/${esc(x.slug)}.webp" alt="${esc(x.nome)}"></div>
+      <div class="txt"><span class="meta"><span class="selo claro">${esc((TIPO_OV[x.tipo] || x.tipo).toUpperCase())}</span></span><h3>${esc(x.nome)} ↗</h3></div></div></div></a>`).join("");
+  });
   fetch("filmes.json").then(r => r.json()).then(F => {
     document.getElementById("filmes").innerHTML = F.map(f => `<a class="c" href="https://www.youtube.com/watch?v=${esc(f.id)}" target="_blank" rel="noopener"><div class="b"><div class="i">
       <div class="thumb"><img loading="lazy" src="https://img.youtube.com/vi/${esc(f.id)}/hqdefault.jpg" alt="Filme ${esc(f.titulo)}"><span class="play">${ico("animacao", 16)}</span></div>
