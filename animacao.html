@@ -513,5 +513,6 @@ abrirPorta(PORTAS.some(p => p.id === inicial) ? inicial : "lab");
 </script>
 <script src="robo-mini.js"></script>
 <script src="titulo-blur.js"></script>
+<script>/* links externos abrem em outra aba */document.addEventListener("click",e=>{const a=e.target.closest("a[href]");if(a&&a.host&&a.host!==location.host){a.target="_blank";a.rel="noopener"}},true);</script>
 </body>
 </html>

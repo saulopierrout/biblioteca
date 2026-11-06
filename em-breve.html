@@ -52,5 +52,6 @@ document.getElementById(p === "protocolos" ? "lp" : "la").classList.add("on");
 document.getElementById("atual").href = "https://saulopierrout.github.io/biblioteca/" + (p === "protocolos" ? "protocolos.html" : "animacao.html");
 </script>
 <script src="titulo-blur.js"></script>
+<script>/* links externos abrem em outra aba */document.addEventListener("click",e=>{const a=e.target.closest("a[href]");if(a&&a.host&&a.host!==location.host){a.target="_blank";a.rel="noopener"}},true);</script>
 </body>
 </html>
