@@ -464,24 +464,25 @@ function montarSites(){
 }
 
 // ---------- tutoriais ----------
+const fNome = f => String(f).split("+").map(k => FERR[k] || k).join(" + ");
 const FERR = {after:"AFTER EFFECTS", premiere:"PREMIERE PRO", navegador:"NAVEGADOR (HTML)", ia:"IA DE VÍDEO", outro:"OUTRO PROGRAMA"};
 const MODO = {script:["SCRIPT PRONTO","script"], manual:["À MÃO","claro"], html:["CÓDIGO PRONTO","script"], preset:["PRESET GRÁTIS","script"], plugin:["PLUGIN","claro"]};
 let TUT = [], tF = "";
 function montarTut(){
   fetch("tutoriais.json").then(r => r.json()).then(T => {
     TUT = T;
-    const fs = [...new Set(T.map(t => t.ferramenta))];
+    const fs = [...new Set(T.flatMap(t => String(t.ferramenta).split("+")))];
     document.getElementById("tFiltros").innerHTML = `<button class="chip on" data-f="">Todos</button>` + fs.map(k => `<button class="chip" data-f="${esc(k)}">${esc(FERR[k] || k)}</button>`).join("");
     document.getElementById("tFiltros").onclick = e => { const b = e.target.closest(".chip"); if (!b) return; tF = b.dataset.f; document.querySelectorAll("#tFiltros .chip").forEach(c => c.classList.toggle("on", c === b)); desenharTut(); };
     desenharTut();
   });
 }
 function desenharTut(){
-  const L = TUT.filter(t => !tF || t.ferramenta === tF);
+  const L = TUT.filter(t => !tF || String(t.ferramenta).split("+").includes(tF));
   document.getElementById("nTut").textContent = L.length + (L.length === 1 ? " TUTORIAL" : " TUTORIAIS");
   document.getElementById("tGrade").innerHTML = L.map(t => { const m = MODO[t.modo] || ["", "claro"]; return `<div class="c" data-t="${esc(t.id)}"><div class="b"><div class="i">
     <div class="thumb">${t.previa && !t.youtube ? `<video muted loop playsinline autoplay preload="metadata" poster="${esc(t.capa)}" src="${esc(t.previa)}" aria-label="Prévia: ${esc(t.titulo)}"></video>` : `<img loading="lazy" src="${esc(t.youtube ? "https://img.youtube.com/vi/" + t.youtube + "/hqdefault.jpg" : t.capa)}" alt="Vídeo: ${esc(t.titulo)}"><span class="play">${ico("youtube", 16)}</span>`}</div>
-    <div class="txt"><span class="meta"><span class="selo">${esc(FERR[t.ferramenta] || t.ferramenta)}</span><span class="selo ${m[1]}">${m[0]}</span>${t.codigo ? `<span class="selo claro">+ CÓDIGO</span>` : ""}</span><h3>${esc(t.titulo)}</h3><p class="r">${esc(t.resumo)}</p>
+    <div class="txt"><span class="meta"><span class="selo">${esc(fNome(t.ferramenta))}</span><span class="selo ${m[1]}">${m[0]}</span>${t.codigo ? `<span class="selo claro">+ CÓDIGO</span>` : ""}</span><h3>${esc(t.titulo)}</h3><p class="r">${esc(t.resumo)}</p>
     <div class="acoes"><button class="mini-btn" data-abre="${esc(t.id)}">PASSO A PASSO</button>${t.script ? `<a class="mini-btn claro" href="${esc(t.script)}" download>BAIXAR ARQUIVOS</a>` : ""}${t.site ? `<a class="mini-btn claro" href="${esc(t.site)}" target="_blank" rel="noopener">SITE ↗</a>` : ""}</div></div></div></div></div>`; }).join("");
 }
 document.getElementById("tGrade").addEventListener("click", e => {
@@ -494,7 +495,7 @@ function abrirTut(id){
       : (modo === "video" || !t.previa) && t.youtube ? `<iframe src="https://www.youtube-nocookie.com/embed/${esc(t.youtube)}" title="Vídeo: ${esc(t.titulo)}" allow="encrypted-media; picture-in-picture" allowfullscreen style="width:100%;height:100%;border:0;display:block;background:#000"></iframe>`
       : `<video muted loop playsinline autoplay src="${esc(t.previa)}" poster="${esc(t.capa)}"></video>`;
     document.querySelectorAll("#jModo button").forEach(b => b.setAttribute("aria-pressed", b.dataset.m === modo)); };
-  document.getElementById("jGrupo").textContent = (FERR[t.ferramenta] || t.ferramenta) + " · " + t.nivel.toUpperCase() + " · " + t.tempo.toUpperCase();
+  document.getElementById("jGrupo").textContent = fNome(t.ferramenta) + " · " + t.nivel.toUpperCase() + " · " + t.tempo.toUpperCase();
   document.getElementById("jTitulo").textContent = t.titulo; document.getElementById("jTexto").textContent = t.resumo;
   document.getElementById("jExtra").innerHTML = `<h4>PASSO A PASSO</h4><ol>${t.passos.map(p => `<li>${esc(p)}</li>`).join("")}</ol>` + (t.dicas && t.dicas.length ? `<h4>DICAS</h4><ul>${t.dicas.map(p => `<li>${esc(p)}</li>`).join("")}</ul>` : "");
   document.getElementById("jAcoes").innerHTML = ((t.codigo || (t.youtube && t.previa)) ? `<span id="jModo" class="modo"><button class="mini-btn" data-m="after">AFTER</button>${t.codigo ? `<button class="mini-btn" data-m="codigo">CÓDIGO</button>` : ""}${t.youtube && t.previa ? `<button class="mini-btn" data-m="video">VÍDEO DO AUTOR</button>` : ""}</span>` : "")

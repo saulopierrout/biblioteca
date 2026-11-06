@@ -131,10 +131,10 @@
   {
     "id": "flash-crop",
     "titulo": "Flash Crop: corte com recorte e flash",
-    "ferramenta": "premiere",
+    "ferramenta": "after+premiere",
     "modo": "script",
     "nivel": "Iniciante",
-    "tempo": "5 min no Premiere · 1 min com o script",
+    "tempo": "5 min no After ou no Premiere · 1 min com o script",
     "resumo": "Antes de cada corte, um pedaço recortado do próximo clipe entra por 3 quadros, estourado de branco, inclinando e borrado. Deixa a montagem rápida com cara de clipe de festa.",
     "previa": "tutoriais/flash-crop/previa.mp4",
     "capa": "tutoriais/flash-crop/capa.jpg",
@@ -150,6 +150,7 @@
       "Copie os efeitos para os outros cortes, mudando só o recorte."
     ],
     "dicas": [
+      "No After Effects é a mesma receita: camada do próximo clipe 3 quadros antes do corte, máscara retangular (no lugar do Cortar), Levels com Input White de 140 a 255, Transform com Skew de 0 a 20 e Shutter Angle acima de 300 (ou o Motion Blur da camada ligado).",
       "Sem Premiere: o script flash_crop.py faz tudo sozinho (python flash_crop.py clipe1.mp4 clipe2.mp4 … -o saida.mp4), com opções de quadros, flash, inclinação e duração.",
       "O botão Copiar prompt traz um pedido pronto para o Claude montar o efeito com os seus vídeos e o seu ritmo.",
       "Funciona melhor com clipes com movimento (festa, esporte, show) e cortes curtos, de 0,3 a 0,8 s."
