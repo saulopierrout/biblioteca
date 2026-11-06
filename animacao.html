@@ -260,8 +260,6 @@ html,body{overflow-x:hidden}
   </section>
 
   <section class="wrap parte" id="p-refs" role="tabpanel">
-    <div class="subtit"><h2>Filmes de referência</h2><span>OBRAS DE MOTION PARA ESTUDAR</span></div>
-    <div class="filmes" id="filmes"></div>
     <div class="subtit"><h2>Vídeos com prompt</h2><span id="nVideos"></span></div>
     <div class="ferr"><label class="busca"><input id="vq" type="search" placeholder="Buscar no prompt (ex.: logo, 3D, texto)" aria-label="Buscar vídeos"></label><div id="vFiltros"></div></div>
     <div class="grade" id="vGrade"></div>
@@ -277,6 +275,8 @@ html,body{overflow-x:hidden}
     <div class="subtit"><h2>Sites de referência</h2><span id="nSites"></span></div>
     <p class="tut-intro">Lugares para pesquisar referência visual fora do feed: o nome de uma técnica, como um frame foi construído, o clima e a paleta de uma cena.</p>
     <div class="grade" id="sGrade"></div>
+    <div class="subtit"><h2>Filmes de referência</h2><span>OBRAS DE MOTION PARA ESTUDAR</span></div>
+    <div class="filmes" id="filmes"></div>
   </section>
 </main>
 
@@ -297,9 +297,9 @@ const copiar = (txt, msg) => navigator.clipboard.writeText(txt).then(() => { con
 
 // ---------- três portas ----------
 const PORTAS = [{id:"lab", nome:"Laboratório de estilos", sub:"Efeitos, visual e movimento num lugar só", ic:"pincel"},
-                {id:"refs", nome:"Referências", sub:"Filmes e 703 vídeos com prompt", ic:"youtube"},
+                {id:"refs", nome:"Vídeos com prompt", sub:"703 vídeos com o prompt de quem fez", ic:"youtube"},
                 {id:"tut", nome:"Tutoriais", sub:"Efeitos recriados, com passo a passo e script", ic:"terminal"},
-                {id:"sites", nome:"Sites de referência", sub:"Onde achar técnica, frame e paleta", ic:"lupa"}];
+                {id:"sites", nome:"Sites e filmes", sub:"Onde pesquisar e obras para estudar", ic:"lupa"}];
 document.getElementById("portas").innerHTML = PORTAS.map(p => `<button class="porta" role="tab" data-id="${p.id}">${ico(p.ic, 22)}<span><b>${p.nome}</b><small>${p.sub}</small></span></button>`).join("");
 const montado = {};
 function abrirPorta(id){
@@ -406,11 +406,6 @@ document.getElementById("jPedido").onclick = pedidoFX;
 // ---------- referências: filmes + vídeos com prompt ----------
 let VIDEOS = [], vCat = "", vLim = 24;
 function montarRefs(){
-  fetch("filmes.json").then(r => r.json()).then(F => {
-    document.getElementById("filmes").innerHTML = F.map(f => `<a class="c" href="https://www.youtube.com/watch?v=${esc(f.id)}" target="_blank" rel="noopener"><div class="b"><div class="i">
-      <div class="thumb"><img loading="lazy" src="https://img.youtube.com/vi/${esc(f.id)}/hqdefault.jpg" alt="Filme ${esc(f.titulo)}"><span class="play">${ico("animacao", 16)}</span></div>
-      <div class="txt"><h3>${esc(f.titulo)}</h3><span class="meta">${esc(f.autor)}</span><p class="r">${esc((f.diz || "").slice(0, 140))}${(f.diz || "").length > 140 ? "…" : ""}</p></div></div></div></a>`).join("");
-  });
   fetch("animacao/videos.json").then(r => r.json()).then(V => {
     VIDEOS = V;
     const cats = [["", "Todos"], ["motion", "Motion"], ["3d", "3D"], ["explainer", "Explicativo"], ["interactive", "Interativo"]];
@@ -444,6 +439,11 @@ vGrade.addEventListener("mouseover", e => {
 
 // ---------- sites de referência ----------
 function montarSites(){
+  fetch("filmes.json").then(r => r.json()).then(F => {
+    document.getElementById("filmes").innerHTML = F.map(f => `<a class="c" href="https://www.youtube.com/watch?v=${esc(f.id)}" target="_blank" rel="noopener"><div class="b"><div class="i">
+      <div class="thumb"><img loading="lazy" src="https://img.youtube.com/vi/${esc(f.id)}/hqdefault.jpg" alt="Filme ${esc(f.titulo)}"><span class="play">${ico("animacao", 16)}</span></div>
+      <div class="txt"><h3>${esc(f.titulo)}</h3><span class="meta">${esc(f.autor)}</span><p class="r">${esc((f.diz || "").slice(0, 140))}${(f.diz || "").length > 140 ? "…" : ""}</p></div></div></div></a>`).join("");
+  });
   fetch("sites.json").then(r => r.json()).then(S => {
     document.getElementById("nSites").textContent = S.length + " SITES";
     document.getElementById("sGrade").innerHTML = S.map(x => `<a class="c" href="${esc(x.url)}" target="_blank" rel="noopener"><div class="b"><div class="i">
